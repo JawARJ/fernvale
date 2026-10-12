@@ -1,0 +1,21 @@
+# Fernvale — source 0.31
+
+Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
+
+## Run locally
+From this folder, run `python -m http.server 8000 --directory dist` and open http://localhost:8000. Saves stay in each browser under localStorage.
+
+## Code
+- dist/game.js: world, input, combat and saves
+- dist/character.js: status and equipment
+- dist/loot.js: drops, boxes, inventory and shop
+- dist/sword.js: swordsman skills
+- dist/tutorial.js: Stage 0 tutorial
+- dist/navigation.js: keyboard menus
+- dist/rounds.js: combo/score/rewards
+- dist/sprites.js: procedural art
+- dist/index.html and dist/style.css: interface
+
+Controls: arrows movement/climbing, Space jump/interact, C attack, Q/W/E/R assigned skills, Z/X potions, Tab status, 1 skills, 2 party, 3 enchant, Esc pause. Menu arrows select, Enter confirms, Esc closes.
+
+The original hosting project ID and Git credentials are intentionally excluded from this shareable package. See PROJECT-HISTORY.md for development notes. Font licensing is in dist/FONT-OFL.txt.
