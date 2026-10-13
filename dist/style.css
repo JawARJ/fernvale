@@ -97,3 +97,5 @@
 @media(min-width:700px) and (max-height:650px){.character-columns{grid-template-columns:260px 1fr}.character-stats .status-values{display:grid;grid-template-columns:1fr 1fr;gap:0 10px!important}.character-stats .status-values>div{font-size:10px;padding:3px 0!important}.equipment-slot{min-height:50px}.gear-icon{width:24px;height:24px}.inventory-cell{height:clamp(30px,8dvh,50px)}.character-job{padding:4px!important;margin-bottom:4px!important}.base-stat-grid{margin-bottom:5px!important}.character-window-head{height:24px}}
 .shop-product>.box-type-icon{width:36px;height:36px}
 .character-window{position:relative}
+
+.empty-skill-slot{border:1px solid #7c906b;background:#18362b;box-shadow:inset 2px 2px #314936;min-height:75px}
