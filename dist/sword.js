@@ -1,6 +1,6 @@
 'use strict';
 // Refresh mixed cached HTML/scripts before interacting with character saves.
-(()=>{const release='0.43';if(document.documentElement.dataset.release===release)return;const target=new URL(location.href);if(target.searchParams.get('release')!==release){target.searchParams.set('release',release);location.replace(target.href)}})();
+(()=>{const release='0.44';if(document.documentElement.dataset.release===release)return;const target=new URL(location.href);if(target.searchParams.get('release')!==release){target.searchParams.set('release',release);location.replace(target.href)}})();
 
 const SWORD_SKILLS={warriorMastery:{name:'Warrior Mastery',max:15,type:'passive'},ironBody:{name:'Iron Body',max:10,type:'passive'},slashBlast:{name:'Slash Blast',max:20,type:'active'},warriorLeap:{name:'Warrior Leap',max:10,type:'active'}};
 const SWORD_DESCRIPTIONS={warriorMastery:'ฝึกพื้นฐานนักดาบ เพิ่มความเร็วเดิน แรงกระโดด HP และโอกาสต้านการกระเด็น',ironBody:'ร่างกายแข็งแกร่ง เพิ่ม HP และ DEF พร้อมลดความเสียหายที่ได้รับแบบติดตัว',slashBlast:'ฟันกวาดด้านหน้า โจมตีศัตรูได้สูงสุด 6 ตัว',warriorLeap:'กระโดดพุ่งไปด้านหน้ากลางอากาศ ใช้ได้หนึ่งครั้งก่อนแตะพื้น · กด Space ซ้ำกลางอากาศได้'};

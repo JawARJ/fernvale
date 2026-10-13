@@ -194,3 +194,5 @@ PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post
 0.42: buffs42 and cache-recovery passed wave hit,8 directions, active count2, passiveSPD, stack tile, migrated binding and MAX buy/sell.
 
 0.43: cd43 passed8s cooldown block/recast, pause, unrelated skill and HUD.
+
+0.44: mobile44 passed emulated844x390/390x844 touch mode, independent multiple pointers and cancel, bag/skill menus, no horizontal page overflow;1254x892 desktop keyboard. Cache recovery passed. Real iOS/Android hardware testing remains.

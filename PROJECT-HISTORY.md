@@ -1,4 +1,4 @@
-# Fernvale — Browser Edition 0.43
+# Fernvale — Browser Edition 0.44
 
 เกม pixel RPG เล่นคนเดียว ใช้ HTML, CSS, JavaScript และ Canvas 2D โดยตรง ไม่มี Godot, WASM, npm build หรือเซิร์ฟเวอร์เกม
 
@@ -254,3 +254,5 @@ Each STR adds10HP and1DEF; DEX adds1ACC and0.125%CRI; INT adds10MP and1ACC; LUK 
 0.42: Top-right placeholder buff tiles with bottom-right Combo/Holy stack counts. Greatsword active skills Brandish/Spirit Blade; Flash Slash passiveSPD+2%/rank. Spirit Blade fires an8-direction piercing wave up to6targets, MP12,120+6rank%ATK, no former passiveATK/reflect. Buy/sell quantity MAX uses available money/stock.
 
 0.43: Spirit Blade8s cooldown, hotbar countdown, paused game freezes timer; other actions remain available after normal recovery.
+
+0.44: Mobile browser touch UI on coarse pointers up to1100px, landscape full screen and portrait layout. Dpad walking/climbing, separate interact, jump/attack, learned QWER skill buttons with cooldown and HP/MP potions. Multi-pointer release/cancel preserves other held controls. Compact HUD and touch bag/skill/pause menus; safe-area spacing, scrollable dialogs; preserve canvas aspect ratio and desktop keyboard/mouse. Saves remain browser-local. No native app install required.
