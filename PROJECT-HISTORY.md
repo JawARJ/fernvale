@@ -1,4 +1,4 @@
-# Fernvale — Browser Edition 0.34
+# Fernvale — Browser Edition 0.35
 
 เกม pixel RPG เล่นคนเดียว ใช้ HTML, CSS, JavaScript และ Canvas 2D โดยตรง ไม่มี Godot, WASM, npm build หรือเซิร์ฟเวอร์เกม
 
@@ -229,3 +229,7 @@ PASS tests/sp33.cjs Lv25 affordability, all-max spending/leaving1SP, retroactive
 ## 0.34 — Four first-job skills
 Upper Charge and Leap Attack removed from UI/casting/keyboard. Iron Body max10. Remaining max ranks15+10+20+10=55. Existing ranks in removed skills plus Iron Body above10 refunded once; removed slot bindings cleared. skillVersion3 stores normalized four-skill data. SP rate remains3 throughLv30 and1 afterward; 2SP per level would now afford all ranks byLv29, but rate was not changed in this request.
 PASS tests/skills34.cjs cost55, max cap, 16-point refund/idempotence, bindings/removed casts and reload. PASS cache-recovery.cjs.
+
+## 0.35 — Two SP per level
+Level-ups into2..30 grant2SP;31+ remains1SP. Four-skill tree55SP is fully affordable atLv29 with56SP. Existing spVersion2 (3SP) balances retained. Original1SP saves receive missing1SP per eligible level once; spVersion3 prevents repeat grants.
+PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post30. PASS cache-recovery.cjs.

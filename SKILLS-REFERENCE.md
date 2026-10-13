@@ -9,4 +9,4 @@ Inspired by Nexon Explorer Warrior first-job concepts: https://gi.maplestory.nex
 |Slash Blast|20|110–205%ATK,6targets, MP6+floor(rank/5), forward sweep|
 |Warrior Leap|10|MP4, one extra leap per airborne cycle, horizontal velocity240+14rank for0.22s; Space repeat or manually assigned slot|
 
-55SP to max all. Rate remains3 per level-up into2..30,1 afterward. Removed Upper Charge/Leap Attack ranks and Iron Body ranks above10 return as SP once. Empty removed bindings can be reassigned by player. Earlier Power Bash refund, Slash remap and HP/DEF Boost migration remain supported.
+55SP to max all. Rate is2 per level-up into2..30,1 afterward (0.35). Removed Upper Charge/Leap Attack ranks and Iron Body ranks above10 return as SP once. Empty removed bindings can be reassigned by player. Earlier Power Bash refund, Slash remap and HP/DEF Boost migration remain supported.
