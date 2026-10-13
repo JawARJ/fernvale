@@ -1,4 +1,4 @@
-# Fernvale — source 0.36
+# Fernvale — source 0.37
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -30,3 +30,5 @@ SP:3 per level-up untilLv30,1 thereafter. First-job skills require71SP; affordab
 0.35:2SP per level-up into2..30,1 afterward. Max55SP tree affordable atLv29; existing earned balances preserved.
 
 0.36: Lv30 boss advancement quest and three second-job skill trees.
+
+0.37: Random boxes have locked levels10/30/60/100, selected by stage-level thresholds.

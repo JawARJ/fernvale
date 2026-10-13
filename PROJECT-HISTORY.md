@@ -1,4 +1,4 @@
-# Fernvale — Browser Edition 0.36
+# Fernvale — Browser Edition 0.37
 
 เกม pixel RPG เล่นคนเดียว ใช้ HTML, CSS, JavaScript และ Canvas 2D โดยตรง ไม่มี Godot, WASM, npm build หรือเซิร์ฟเวอร์เกม
 
@@ -237,3 +237,7 @@ PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post
 ## 0.36 — Second-job advancement
 Lv.30 offers a quest to defeat the Warrior Trial boss. Victory grants a Warrior Mark in the usable inventory. Activate it and confirm one of Greatsword (8 skills), Guardian (8 skills), or Spearman (9 skills). Skills are adapted from the official MapleStory Warrior guide: https://gi.maplestory.nexon.com/Guide/GameInformation/Skill/Warrior
 First-job skills and points remain. Second-job skills have a separate bank: 10 SP on advancement, plus 3 per level from 31 through 60, including catch-up for delayed advancement. Select the second-job tab, learn skills and bind active skills to Q/W/E/R. Bosses and elites resist stun/pull. Buffs last 45 seconds; Beholder heals every 5 seconds.
+
+## 0.37 — Locked box tiers
+All four box categories store their item level. Stage levels10–29 /30–59 /60–99 /100+ drop boxesLv10 /30 /60 /100 respectively. Stages below10 do not drop boxes. Elite drop100% and ordinary drop1% are unchanged. Grade bonus boxes use the same stage tier. Same type and level stack; different levels occupy separate stacks. Opening generates gear at the locked level regardless of character level. Inventory, shop, rewards and opening dialogs display the level.
+Legacy boxes have no source-stage history: migrate using the old level-based opening rule, rounded into the new tiers (minimum10), without losing counts. Existing gear retains stats and gains its old stage-derived level label. No equip-level restriction is added.

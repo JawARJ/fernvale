@@ -180,3 +180,5 @@ Level-ups into2..30 grant2SP;31+ remains1SP. Four-skill tree55SP is fully afford
 PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post30. PASS cache-recovery.cjs.
 
 0.36: tests/second36.cjs passed Lv30 popup, boss victory, token, 3 choices, promotion, 8/8/9 skill trees, combat/buffs/pull/stun/healing and save/reload. sp35 and cache-recovery passed.
+
+0.37: boxes37 passed tier boundaries9/10,29/30,59/60,99/100; all4 categories locked gear levels; below10 no drops; legacy migration; single/double/MAX opening; bag capacity; level-specific sales and persistence. Screenshot reviewed.
