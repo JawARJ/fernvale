@@ -1,4 +1,4 @@
-# Fernvale — Browser Edition 0.46
+# Fernvale — Browser Edition 0.47
 
 เกม pixel RPG เล่นคนเดียว ใช้ HTML, CSS, JavaScript และ Canvas 2D โดยตรง ไม่มี Godot, WASM, npm build หรือเซิร์ฟเวอร์เกม
 
@@ -263,3 +263,5 @@ Each STR adds10HP and1DEF; DEX adds1ACC and0.125%CRI; INT adds10MP and1ACC; LUK 
 Four base classes (warriorSTR, shooterDEX, mageINT, rogueLUK) choose allowed weapons at creation. Weapon items can equip either hand: main ATK100%, offhand50%, special bonuses100%, primary stat once1:1. Main enables active/buff/passive; offhand onlybuff/passive. Four tiers unlock10/30/60/100, each1active2buff2passive. QWER active by tier; mobile third slot switchesE/R. Skills from tier-labelled skill boxes replacing offhand box category; Elite grants exactly1 random box. Weapon box supplies permitted class weapons for either hand. Added Lv60/Lv100 stages.
 Skill catalogue:13weapon types ×4tiers ×(1active2buff2passive)=260skills. Melee/ranged attacks with weapon-specific range, hammer stun, cooldowns; buffs ATK/DEF120s, passives ATK/SPD. Use a duplicate scroll to learn atLv1 or upgrade up to30. Target level2–5/6–10/11–15/16–20/21–25/26–30 success100/80/65/50/40/30%. Failure consumes scroll but never loses rank.
 SP and old advancement replaced. Legacy characters migrate towarrior, preserve level/stats/AP/money/gear/boxes; archive old tree inlegacySkillBuild, receive one new active scroll per learned old skill at its old tier. Old secondary boxes become same-tier skill boxes. No repeated migration rewards. Buff timers expire on stage change/load.
+
+0.47: Remove creation ATK1:1 label and axe. Twelve weapon types have distinct held pixel sprites and inventory SVG icons. Both equipped hands render actual weapons, no automatic shield. Axe items/skills migrate tohammer; duplicate scroll counts merge, learned rank keeps maximum, duplicate mapped loadout entries clear. New random pools excludeaxe.

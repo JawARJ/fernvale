@@ -200,3 +200,5 @@ PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post
 0.45: joystick45 and cache-recovery passed drag directions/diagonal/cancel, five buttons and NPC context icon. Mobile screenshot reviewed.
 
 0.46: loadout46/classes46 passed4class cards,20slots,skillbox/bag,75ATK worked example, offhand active blocked/passive enabled, upgrade failure/cost, reload; all4classes main stats, active andbuff gameplay/mobile menus; migration idempotent andElite1box. Screenshots inspected.
+
+0.47: weapons47 and classes46 passed all12 sprites, noaxe/formula labels, axe migration rank/count retention, all4classes gameplay/reload. Weapon sheet/world screenshots reviewed.
