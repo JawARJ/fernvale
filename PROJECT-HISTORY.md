@@ -1,4 +1,4 @@
-# Fernvale — Browser Edition 0.40
+# Fernvale — Browser Edition 0.41
 
 เกม pixel RPG เล่นคนเดียว ใช้ HTML, CSS, JavaScript และ Canvas 2D โดยตรง ไม่มี Godot, WASM, npm build หรือเซิร์ฟเวอร์เกม
 
@@ -248,3 +248,5 @@ Each STR adds10HP and1DEF; DEX adds1ACC and0.125%CRI; INT adds10MP and1ACC; LUK 
 0.39: Shared action recovery prevents repeated or alternating attack/skill spam. Normal attacks0.7/0.9/0.7/0.8s by job; skill attacks0.8–1s, buffs0.65s, toggles/leap0.5s. Weapon Acceleration reduces duration up to25%, floor0.5s. Movement and potions unaffected. Stats and previews display up to1 decimal; underlying calculations retain precision.
 
 0.40: Future level-ups grant1AP; existing balances remain. GM NPC at town735/420, interact withSpace: +99,999money, +1level through regular progression, reset toLv1 after confirmation. Reset clears XP/AP/SP/stats/class/skills/advancement quest, retains money/inventory/equipment. GM commands available to all players for testing.
+
+0.41: Two active skills per tier/branch: Slash Blast/Warrior Leap; Brandish/Flash Slash; Divine Swing/Page Order; Spear Pulling/Beholder Shock. Former toggles/buffs become learned passives, existing ranks retained and obsolete bindings cleared. Recovery0.4–0.5s with one queued input during final0.22s. SPD100–200%, JUMP100–120% control actual movement. Basejump360 velocity; maxjump~84px, second leap horizontal without upward reset.
