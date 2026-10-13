@@ -7,7 +7,7 @@ function openCreator(index){if(!Number.isInteger(index)||index<0||index>=3||slot
 function leaveCreator(){pendingSlot=-1;switchScreen('saves')}
 function createCharacter(event){event.preventDefault();if(screen!=='creator'||pendingSlot<0||slots[pendingSlot])return;const name=$('characterName').value.trim().normalize('NFC');if(!name||name.length>24){$('characterName').setCustomValidity('ตั้งชื่อ 1–24 ตัวอักษร');$('characterName').reportValidity();return}const index=pendingSlot;slots[index]={character:{...fresh(),name,baseClass:previewJob,job:previewJob},savedAt:new Date().toISOString()};pendingSlot=-1;persist();loadSlot(index)}
 function openCareer(){openControlWindow('skill')}
-function renderTrialEntry(){$('trialEntry').replaceChildren();$('trialEntry').textContent='ระบบบอสอาชีพเดิมถูกแทนที่ด้วยชุดสกิลอาวุธ'}
+function renderTrialEntry(){const box=$('trialEntry');box.replaceChildren();const label=document.createElement('p');label.textContent=player.classTier>=4?'เลื่อนครบขั้น 4 แล้ว':player.advancementMark?'มีตราแล้ว · กดใช้ในหมวดใช้งาน':'สู้บอสเพื่อรับตราเลื่อนขั้น '+(player.classTier+1)+' · Lv.'+SKILL_MIN_LEVEL[player.classTier+1];const start=document.createElement('button');start.id='trialStartBtn';start.textContent='ท้าทายบอส';start.disabled=!canEnterTrial();start.onclick=()=>beginStage(4);box.append(label,start)}
 function renderStages(){renderStoryStages();renderTrialEntry();selectStageCategory(stageCategory)}
 $('creatorBack').onclick=leaveCreator;$('characterForm').onsubmit=createCharacter;$('characterName').oninput=()=>$('characterName').setCustomValidity('');$('careerBtn').onclick=openCareer;
 

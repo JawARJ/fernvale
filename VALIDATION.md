@@ -204,3 +204,5 @@ PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post
 0.47: weapons47 and classes46 passed all12 sprites, noaxe/formula labels, axe migration rank/count retention, all4classes gameplay/reload. Weapon sheet/world screenshots reviewed.
 
 0.48: pages48/loadout46 passed empty skills20cells,5pages,25items split20+5, independent categories, sort/page reset/persist and equipment capacity100. Screenshot reviewed.
+
+0.49: fixes49 passed8hand swaps without duplicates, merchantMAX3 at1000, bossmark/use/tier2/reload and no dialogscroll at1102x892; tier3/4boss rewards verified. Cache-recovery/pages48 passed. Screenshot reviewed.
