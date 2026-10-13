@@ -1,4 +1,4 @@
-# Fernvale — Browser Edition 0.37
+# Fernvale — Browser Edition 0.38
 
 เกม pixel RPG เล่นคนเดียว ใช้ HTML, CSS, JavaScript และ Canvas 2D โดยตรง ไม่มี Godot, WASM, npm build หรือเซิร์ฟเวอร์เกม
 
@@ -241,3 +241,6 @@ First-job skills and points remain. Second-job skills have a separate bank: 10 S
 ## 0.37 — Locked box tiers
 All four box categories store their item level. Stage levels10–29 /30–59 /60–99 /100+ drop boxesLv10 /30 /60 /100 respectively. Stages below10 do not drop boxes. Elite drop100% and ordinary drop1% are unchanged. Grade bonus boxes use the same stage tier. Same type and level stack; different levels occupy separate stacks. Opening generates gear at the locked level regardless of character level. Inventory, shop, rewards and opening dialogs display the level.
 Legacy boxes have no source-stage history: migrate using the old level-based opening rule, rounded into the new tiers (minimum10), without losing counts. Existing gear retains stats and gains its old stage-derived level label. No equip-level restriction is added.
+
+## 0.38 — Main-stat formulas
+Each STR adds10HP and1DEF; DEX adds1ACC and0.125%CRI; INT adds10MP and1ACC; LUK adds0.125%AVOID and0.125%CRI. Only the class main stat contributes to ATK at1:1, added to weapon ATK; no secondary-stat multiplier or automatic level ATK. Existing HP/MP level growth, job DEF and skill/equipment bonuses remain. BaseCRI0%, baseCRI.DAMAGE150%, baseACC90. CRI andAVOID cap100%. LUK no longer raisesCRI.DAMAGE; existing equipment criDamage affixes and character special criDamage bonuses remain supported. Avoided monster contact showsMISS and uses the usual1.2s invulnerability without damage, knockback or reflection.

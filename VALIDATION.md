@@ -182,3 +182,5 @@ PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post
 0.36: tests/second36.cjs passed Lv30 popup, boss victory, token, 3 choices, promotion, 8/8/9 skill trees, combat/buffs/pull/stun/healing and save/reload. sp35 and cache-recovery passed.
 
 0.37: boxes37 passed tier boundaries9/10,29/30,59/60,99/100; all4 categories locked gear levels; below10 no drops; legacy migration; single/double/MAX opening; bag capacity; level-specific sales and persistence. Screenshot reviewed.
+
+0.38: stats38 passed exact per-point deltas, primary-only ATK, gear bonuses, avoidance,3-decimal display and save/reload. Cache recovery and locked-box tests passed.
