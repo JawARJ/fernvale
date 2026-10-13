@@ -190,3 +190,5 @@ PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post
 0.40: gm40 and cache-recovery passed AP1, money/level/reset, confirmation, persistence and NPC registration.
 
 0.41: combat41, air41 and cache-recovery passed. Active counts2/2/2/2; buffer fires once; jump height83.52px at120%; leap does not reset upward velocity; learned Beholder heals and Shock works; old passive bindings clear. Airborne moving Brandish and queued followup both hit52damage with0.45s recovery.
+
+0.42: buffs42 and cache-recovery passed wave hit,8 directions, active count2, passiveSPD, stack tile, migrated binding and MAX buy/sell.

@@ -1,4 +1,4 @@
-# Fernvale — Browser Edition 0.41
+# Fernvale — Browser Edition 0.42
 
 เกม pixel RPG เล่นคนเดียว ใช้ HTML, CSS, JavaScript และ Canvas 2D โดยตรง ไม่มี Godot, WASM, npm build หรือเซิร์ฟเวอร์เกม
 
@@ -250,3 +250,5 @@ Each STR adds10HP and1DEF; DEX adds1ACC and0.125%CRI; INT adds10MP and1ACC; LUK 
 0.40: Future level-ups grant1AP; existing balances remain. GM NPC at town735/420, interact withSpace: +99,999money, +1level through regular progression, reset toLv1 after confirmation. Reset clears XP/AP/SP/stats/class/skills/advancement quest, retains money/inventory/equipment. GM commands available to all players for testing.
 
 0.41: Two active skills per tier/branch: Slash Blast/Warrior Leap; Brandish/Flash Slash; Divine Swing/Page Order; Spear Pulling/Beholder Shock. Former toggles/buffs become learned passives, existing ranks retained and obsolete bindings cleared. Recovery0.4–0.5s with one queued input during final0.22s. SPD100–200%, JUMP100–120% control actual movement. Basejump360 velocity; maxjump~84px, second leap horizontal without upward reset.
+
+0.42: Top-right placeholder buff tiles with bottom-right Combo/Holy stack counts. Greatsword active skills Brandish/Spirit Blade; Flash Slash passiveSPD+2%/rank. Spirit Blade fires an8-direction piercing wave up to6targets, MP12,120+6rank%ATK, no former passiveATK/reflect. Buy/sell quantity MAX uses available money/stock.
