@@ -1,4 +1,4 @@
-# Fernvale — Browser Edition 0.47
+# Fernvale — Browser Edition 0.48
 
 เกม pixel RPG เล่นคนเดียว ใช้ HTML, CSS, JavaScript และ Canvas 2D โดยตรง ไม่มี Godot, WASM, npm build หรือเซิร์ฟเวอร์เกม
 
@@ -265,3 +265,5 @@ Skill catalogue:13weapon types ×4tiers ×(1active2buff2passive)=260skills. Mele
 SP and old advancement replaced. Legacy characters migrate towarrior, preserve level/stats/AP/money/gear/boxes; archive old tree inlegacySkillBuild, receive one new active scroll per learned old skill at its old tier. Old secondary boxes become same-tier skill boxes. No repeated migration rewards. Buff timers expire on stage change/load.
 
 0.47: Remove creation ATK1:1 label and axe. Twelve weapon types have distinct held pixel sprites and inventory SVG icons. Both equipped hands render actual weapons, no automatic shield. Axe items/skills migrate tohammer; duplicate scroll counts merge, learned rank keeps maximum, duplicate mapped loadout entries clear. New random pools excludeaxe.
+
+0.48: Uniform20-cell inventory grid for equipment/usable/skills,5pages per category and immediate sort button; page selections independent. Sorting persists via inventoryOrder. Equipment capacity100. Legacy skill bags with over100 distinct entries get extra pages to avoid hiding items.

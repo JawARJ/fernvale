@@ -90,3 +90,5 @@
 .weapon-skill-window>.window-close{top:-60px;right:0}.mobile-play .weapon-skill-window>.window-close{top:-34px}.skill-detail-action{grid-row:2}
 
 .touch-skill-page{position:absolute;bottom:195px;right:16px;min-height:32px!important;font-size:10px!important}.weapon-skill-cell:disabled{opacity:.35}
+
+.inventory-page-controls{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px}.inventory-page-buttons{display:flex;gap:4px;flex-wrap:wrap;justify-content:end}.inventory-page-buttons button{min-width:32px;padding:5px}.inventory-page-buttons .selected{background:#dac08a;color:#223b2c}.inventory-page-controls>button{padding:7px 12px}.mobile-play .inventory-page-buttons button{min-width:38px;min-height:38px}.skill-scroll svg{width:44px;height:44px}
