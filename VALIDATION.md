@@ -196,3 +196,5 @@ PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post
 0.43: cd43 passed8s cooldown block/recast, pause, unrelated skill and HUD.
 
 0.44: mobile44 passed emulated844x390/390x844 touch mode, independent multiple pointers and cancel, bag/skill menus, no horizontal page overflow;1254x892 desktop keyboard. Cache recovery passed. Real iOS/Android hardware testing remains.
+
+0.45: joystick45 and cache-recovery passed drag directions/diagonal/cancel, five buttons and NPC context icon. Mobile screenshot reviewed.
