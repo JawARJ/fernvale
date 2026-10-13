@@ -14,3 +14,6 @@ Concept source: Nexon official Explorer Warrior skill guide https://gi.maplestor
 No timed skill cooldowns; movement has ground/air conditions and one-air-use limits. Invalid casts do not consumeMP. Q/W/E/R manual assignments remain. Ordinary C attack stays one target.
 
 Migration: old Slash ranks→Slash Blast; old HP Boost + DEF Boost ranks→Iron Body; removed Power Bash ranks refunded as SP. Old Slash bindings remap; Power Bash bindings cleared. New skillVersion2 is saved; migration does not repeat or duplicate points.
+
+## SP earning (0.33)
+3SP for each level-up into2..30; 1SP into31+. Max tree71SP becomes affordable atLv25 with72SP. Existing saves receive missing2SP per eligible earlier level once.

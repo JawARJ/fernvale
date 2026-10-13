@@ -1,6 +1,6 @@
 'use strict';
 // Refresh mixed cached HTML/scripts before interacting with character saves.
-(()=>{const release='0.32';if(document.documentElement.dataset.release===release)return;const target=new URL(location.href);if(target.searchParams.get('release')!==release){target.searchParams.set('release',release);location.replace(target.href)}})();
+(()=>{const release='0.33';if(document.documentElement.dataset.release===release)return;const target=new URL(location.href);if(target.searchParams.get('release')!==release){target.searchParams.set('release',release);location.replace(target.href)}})();
 
 const SWORD_SKILLS={warriorMastery:{name:'Warrior Mastery',max:15,type:'passive'},ironBody:{name:'Iron Body',max:20,type:'passive'},slashBlast:{name:'Slash Blast',max:20,type:'active'},warriorLeap:{name:'Warrior Leap',max:10,type:'active'},upperCharge:{name:'Upper Charge',max:5,type:'active'},leapAttack:{name:'Leap Attack',max:1,type:'active'}};
 const SWORD_DESCRIPTIONS={warriorMastery:'ฝึกพื้นฐานนักดาบ เพิ่มความเร็วเดิน แรงกระโดด HP และโอกาสต้านการกระเด็น',ironBody:'ร่างกายแข็งแกร่ง เพิ่ม HP และ DEF พร้อมลดความเสียหายที่ได้รับแบบติดตัว',slashBlast:'ฟันกวาดด้านหน้า โจมตีศัตรูได้สูงสุด 6 ตัว',warriorLeap:'กระโดดพุ่งไปด้านหน้ากลางอากาศ ใช้ได้หนึ่งครั้งก่อนแตะพื้น · กด Space ซ้ำกลางอากาศได้',upperCharge:'พุ่งขึ้นพร้อมฟันศัตรูรอบตัว ใช้ได้หนึ่งครั้งก่อนแตะพื้น · ใช้ ↑ + C ได้',leapAttack:'ดิ่งลงสู่แพลตฟอร์มด้านล่างและโจมตีบริเวณที่ลงพื้น · ใช้ ↓ + C กลางอากาศได้'};
