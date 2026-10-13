@@ -1,4 +1,4 @@
-# Fernvale — source 0.33
+# Fernvale — source 0.34
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -24,3 +24,5 @@ The original hosting project ID and Git credentials are intentionally excluded f
 Warrior Mastery, Iron Body, Slash Blast, Warrior Leap, Upper Charge, Leap Attack. See [skill tuning and save migration](SKILLS-REFERENCE.md). Space repeat in air uses Warrior Leap; Up+C launches Upper Charge; Down+C in air dives. Active skills remain manually assignable toQ/W/E/R. Old SP migrates once; Power Bash points refunded.
 
 SP:3 per level-up untilLv30,1 thereafter. First-job skills require71SP; affordable atLv25. Existing saves receive missingSP once.
+
+0.34: Upper Charge/Leap Attack removed, Iron Body max10. Four-skill tree requires55SP. Removed/excess ranks refund once. SP rate unchanged. See SKILLS-REFERENCE.md for current controls.
