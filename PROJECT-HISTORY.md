@@ -1,4 +1,4 @@
-# Fernvale — Browser Edition 0.39
+# Fernvale — Browser Edition 0.40
 
 เกม pixel RPG เล่นคนเดียว ใช้ HTML, CSS, JavaScript และ Canvas 2D โดยตรง ไม่มี Godot, WASM, npm build หรือเซิร์ฟเวอร์เกม
 
@@ -246,3 +246,5 @@ Legacy boxes have no source-stage history: migrate using the old level-based ope
 Each STR adds10HP and1DEF; DEX adds1ACC and0.125%CRI; INT adds10MP and1ACC; LUK adds0.125%AVOID and0.125%CRI. Only the class main stat contributes to ATK at1:1, added to weapon ATK; no secondary-stat multiplier or automatic level ATK. Existing HP/MP level growth, job DEF and skill/equipment bonuses remain. BaseCRI0%, baseCRI.DAMAGE150%, baseACC90. CRI andAVOID cap100%. LUK no longer raisesCRI.DAMAGE; existing equipment criDamage affixes and character special criDamage bonuses remain supported. Avoided monster contact showsMISS and uses the usual1.2s invulnerability without damage, knockback or reflection.
 
 0.39: Shared action recovery prevents repeated or alternating attack/skill spam. Normal attacks0.7/0.9/0.7/0.8s by job; skill attacks0.8–1s, buffs0.65s, toggles/leap0.5s. Weapon Acceleration reduces duration up to25%, floor0.5s. Movement and potions unaffected. Stats and previews display up to1 decimal; underlying calculations retain precision.
+
+0.40: Future level-ups grant1AP; existing balances remain. GM NPC at town735/420, interact withSpace: +99,999money, +1level through regular progression, reset toLv1 after confirmation. Reset clears XP/AP/SP/stats/class/skills/advancement quest, retains money/inventory/equipment. GM commands available to all players for testing.

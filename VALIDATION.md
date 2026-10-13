@@ -186,3 +186,5 @@ PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post
 0.38: stats38 passed exact per-point deltas, primary-only ATK, gear bonuses, avoidance,3-decimal display and save/reload. Cache recovery and locked-box tests passed.
 
 0.39: delay39 passed repeated/cross-skill and normal attack lock, timing and1-decimal display with exact underlying value.
+
+0.40: gm40 and cache-recovery passed AP1, money/level/reset, confirmation, persistence and NPC registration.
