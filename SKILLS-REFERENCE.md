@@ -1,12 +1,8 @@
-# Swordsman skills — Fernvale0.34
+# Weapon skill system — 0.46
+The old first/second-job trees are retired. Creation determines allowed weapon family and primary stat.
 
-Inspired by Nexon Explorer Warrior first-job concepts: https://gi.maplestory.nexon.com/Guide/GameInformation/Skill/Warrior . Fernvale has its own tuning/art; this is not exact MapleStory patch data.
+Each tier (minimum level10/30/60/100) has one active, two buff and two passive slots. Tier-specific scrolls are randomised from13 weapon types. Learn a scroll atLv1; each further attempt consumes one same-ID scroll. Failure preserves rank. Maximum30; target levels2–5/6–10/11–15/16–20/21–25/26–30 succeed100/80/65/50/40/30 percent.
 
-|Skill|Max|Fernvale effect|
-|---|---:|---|
-|Warrior Mastery|15|Per rank speed+3%, jump impulse+2%, HP+1%, knockback resistance+2%|
-|Iron Body|10|Passive per rank HP+2%, DEF+1, incoming mitigation+0.5%|
-|Slash Blast|20|110–205%ATK,6targets, MP6+floor(rank/5), forward sweep|
-|Warrior Leap|10|MP4, one extra leap per airborne cycle, horizontal velocity240+14rank for0.22s; Space repeat or manually assigned slot|
+Active requires matching main hand. Buff/passive permits either matching hand. Weapon swap invalidates effects immediately. Main weaponATK100%, offhand50%, primary stat once, affixes100%. Buff effects last120seconds. Passive effects apply automatically when slotted and equipped correctly. QWER casts active tiers1–4, mobile E/R switch accesses tier4.
 
-55SP to max all. Rate is2 per level-up into2..30,1 afterward (0.35). Removed Upper Charge/Leap Attack ranks and Iron Body ranks above10 return as SP once. Empty removed bindings can be reassigned by player. Earlier Power Bash refund, Slash remap and HP/DEF Boost migration remain supported.
+Prototype catalogue provides each weapon/tier one attack (melee or directional ranged), ATK andDEF buffs, ATK andSPD passives. Hammer attacks stun ordinary targets; spear uses longer reach. Weapon ranks and loadouts persist; timed buffs reset on load/map change. Legacy builds remain in legacySkillBuild, with scroll compensation for learned skills.

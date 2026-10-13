@@ -1,4 +1,4 @@
-# Fernvale — source 0.45
+# Fernvale — source 0.46
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -48,3 +48,5 @@ SP:3 per level-up untilLv30,1 thereafter. First-job skills require71SP; affordab
 0.44: Mobile browser multitouch controls and responsive landscape/portrait UI; desktop keyboard retained.
 
 0.45: Circular drag joystick, five action circles, contextual jump and no minimap.
+
+0.46: Base classes, weapon skill loadouts across four tiers, duplicate skill upgrades, skill boxes and offhand ATK50%.

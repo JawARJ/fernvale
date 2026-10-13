@@ -198,3 +198,5 @@ PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post
 0.44: mobile44 passed emulated844x390/390x844 touch mode, independent multiple pointers and cancel, bag/skill menus, no horizontal page overflow;1254x892 desktop keyboard. Cache recovery passed. Real iOS/Android hardware testing remains.
 
 0.45: joystick45 and cache-recovery passed drag directions/diagonal/cancel, five buttons and NPC context icon. Mobile screenshot reviewed.
+
+0.46: loadout46/classes46 passed4class cards,20slots,skillbox/bag,75ATK worked example, offhand active blocked/passive enabled, upgrade failure/cost, reload; all4classes main stats, active andbuff gameplay/mobile menus; migration idempotent andElite1box. Screenshots inspected.

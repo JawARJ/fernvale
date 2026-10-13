@@ -1,4 +1,4 @@
-# Fernvale — Browser Edition 0.45
+# Fernvale — Browser Edition 0.46
 
 เกม pixel RPG เล่นคนเดียว ใช้ HTML, CSS, JavaScript และ Canvas 2D โดยตรง ไม่มี Godot, WASM, npm build หรือเซิร์ฟเวอร์เกม
 
@@ -258,3 +258,8 @@ Each STR adds10HP and1DEF; DEX adds1ACC and0.125%CRI; INT adds10MP and1ACC; LUK 
 0.44: Mobile browser touch UI on coarse pointers up to1100px, landscape full screen and portrait layout. Dpad walking/climbing, separate interact, jump/attack, learned QWER skill buttons with cooldown and HP/MP potions. Multi-pointer release/cancel preserves other held controls. Compact HUD and touch bag/skill/pause menus; safe-area spacing, scrollable dialogs; preserve canvas aspect ratio and desktop keyboard/mouse. Saves remain browser-local. No native app install required.
 
 0.45: Drag-and-hold circular joystick replaces Dpad. Right five-circle layout: large contextual jump/interact foot/speech icon, smaller normal attack and Q/W/E skill slots. PC retains QWER. Minimap removed globally; combo only track and count without frame/header.
+
+## 0.46 — Weapon skill loadouts
+Four base classes (warriorSTR, shooterDEX, mageINT, rogueLUK) choose allowed weapons at creation. Weapon items can equip either hand: main ATK100%, offhand50%, special bonuses100%, primary stat once1:1. Main enables active/buff/passive; offhand onlybuff/passive. Four tiers unlock10/30/60/100, each1active2buff2passive. QWER active by tier; mobile third slot switchesE/R. Skills from tier-labelled skill boxes replacing offhand box category; Elite grants exactly1 random box. Weapon box supplies permitted class weapons for either hand. Added Lv60/Lv100 stages.
+Skill catalogue:13weapon types ×4tiers ×(1active2buff2passive)=260skills. Melee/ranged attacks with weapon-specific range, hammer stun, cooldowns; buffs ATK/DEF120s, passives ATK/SPD. Use a duplicate scroll to learn atLv1 or upgrade up to30. Target level2–5/6–10/11–15/16–20/21–25/26–30 success100/80/65/50/40/30%. Failure consumes scroll but never loses rank.
+SP and old advancement replaced. Legacy characters migrate towarrior, preserve level/stats/AP/money/gear/boxes; archive old tree inlegacySkillBuild, receive one new active scroll per learned old skill at its old tier. Old secondary boxes become same-tier skill boxes. No repeated migration rewards. Buff timers expire on stage change/load.
