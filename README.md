@@ -1,4 +1,4 @@
-# Fernvale — source 0.31
+# Fernvale — source 0.32
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -19,3 +19,6 @@ From this folder, run `python -m http.server 8000 --directory dist` and open htt
 Controls: arrows movement/climbing, Space jump/interact, C attack, Q/W/E/R assigned skills, Z/X potions, Tab status, 1 skills, 2 party, 3 enchant, Esc pause. Menu arrows select, Enter confirms, Esc closes.
 
 The original hosting project ID and Git credentials are intentionally excluded from this shareable package. See PROJECT-HISTORY.md for development notes. Font licensing is in dist/FONT-OFL.txt.
+
+## Swordsman skills in0.32
+Warrior Mastery, Iron Body, Slash Blast, Warrior Leap, Upper Charge, Leap Attack. See [skill tuning and save migration](SKILLS-REFERENCE.md). Space repeat in air uses Warrior Leap; Up+C launches Upper Charge; Down+C in air dives. Active skills remain manually assignable toQ/W/E/R. Old SP migrates once; Power Bash points refunded.
