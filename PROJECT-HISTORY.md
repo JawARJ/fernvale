@@ -1,4 +1,4 @@
-# Fernvale — Browser Edition 0.35
+# Fernvale — Browser Edition 0.36
 
 เกม pixel RPG เล่นคนเดียว ใช้ HTML, CSS, JavaScript และ Canvas 2D โดยตรง ไม่มี Godot, WASM, npm build หรือเซิร์ฟเวอร์เกม
 
@@ -233,3 +233,7 @@ PASS tests/skills34.cjs cost55, max cap, 16-point refund/idempotence, bindings/r
 ## 0.35 — Two SP per level
 Level-ups into2..30 grant2SP;31+ remains1SP. Four-skill tree55SP is fully affordable atLv29 with56SP. Existing spVersion2 (3SP) balances retained. Original1SP saves receive missing1SP per eligible level once; spVersion3 prevents repeat grants.
 PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post30. PASS cache-recovery.cjs.
+
+## 0.36 — Second-job advancement
+Lv.30 offers a quest to defeat the Warrior Trial boss. Victory grants a Warrior Mark in the usable inventory. Activate it and confirm one of Greatsword (8 skills), Guardian (8 skills), or Spearman (9 skills). Skills are adapted from the official MapleStory Warrior guide: https://gi.maplestory.nexon.com/Guide/GameInformation/Skill/Warrior
+First-job skills and points remain. Second-job skills have a separate bank: 10 SP on advancement, plus 3 per level from 31 through 60, including catch-up for delayed advancement. Select the second-job tab, learn skills and bind active skills to Q/W/E/R. Bosses and elites resist stun/pull. Buffs last 45 seconds; Beholder heals every 5 seconds.

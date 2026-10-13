@@ -1,4 +1,4 @@
-# Fernvale — source 0.35
+# Fernvale — source 0.36
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -28,3 +28,5 @@ SP:3 per level-up untilLv30,1 thereafter. First-job skills require71SP; affordab
 0.34: Upper Charge/Leap Attack removed, Iron Body max10. Four-skill tree requires55SP. Removed/excess ranks refund once. SP rate unchanged. See SKILLS-REFERENCE.md for current controls.
 
 0.35:2SP per level-up into2..30,1 afterward. Max55SP tree affordable atLv29; existing earned balances preserved.
+
+0.36: Lv30 boss advancement quest and three second-job skill trees.

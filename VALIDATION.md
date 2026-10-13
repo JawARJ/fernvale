@@ -178,3 +178,5 @@ PASS tests/skills34.cjs cost55, max cap, 16-point refund/idempotence, bindings/r
 ## 0.35 — Two SP per level
 Level-ups into2..30 grant2SP;31+ remains1SP. Four-skill tree55SP is fully affordable atLv29 with56SP. Existing spVersion2 (3SP) balances retained. Original1SP saves receive missing1SP per eligible level once; spVersion3 prevents repeat grants.
 PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post30. PASS cache-recovery.cjs.
+
+0.36: tests/second36.cjs passed Lv30 popup, boss victory, token, 3 choices, promotion, 8/8/9 skill trees, combat/buffs/pull/stun/healing and save/reload. sp35 and cache-recovery passed.
