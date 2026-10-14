@@ -6,7 +6,7 @@ function ensureBaselineSkills(p){
 }
 const validateBeforeBaseline=validateCharacter;
 validateCharacter=function(raw){return ensureBaselineSkills(validateBeforeBaseline(raw))};
-function skillEffectDetail(d,rank){
+function skillEffectDetail(d,rank){if(d.tier===2)return tier2EffectDetail(d,rank);
  const n=value=>Number(value.toFixed(1));
  if(d.kind==='active')return 'ใช้จากมือหลัก · '+({hammer:'ทำให้มอนทั่วไปชะงัก '+n(.6+rank*.01)+' วิ',staff:'ระเบิดรอบเป้าหมาย ดาเมจเสริม 70%',tome:'ทำให้มอนทั่วไปเดินช้า 2 วิ',star:'ชิ่งไปหาศัตรูใกล้เคียงสูงสุด 3 ตัว ดาเมจเริ่ม 70%'}[d.weapon]||'โจมตีตามทิศที่หัน'+(WEAPON_DESIGNS[d.weapon].ranged?' หรือทิศลูกศร':''));
  if(d.kind==='buff'){
@@ -33,9 +33,9 @@ function skillEffectDetail(d,rank){
 }
 weaponSkillText=function(id){
  const d=WEAPON_SKILLS[id];if(!d?.designed)return 'รอออกแบบ';
- const rank=Math.max(1,player.weaponSkills[id]||0),design=WEAPON_DESIGNS[d.weapon],active=d.kind==='active';
+ const rank=Math.max(1,player.weaponSkills[id]||0),design=getWeaponDesign(d),active=d.kind==='active';
  const heading=d.kind.toUpperCase()+' · ขั้น '+d.tier+' · Lv.'+rank+'/30\nใช้สำหรับอาวุธ : '+WEAPON_NAMES[d.weapon];
- const metrics='CD '+(d.kind==='passive'?0:active?3:8)+' วิ · MP '+(d.kind==='passive'?0:8)+(active?'\nDamage '+(90+rank*2)+'% ATK × '+design.hits+' Hit · Mob '+design.targets:'');
+ const metrics='CD '+(d.kind==='passive'?0:active?design.cd:d.tier===2?12:8)+' วิ · MP '+(d.kind==='passive'?0:active?design.cost:d.tier===2?14:8)+(active?'\nDamage '+(design.damageBase+rank*design.damagePerLevel)+'% ATK × '+design.hits+' Hit · Mob '+design.targets:'');
  return heading+'\n'+metrics+'\n'+skillEffectDetail(d,rank);
 };
 function skillPreview(cell,id){if(id)attachLootDetail(cell,{name:WEAPON_SKILLS[id].name,description:weaponSkillText(id)})}
@@ -51,9 +51,9 @@ function renderSwordSkillWindow(body){
    player.weaponLoadout[tier-1][kind].forEach((id,index)=>{
     const slot=document.createElement('div');slot.className='weapon-slot';
     const cell=document.createElement('div');cell.className='weapon-skill-cell';cell.tabIndex=0;
-    cell.textContent=tier>1?'รอออกแบบ':id?WEAPON_SKILLS[id].name+'\nLv.'+player.weaponSkills[id]+(weaponSkillEnabled(id)?'':'\nอาวุธไม่ตรง'):'ว่าง';
-    if(tier===1)skillPreview(cell,id);
-    const change=document.createElement('button');change.className='skill-detail-action';change.textContent='เปลี่ยนสกิล';change.disabled=tier>1;change.onclick=()=>pickWeaponSkill(tier,kind,index);
+    cell.textContent=tier>2?'รอออกแบบ':tier===2&&(player.level<30||player.classTier<2)?'Lv.30 · ใช้ตราเลื่อนขั้น 2':id?WEAPON_SKILLS[id].name+'\nLv.'+player.weaponSkills[id]+(weaponSkillEnabled(id)?'':'\nอาวุธไม่ตรง'):'ว่าง';
+    if(tier<=2)skillPreview(cell,id);
+    const change=document.createElement('button');change.className='skill-detail-action';change.textContent='เปลี่ยนสกิล';change.disabled=tier>2||tier===2&&(player.level<30||player.classTier<2);change.onclick=()=>pickWeaponSkill(tier,kind,index);
     slot.append(cell,change);group.append(slot);
    });grid.append(group);
   }

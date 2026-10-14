@@ -287,3 +287,5 @@ SP and old advancement replaced. Legacy characters migrate towarrior, preserve l
 0.57: Six farming stages Lv10/20/30/40/50/60. Each entry generates a wider map with 2-4 layers from ramp, staggered, split and bridge families; every ledge connects by ladders. Thirty normal monsters, respawn2s. Boss Lv30/Lv60 with weapon-box rewards; only Lv30 awards tier2 advancement mark.
 
 0.58: Each stage now has one fixed generated layout shared across reentries/reloads. Six stages cover ramp/staggered/split/bridge layouts with2-4 layers. Town-return portals at entry and far end, including bosses. Kill combo UI and score contribution removed.
+
+0.59: Removed unconditional second-jump air dash. Added72 tier2 skills across12 weapons:1 active/2 buffs/3 passive choices each, baselineLv1, unlockLv30+tier2 mark, activeCD5-8s and MP14-20, buffCD12s/duration90s. Tier2 boxes now open and upgrade scrolls. Tier3/4 remain pending.
