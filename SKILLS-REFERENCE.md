@@ -6,3 +6,6 @@ Each tier (minimum level10/30/60/100) has one active, two buff and two passive s
 Active requires matching main hand. Buff/passive permits either matching hand. Weapon swap invalidates effects immediately. Main weaponATK100%, offhand50%, primary stat once, affixes100%. Buff effects last120seconds. Passive effects apply automatically when slotted and equipped correctly. QWER casts active tiers1–4, mobile E/R switch accesses tier4.
 
 Prototype catalogue provides each weapon/tier one attack (melee or directional ranged), ATK andDEF buffs, ATK andSPD passives. Hammer attacks stun ordinary targets; spear uses longer reach. Weapon ranks and loadouts persist; timed buffs reset on load/map change. Legacy builds remain in legacySkillBuild, with scroll compensation for learned skills.
+
+## Current0.51
+Tier1 designed in dist/skilldesign.js;12weapons each1active2buff3passive choices. Equip1active2buff2passive fromcurrentlyheld weapon pool; same names prohibited withinkind/tier. Shared primary-stat buff uses one choice. Tier2–4 awaitdesign.

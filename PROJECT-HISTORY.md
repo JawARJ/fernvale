@@ -1,4 +1,4 @@
-# Fernvale — Browser Edition 0.50
+# Fernvale — Browser Edition 0.51
 
 เกม pixel RPG เล่นคนเดียว ใช้ HTML, CSS, JavaScript และ Canvas 2D โดยตรง ไม่มี Godot, WASM, npm build หรือเซิร์ฟเวอร์เกม
 
@@ -271,3 +271,5 @@ SP and old advancement replaced. Legacy characters migrate towarrior, preserve l
 0.49: Boss advancement atLv30/60/100 grants a mark; activate mark inusable inventory to unlock next tier ofsame base class. Legacy characters retain their already unlocked tier. Potion merchant sells tier1skill boxes for1000 with quantityMAX. Equipped hand swaps exchange items directly and never mint starter weapons; implicit starter materialised atmostonce. Character world sprite shows main handonly. Desktop character dialog condensed to avoid scrolling at1102x892.
 
 0.50: Only tier1/2 scaffold currently shown,5slots each. Remove Lv60/100stages and tier3/4boss entry. Provisional skills suspended pending design; existing ranks/scrolls/boxes remain saved. Skill boxes temporarily cannot open and are not consumed. Basic attacks still work.
+
+0.51: Designed tier1skills for12weapons (1active2buff3passive choices each). Main hand supplies Active; both hands supply Buff/Passive pools, choose2each without duplicate display names. Common main-stat buff deduplicates across same-family weapons, best learned rank shown. Slot effects stop immediately with incompatible weapons. Spear buffs/passives extend main attack reach/ignoreDEF; no tip-distance mechanic. Distinct melee/ranged/CC attacks,120s buffs, conditional/passive combat effects. Skill boxes tier1 reenabled and draw fromclass weapon pool. Tier2–4 rows retained as pending design; no tier3/4advancement content.
