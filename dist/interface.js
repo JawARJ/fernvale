@@ -1,6 +1,6 @@
 'use strict';
 let stageCategory='dungeon';
-function updateCombatMeters(){const playing=player.map!=='town'&&!!run;$('combatMeter').hidden=!playing;$('eliteMeter').hidden=!playing||!!run?.trial||!!run?.tutorial;if(!playing)return;$('roundClock').textContent=run.tutorial?'ฝึกสอน':'ฟาร์ม';$('comboFill').style.width=(run.combo?Math.max(0,1-(run.time-run.lastKill)/5)*100:0)+'%';$('comboCount').textContent=run.combo;$('eliteFill').style.width=(run.eliteProgress||0)+'%';$('eliteCount').textContent=(run.eliteProgress||0)+' / 100'}
+function updateCombatMeters(){const playing=player.map!=='town'&&!!run;$('combatMeter').hidden=true;$('eliteMeter').hidden=!playing||!!run?.trial||!!run?.tutorial;if(!playing)return;$('eliteFill').style.width=(run.eliteProgress||0)+'%';$('eliteCount').textContent=(run.eliteProgress||0)+' / 100'}
 function selectStageCategory(category){stageCategory=category;for(const [id,key]of [['dungeonCategory','dungeon'],['bossCategory','boss']]){$(id).setAttribute('aria-selected',String(category===key));$(id).classList.toggle('selected',category===key)}$('stageList').hidden=category!=='dungeon';$('trialEntry').hidden=category!=='boss'}
 window.addEventListener('DOMContentLoaded',()=>{$('dungeonCategory').onclick=()=>selectStageCategory('dungeon');$('bossCategory').onclick=()=>selectStageCategory('boss')});
 

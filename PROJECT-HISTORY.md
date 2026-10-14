@@ -285,3 +285,5 @@ SP and old advancement replaced. Legacy characters migrate towarrior, preserve l
 0.56: Combat numbers stack per target so multi-hit damage remains visible. Active metrics show damage x hits then Mob; Buff/Passive omit attack metrics. Picker filters requested kind. Shop stock uses icon/name/price rows with hover details. Result dialog half-width and compact on short screens.
 
 0.57: Six farming stages Lv10/20/30/40/50/60. Each entry generates a wider map with 2-4 layers from ramp, staggered, split and bridge families; every ledge connects by ladders. Thirty normal monsters, respawn2s. Boss Lv30/Lv60 with weapon-box rewards; only Lv30 awards tier2 advancement mark.
+
+0.58: Each stage now has one fixed generated layout shared across reentries/reloads. Six stages cover ramp/staggered/split/bridge layouts with2-4 layers. Town-return portals at entry and far end, including bosses. Kill combo UI and score contribution removed.

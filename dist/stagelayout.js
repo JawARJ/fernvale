@@ -1,11 +1,9 @@
 'use strict';
-const lastStageLayouts=new Map();
+function stageLayoutRandom(id){let state=(0x58f37a91+id*2654435761)>>>0;return ()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296}}
 function platformSurface(p,x){return p.y+(p.yEnd===undefined?0:(p.yEnd-p.y)*Math.max(0,Math.min(1,(x-p.x)/p.w)))}
-function makeStageLayout(id,rng=Math.random){
- const width=1600+id*80+Math.floor(rng()*5)*160,layers=2+Math.floor(rng()*3);
- let family=(id+Math.floor(rng()*4))%4;const signature=width+':'+layers+':'+family;
- if(lastStageLayouts.get(id)===signature)family=(family+1)%4;
- lastStageLayouts.set(id,width+':'+layers+':'+family);
+function makeStageLayout(id,rng=stageLayoutRandom(id)){
+ const width=1600+id*80+Math.floor(rng()*5)*160,layers=[2,3,3,4,3,4][id-1]||2+Math.floor(rng()*3);
+ const family=[0,1,2,3,0,2][id-1]??(id+Math.floor(rng()*4))%4;
  const ledges=[{x:0,y:420,w:width,layer:0}],links=[];
  for(let layer=1;layer<layers;layer++){
   const y=420-layer*105,jitter=Math.floor(rng()*90),margin=70+jitter;
@@ -50,3 +48,5 @@ function drawStageTerrain(){
  }
  mushroom(worldWidth()-45,418,1.1);
 }
+
+function drawStagePortals(){for(const exit of interactables.filter(t=>t.kind==='portal')){portal(exit.x,exit.y);ctx.font='12px Thai,Tahoma';ctx.textAlign='center';ctx.fillStyle='#173929';ctx.fillRect(exit.x-55,exit.y-137,110,23);ctx.fillStyle='#f3dc9e';ctx.fillText(run?.tutorial?'จบการฝึก':'กลับหมู่บ้าน',exit.x,exit.y-121);if(Math.abs(player.x-exit.x)<100){ctx.font='10px Thai,Tahoma';ctx.fillText('Spacebar โต้ตอบ',exit.x,exit.y-102)}}}

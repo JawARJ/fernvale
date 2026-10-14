@@ -22,9 +22,6 @@ function deleteSlot(i){
 }
 function recordKill(m){
  run.pendingXP+=m.exp;gainXP(m.exp);tutorialMark("attack");rollMonsterLoot(m);save();
- run.combo=run.time-run.lastKill<=5?run.combo+1:1;
- run.lastKill=run.time;run.maxCombo=Math.max(run.maxCombo,run.combo);
- run.comboPoints+=Math.min(100,(run.combo-1)*10);
  if(m.elite)run.eliteKills++;else if(m.boss)run.bossKills++;
  if(!run.trial&&!run.tutorial&&!m.elite){run.eliteProgress++;if(run.eliteProgress>=100){run.eliteProgress-=100;run.eliteSpawns++;spawnElite()}}m.respawnAt=run.time+2;
 
@@ -35,7 +32,6 @@ function spawnElite(){
  toast('ELITE ปรากฏตัว!');
 }
 function updateRound(){
- if(run.combo&&run.time-run.lastKill>5)run.combo=0;
  if(run.trial)return;
  for(const m of monsters){
   if(!run.tutorial&&m.dead&&!m.boss&&!m.elite&&run.time>=m.respawnAt){m.dead=0;m.hp=m.max;m.x=m.home;m.hit=0;if(run.layout)m.y=platformSurface(platforms[m.p],m.x)}
@@ -43,13 +39,13 @@ function updateRound(){
 }
 function calculateResult(r){
  const killPoints=r.kills*100,elitePoints=r.eliteKills*500,bossPoints=r.bossKills*1000;
- const score=killPoints+r.comboPoints+elitePoints+bossPoints;
+ const score=killPoints+elitePoints+bossPoints;
  const grade=ROUND_GRADES.find(g=>score>=g.min);
  const bonusXP=Math.floor(r.pendingXP*grade.bonus);
- return {...grade,score,killPoints,elitePoints,bossPoints,comboPoints:r.comboPoints,baseXP:r.pendingXP,bonusXP,totalXP:r.pendingXP+bonusXP};
+ return {...grade,score,killPoints,elitePoints,bossPoints,comboPoints:0,baseXP:r.pendingXP,bonusXP,totalXP:r.pendingXP+bonusXP};
 }
 function renderRoundResult(result,beforeLevel){
- const rows=[['กำจัดมอนสเตอร์',run.kills+' ตัว',result.killPoints],['คอมโบสูงสุด',run.maxCombo+' COMBO',result.comboPoints],['Elite',run.eliteKills+' ตัว',result.elitePoints],...(run.trial?[['บอส',run.bossKills+' ตัว',result.bossPoints]]:[])];
+ const rows=[['กำจัดมอนสเตอร์',run.kills+' ตัว',result.killPoints],['Elite',run.eliteKills+' ตัว',result.elitePoints],...(run.trial?[['บอส',run.bossKills+' ตัว',result.bossPoints]]:[])];
  $('scoreRows').replaceChildren();
  for(const [label,count,points]of rows){const row=document.createElement('div');row.className='score-row';const detail=document.createElement('span');detail.textContent=label;const small=document.createElement('small');small.textContent=count;detail.append(small);const value=document.createElement('strong');value.textContent=points.toLocaleString();row.append(detail,value);$('scoreRows').append(row)}
  $('resultRank').textContent=result.rank;
@@ -66,7 +62,7 @@ if(run.awardedMark){const cell=$('rewardItems').children[rewards.length];cell.cl
  $('xpBreakdown').textContent='ฟาร์ม '+result.baseXP.toLocaleString()+' + โบนัส '+Math.round(result.bonus*100)+'% ('+result.bonusXP.toLocaleString()+')'+(player.level>beforeLevel?' · Lv. '+beforeLevel+' → '+player.level:'');
 }
 
-function comboGrade(combo){return combo>=75?'SSS':combo>=50?'SS':combo>=35?'S':combo>=20?'A':combo>=10?'B':combo>=5?'C':'D'}
+
 
 let resultAnimationSerial=0;
 function animateResultXP(result){const serial=++resultAnimationSerial,owner=run,start=performance.now(),duration=matchMedia('(prefers-reduced-motion: reduce)').matches?350:1500;const initial=result.beforeXP||0,initialLevel=result.beforeLevel||1;function draw(amount){let lv=initialLevel,xp=initial+amount,need=xpRequired(lv);while(xp>=need&&lv<999){xp-=need;lv++;need=xpRequired(lv)}xp=Math.min(xp,need-1);$('resultLevel').textContent=lv;$('resultXPFill').style.width=100*xp/need+'%';$('resultXPText').textContent=Math.floor(xp).toLocaleString()+' / '+need.toLocaleString()}

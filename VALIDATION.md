@@ -222,3 +222,5 @@ PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post
 0.56: update56.cjs and multihit56.cjs passed: sword two hit numbers, claw/gun three separate hit numbers, unchanged aggregate damage, filtered buff/passive rows, tooltip metrics, shop purchase and compact result viewport checks. Desktop and mobile screenshots reviewed, no page errors.
 
 0.57: stages57.cjs passed 48 randomized layouts for levels10-60, connectivity, monster counts, respawn timing, actual ladder and slope movement, both bosses and rewards. Tutorial/update53 and multihit56 regressions passed. Screenshots reviewed.
+
+0.58: stages58.cjs passed fixed geometry across reentry and reload, distinct six maps,30 monsters, return portal flow and no combo scoring/UI. Updated stages57 checks passed connected paths, continuous ladder climbing, ramp walking and both bosses. update53 tutorial regression passed.
