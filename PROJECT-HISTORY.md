@@ -279,3 +279,5 @@ SP and old advancement replaced. Legacy characters migrate towarrior, preserve l
 0.53: PC A/S/D/F menus, QWER active and 1-8 buffs. Active CD3s, buff CD8s. Tutorial portal awards Lv5 and 10 tier1 skill boxes once. Offhand contributes special affixes only; boxes roll every weapon in their tier.
 
 0.54: All designed skills start at Lv1 without consuming scrolls; existing ranks retained. Weapon-tab picker, separate Change Skill buttons, hover-only equipped skill details. Tutorial teaches C normal attack and Z/X HP/MP potions, removes sign, adds portal Spacebar prompt. Uniform inventory cells and aligned panel bottoms.
+
+0.55: Weapon status dialog and hover card show name, weapon type, level, ATK, base speed100, enhancement+0 and separate special options. Current weapon model has no per-item base speed or enhancement progression.
