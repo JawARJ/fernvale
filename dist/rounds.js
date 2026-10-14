@@ -26,19 +26,19 @@ function recordKill(m){
  run.lastKill=run.time;run.maxCombo=Math.max(run.maxCombo,run.combo);
  run.comboPoints+=Math.min(100,(run.combo-1)*10);
  if(m.elite)run.eliteKills++;else if(m.boss)run.bossKills++;
- if(!run.trial&&!run.tutorial&&!m.elite){run.eliteProgress++;if(run.eliteProgress>=100){run.eliteProgress-=100;run.eliteSpawns++;spawnElite()}}m.respawnAt=run.time+4;
+ if(!run.trial&&!run.tutorial&&!m.elite){run.eliteProgress++;if(run.eliteProgress>=100){run.eliteProgress-=100;run.eliteSpawns++;spawnElite()}}m.respawnAt=run.time+2;
 
 }
 function spawnElite(){
- const s=stageById(run.id),x=650;
- monsters.push({id:'elite-'+run.eliteSpawns,level:s.level,elite:true,boss:false,x,y:420,p:0,home:x,low:300,high:1100,dir:-1,hp:s.hp*5,max:s.hp*5,atk:s.atk*2,def:Math.min(95,Math.round(s.def*1.5)),avoid:Math.min(50,s.avoid+5),exp:s.exp*5,dead:0,hit:0,phase:0});
+ const s=stageById(run.id),x=clamp(player.x+220,150,worldWidth()-150);
+ monsters.push({id:'elite-'+run.eliteSpawns,level:s.level,elite:true,boss:false,x,y:420,p:0,home:x,low:100,high:worldWidth()-100,dir:-1,hp:s.hp*5,max:s.hp*5,atk:s.atk*2,def:Math.min(95,Math.round(s.def*1.5)),avoid:Math.min(50,s.avoid+5),exp:s.exp*5,dead:0,hit:0,phase:0});
  toast('ELITE ปรากฏตัว!');
 }
 function updateRound(){
  if(run.combo&&run.time-run.lastKill>5)run.combo=0;
  if(run.trial)return;
  for(const m of monsters){
-  if(!run.tutorial&&m.dead&&!m.boss&&!m.elite&&run.time>=m.respawnAt){m.dead=0;m.hp=m.max;m.x=m.home;m.hit=0}
+  if(!run.tutorial&&m.dead&&!m.boss&&!m.elite&&run.time>=m.respawnAt){m.dead=0;m.hp=m.max;m.x=m.home;m.hit=0;if(run.layout)m.y=platformSurface(platforms[m.p],m.x)}
  }
 }
 function calculateResult(r){
@@ -56,7 +56,7 @@ function renderRoundResult(result,beforeLevel){
  $('resultScore').textContent=result.score.toLocaleString()+' คะแนน';
  const grouped={};for(const type of [...(result.loot?.drops||[]),...(result.loot?.boxes||[])])grouped[type]=(grouped[type]||0)+1;const rewards=Object.entries(grouped);
  $('rewardItems').replaceChildren();for(let i=0;i<20;i++){const reward=rewards[i],cell=document.createElement('div');cell.className='reward-cell';if(reward){const [type,count]=reward;cell.classList.add('reward-box');cell.innerHTML=boxIcon(type);const amount=document.createElement('strong');amount.className='item-count';amount.textContent=count;cell.append(amount);appendBoxLevel(cell,type);cell.setAttribute('aria-label',boxName(type)+' × '+count);attachLootDetail(cell,{name:boxName(type),description:boxDescription(type)+'\nจำนวน '+count+' กล่อง · เปิดได้ในหมวดใช้งาน'});cell.tabIndex=0}else cell.setAttribute('aria-label','ช่องรางวัล '+(i+1)+' ว่าง');$('rewardItems').append(cell)}
-if(run.trial&&player.advancementMark){const cell=$('rewardItems').firstElementChild;cell.className='reward-cell reward-token';cell.innerHTML=promotionTokenIcon();cell.setAttribute('aria-label','ตราเลื่อนขั้น');attachLootDetail(cell,{name:'ตราเลื่อนขั้น '+player.advancementMark,description:'รับแล้วในหมวดใช้งาน · กดใช้เพื่อเลื่อนขั้น'})}
+if(run.awardedMark){const cell=$('rewardItems').children[rewards.length];cell.className='reward-cell reward-token';cell.innerHTML=promotionTokenIcon();cell.setAttribute('aria-label','ตราเลื่อนขั้น');attachLootDetail(cell,{name:'ตราเลื่อนขั้น '+player.advancementMark,description:'รับแล้วในหมวดใช้งาน · กดใช้เพื่อเลื่อนขั้น'})}
  $('rewardChance').hidden=true;$('rewardChance').textContent='เงิน +'+(result.loot?.money||0).toLocaleString()+' เหรียญเงิน'+' · ดรอป '+(result.loot?.drops.length||0)+' กล่อง · โบนัสเกรด '+(result.loot?.boxes.length||0)+' กล่อง';
  $('resultLevel').textContent=result.beforeLevel;
  $('earnedXP').textContent='EXP +'+result.totalXP.toLocaleString();

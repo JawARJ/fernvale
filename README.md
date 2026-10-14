@@ -1,4 +1,4 @@
-# Fernvale — source 0.56
+# Fernvale — source 0.57
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -70,3 +70,5 @@ SP:3 per level-up untilLv30,1 thereafter. First-job skills require71SP; affordab
 0.55: Structured weapon status and option cards.
 
 0.56: Visible multi-hit numbers, filtered skill picker and compact shop/result UI.
+
+0.57: Six randomized farming maps and Lv30/Lv60 boss stages.
