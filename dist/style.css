@@ -99,3 +99,6 @@
 .character-window{position:relative}
 
 .empty-skill-slot{border:1px solid #7c906b;background:#18362b;box-shadow:inset 2px 2px #314936;min-height:75px}
+.combat-hotbars{display:grid;gap:5px;min-width:0}.buff-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}.combat-hotbars button{position:relative;min-width:0;min-height:39px;padding:4px 4px 14px;font-size:9px}.combat-hotbars .skill-grid{gap:4px}.combat-hotbars .skill-grid button{min-height:39px}.hotkey-label{position:absolute;bottom:2px;left:4px;font-size:10px;color:#efda9c}.combat-hotbars em{position:absolute;right:4px;top:3px;color:#fff;font-style:normal}.combat-hotbars button:disabled{opacity:.45}.character-window>.money-panel{border:1px solid #708466;min-height:40px;padding:7px 12px!important;margin-top:8px!important}.result-grid{grid-template-columns:1fr!important}.result-grid>.score-panel{display:none!important}
+@media(min-width:701px){.hud{grid-template-columns:48px minmax(140px,1fr) auto 118px minmax(320px,1.2fr);gap:8px}.character-window .inventory-cell{height:clamp(42px,8dvh,82px)}}
+@media(max-width:700px){.buff-grid{display:none}.combat-hotbars{display:contents}}

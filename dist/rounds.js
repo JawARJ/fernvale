@@ -38,7 +38,7 @@ function updateRound(){
  if(run.combo&&run.time-run.lastKill>5)run.combo=0;
  if(run.trial)return;
  for(const m of monsters){
-  if(m.dead&&!m.boss&&!m.elite&&run.time>=m.respawnAt){m.dead=0;m.hp=m.max;m.x=m.home;m.hit=0}
+  if(!run.tutorial&&m.dead&&!m.boss&&!m.elite&&run.time>=m.respawnAt){m.dead=0;m.hp=m.max;m.x=m.home;m.hit=0}
  }
 }
 function calculateResult(r){

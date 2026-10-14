@@ -212,3 +212,5 @@ PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post
 0.51: pools51 passed sword-main/spear-off pool, oneSTR choice, sixPassive choices, name duplication blocked, main-onlyActive, STR buff and reach121, incompatible weapon stops. design51 passed12weapons active damage/buffs/3passive choices andtier1boxes. Cache recovery passed.
 
 0.52: start52 passedall4classes Lv1starter skills andbuff, ATKSPD100/cap190/fasterrecovery, portalinteraction.
+
+0.53: update53.cjs and hud53.cjs passed: cooldowns, fixed buff keys, offhand base exclusions/special inclusion, foreign weapon rolls, nonrespawning tutorial, Lv5 AP4/10-box one-time reward and hidden Stage0. Desktop screenshots verified.
