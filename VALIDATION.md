@@ -218,3 +218,5 @@ PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post
 0.54: update54.cjs passed desktop and mobile picker; all 72 designed tier1 skills accessible at rank1, existing rank20 preserved, tutorial actions/potions/portal copy, 20 equal-height slots and aligned bottoms, hover details, picker and passive selection. pools51.cjs, update53.cjs and hud53.cjs regression checks passed. Screenshots reviewed.
 
 0.55: Browser visual QA: Epic sword with STR/ATKSPD options, inventory hover card, Common spear mobile dialog. All requested rows visible; no page errors. Existing equipment actions retained.
+
+0.56: update56.cjs and multihit56.cjs passed: sword two hit numbers, claw/gun three separate hit numbers, unchanged aggregate damage, filtered buff/passive rows, tooltip metrics, shop purchase and compact result viewport checks. Desktop and mobile screenshots reviewed, no page errors.

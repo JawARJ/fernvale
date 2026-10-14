@@ -281,3 +281,5 @@ SP and old advancement replaced. Legacy characters migrate towarrior, preserve l
 0.54: All designed skills start at Lv1 without consuming scrolls; existing ranks retained. Weapon-tab picker, separate Change Skill buttons, hover-only equipped skill details. Tutorial teaches C normal attack and Z/X HP/MP potions, removes sign, adds portal Spacebar prompt. Uniform inventory cells and aligned panel bottoms.
 
 0.55: Weapon status dialog and hover card show name, weapon type, level, ATK, base speed100, enhancement+0 and separate special options. Current weapon model has no per-item base speed or enhancement progression.
+
+0.56: Combat numbers stack per target so multi-hit damage remains visible. Active metrics show damage x hits then Mob; Buff/Passive omit attack metrics. Picker filters requested kind. Shop stock uses icon/name/price rows with hover details. Result dialog half-width and compact on short screens.

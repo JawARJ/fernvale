@@ -35,7 +35,7 @@ weaponSkillText=function(id){
  const d=WEAPON_SKILLS[id];if(!d?.designed)return 'รอออกแบบ';
  const rank=Math.max(1,player.weaponSkills[id]||0),design=WEAPON_DESIGNS[d.weapon],active=d.kind==='active';
  const heading=d.kind.toUpperCase()+' · ขั้น '+d.tier+' · Lv.'+rank+'/30\nใช้สำหรับอาวุธ : '+WEAPON_NAMES[d.weapon];
- const metrics='CD '+(d.kind==='passive'?0:active?3:8)+' วิ · MP '+(d.kind==='passive'?0:8)+'\nDamage '+(active?(90+rank*2)+'% ATK / hit':'—')+' · Mob '+(active?design.targets:'—')+' · Hit '+(active?design.hits:'—');
+ const metrics='CD '+(d.kind==='passive'?0:active?3:8)+' วิ · MP '+(d.kind==='passive'?0:8)+(active?'\nDamage '+(90+rank*2)+'% ATK × '+design.hits+' Hit · Mob '+design.targets:'');
  return heading+'\n'+metrics+'\n'+skillEffectDetail(d,rank);
 };
 function skillPreview(cell,id){if(id)attachLootDetail(cell,{name:WEAPON_SKILLS[id].name,description:weaponSkillText(id)})}
@@ -69,7 +69,7 @@ function pickWeaponSkill(tier,kind,index){
  function render(){
   rows.replaceChildren();for(const b of tabs.children)b.classList.toggle('selected',b.dataset.weapon===weapon);
   const heading=document.createElement('h3');heading.textContent=WEAPON_NAMES[weapon]+' · ขั้น '+tier;rows.append(heading);
-  for(const d of Object.values(WEAPON_SKILLS).filter(d=>d.designed&&d.tier===tier&&d.weapon===weapon)){
+  for(const d of Object.values(WEAPON_SKILLS).filter(d=>d.designed&&d.tier===tier&&d.weapon===weapon&&d.kind===kind)){
    const row=document.createElement('div');row.className='weapon-picker-row';row.tabIndex=0;skillPreview(row,d.id);
    const icon=document.createElement('span');icon.innerHTML=weaponIcon(weapon);
    const label=document.createElement('span');label.textContent=d.name;const type=document.createElement('small');type.textContent=d.kind.toUpperCase();label.append(type);
