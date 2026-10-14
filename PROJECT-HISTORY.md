@@ -277,3 +277,5 @@ SP and old advancement replaced. Legacy characters migrate towarrior, preserve l
 0.52: New characters learnLv1 Active/twoBuffs for all3permitted classweapons; starter main active/two buffs auto-slotted and usable atcharacterLv1. Passive stillobtained fromboxes. ATKSPD specialstat starts100 caps190; equipmentaffixes/buffs increase it and recovery scales100/ATKSPD. Return portal at right ground end ofnormal/tutorialmaps enters existing end-round/reward flow.
 
 0.53: PC A/S/D/F menus, QWER active and 1-8 buffs. Active CD3s, buff CD8s. Tutorial portal awards Lv5 and 10 tier1 skill boxes once. Offhand contributes special affixes only; boxes roll every weapon in their tier.
+
+0.54: All designed skills start at Lv1 without consuming scrolls; existing ranks retained. Weapon-tab picker, separate Change Skill buttons, hover-only equipped skill details. Tutorial teaches C normal attack and Z/X HP/MP potions, removes sign, adds portal Spacebar prompt. Uniform inventory cells and aligned panel bottoms.
