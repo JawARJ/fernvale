@@ -1,4 +1,4 @@
-# Fernvale — source 0.51
+# Fernvale — source 0.52
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -60,3 +60,5 @@ SP:3 per level-up untilLv30,1 thereafter. First-job skills require71SP; affordab
 0.50: Two tier skill scaffold only; suspend provisional skills pending design.
 
 0.51: Designed first-tier weapon skills and deduplicated main/offhand buff/passive pools.
+
+0.52: Starter active/buff skills, capped ATKSPD and return-town portals.
