@@ -1,3 +1,16 @@
+# Validation — release 0.70
+
+2026-10-15, Microsoft Edge / Playwright on actual HTTP-served game assets.
+
+- tests/tutorial70.cjs: full real-keyboard/UI tutorial path, upper-platform Buff lesson, three Active-only training kills, no EXP/loot/kill farming, drop-through and one selectable Emblem. All four starter families can damage training targets.
+- tests/refinements70.cjs: DEX threshold/no ACC, STR/INT regen formulas and actual HP/MP ticks, two stat pages and six Bonus values, Emblem source labels/badges. Checks 300 monsters across ten layouts and actual movement through a flat/ramp/flat route.
+- tests/refinements70-mobile.cjs: saved upper-platform checkpoints, fresh training targets on resume, touch Buff, mobile Bonus/Emblem UI, save compatibility and displayed conditional damage reduction equals received-damage calculation.
+- tests/support63.cjs: all 128 support skills at rank 1/30 and mechanics pass; baseline speed expectations include the new +1 ATKSPD from DEX 5.
+- tests/active60.cjs, tests/combat60.cjs, tests/loot64.cjs, tests/viewport68.cjs and tests/mobile66.cjs pass after the changes.
+- Legacy command aliases tests/tutorial65.cjs and tests/tutorial65-resume.cjs now run the updated tutorial/checkpoint coverage. All dist JavaScript passed node --check. Training/Emblem/Bonus screens inspected on desktop and mobile. Stat-page height stays stable while switching.
+
+---
+
 # Validation — release 0.69
 
 2026-10-15, HTTP preview / Microsoft Edge / Playwright.

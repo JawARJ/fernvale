@@ -1,4 +1,4 @@
-# Fernvale — source 0.69
+# Fernvale — source 0.70
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -76,3 +76,7 @@ Gameplay fills PC and mobile browser windows. An aspect-aware canvas/camera remo
 ## Stage drop previews 0.69
 
 Stage cards show item icons, box level/skill tier, money quantity and actual drop rates. Dungeon box cells list Normal / Elite odds; boss cells show guaranteed weapon boxes and money. Metadata shares the real drop probability, tier and money rules. Tests cover RNG boundaries and responsive layouts.
+
+## Tutorial, patrols and stats 0.70
+
+Buff training moves to the upper tutorial platform, followed by three Active-only training monsters with no farming rewards. Monsters traverse connected flat/ramp/flat routes. Skill pages label equipped main weapon and Emblem. DEX grants +1 ATKSPD per four points instead of ACC; STR/INT add HP/MP regen, baseline mana regen is slower. Status and Bonus Stat are separate pages; see STATS-REFERENCE.md for exact formulas. New end-to-end and mobile tests cover the changes.

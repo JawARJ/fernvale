@@ -24,6 +24,6 @@ function spawnElite(){
 function updateRound(){
  if(run.trial||run.finished)return;
  for(const m of monsters){
-  if(!run.tutorial&&m.dead&&!m.boss&&!m.elite&&run.time>=m.respawnAt){m.dead=0;m.lootDropped=false;m.hp=m.max;m.x=m.home;m.hit=0;if(run.layout)m.y=platformSurface(platforms[m.p],m.x)}
+  if(!run.tutorial&&m.dead&&!m.boss&&!m.elite&&run.time>=m.respawnAt){m.dead=0;m.lootDropped=false;m.hp=m.max;m.x=m.home;m.hit=0;if(run.layout)updateMonsterSurface(m)}
  }
 }

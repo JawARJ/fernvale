@@ -1,3 +1,15 @@
+# Current release 0.70 · Tutorial, patrols and stats
+
+Moves Buff installation/use to the upper-left end of the tutorial route after climbing and jumping. Three non-hostile training monsters stand on the upper-right platform. Only damage from manually cast Active skills during that lesson defeats them; all three must be defeated before the drop-through/portal lesson. They give no money, drops, EXP or persistent kill credit. Saved Buff/Active checkpoints resume at the upper platform with safe fresh targets. All four starter weapon families can complete the lesson without waiting for mana regeneration.
+
+Monsters patrol connected same-layer flat/ramp/flat surfaces instead of being confined to a short ramp segment. Spawn distribution uses connected routes, and platform assignment/surface height follow movement and respawn. Gaps and disconnected ledges remain separate.
+
+Skill loadouts and pickers show current main weapon and Emblem names/icons. Weapon tabs mark the equipped Emblem and main weapon distinctly. Active eligibility remains main-weapon-only; support eligibility remains main weapon + Emblem.
+
+DEX no longer adds ACC and grants one ATKSPD per four effective points. STR adds HP recovery and INT adds MP recovery; baseline MP recovery is reduced. Status and Bonus Stat are separate tabs, with six Bonus metrics including actual HP/MP regen and damage reduction. See [stat rules](STATS-REFERENCE.md) for formulas.
+
+---
+
 # Current release 0.69 · Stage drop previews
 
 Stage cards show six drop cells in the previously empty center: the five random box types and money. Each cell shows an icon, box level/skill tier or money quantity at upper left, and its actual drop chance at the bottom. Dungeon boxes show Normal / Elite rates (0.2% / 20% per type); money shows 100% and level × 10. Boss cards show their guaranteed weapon box and money. Hover for item names and descriptions.

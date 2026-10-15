@@ -33,9 +33,10 @@ function makeStageLayout(id,rng=stageLayoutRandom(id)){
 function applyStageLayout(){
  const layout=makeStageLayout(run.id);run.layout=layout;platforms=layout.platforms;ladders=layout.ladders;
  const stage=stageById(run.id);
+ const routes=[];const seen=new Set();for(let i=0;i<platforms.length;i++){if(seen.has(i))continue;const route=monsterSurfaceRoute(i);route.forEach(n=>seen.add(n));routes.push(route)}
  monsters=[];for(let i=0;i<30;i++){
-  const index=i%platforms.length,p=platforms[index],low=p.x+(index?25:200),high=p.x+p.w-25,x=low+(high-low)*(Math.floor(i/platforms.length)+.5)/Math.ceil(30/platforms.length);
-  monsters.push({id:i,level:stage.level,x,y:platformSurface(p,x),p:index,home:x,low,high,dir:i%2?1:-1,hp:stage.hp,max:stage.hp,atk:stage.atk,def:stage.def,avoid:stage.avoid,exp:stage.exp,dead:0,hit:0,phase:random(0,6),boss:false});
+  const route=routes[i%routes.length],left=platforms[route[0]],right=platforms[route.at(-1)],low=left.x+(left.layer===0?200:25),high=right.x+right.w-25,x=low+(high-low)*(Math.floor(i/routes.length)+.5)/Math.ceil(30/routes.length),index=route.find(n=>x>=platforms[n].x&&x<=platforms[n].x+platforms[n].w)??route[0],p=platforms[index];
+  monsters.push({id:i,level:stage.level,x,y:platformSurface(p,x),p:index,patrolPlatforms:route,home:x,low,high,dir:i%2?1:-1,hp:stage.hp,max:stage.hp,atk:stage.atk,def:stage.def,avoid:stage.avoid,exp:stage.exp,dead:0,hit:0,phase:random(0,6),boss:false});
  }
  run.total=30;player.x=110;player.y=420;resetMotion();camera=0;
 }
