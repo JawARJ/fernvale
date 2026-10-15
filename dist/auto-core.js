@@ -36,6 +36,7 @@ function tickAutoFarm(dt){
  if(!autoFarmActive())return;const a=autoSession;
  if(!run||run.tutorial||run.id!==a.mapId||run.serial!==a.serial){stopAutoFarm('mapChanged');return}
  if(player.autoFarm.seconds<=0){stopAutoFarm('timeExpired');return}
+ if(!player.autoFarm.skills.some(id=>id&&weaponSkillEnabled(id))){stopAutoFarm('noSkills');return}
  const spent=Math.min(dt,player.autoFarm.seconds);player.autoFarm.seconds=Math.max(0,player.autoFarm.seconds-spent);keys={};
  if(player.charge){const c=player.charge;a.held=c.elapsed<c.max?c.d.id:null;return}
  if(player.activeChannel){a.held=player.activeChannel.elapsed<3?player.activeChannel.id:null;return}

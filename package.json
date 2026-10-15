@@ -1,7 +1,12 @@
 {
   "name": "fernvale",
-  "version": "0.71.0",
+  "version": "0.72.0",
   "private": true,
-  "engines": {"node": ">=20.11"},
-  "scripts": {"start": "node server/server.cjs", "test": "node tests/auto71.cjs"}
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "start": "node server/server.cjs",
+    "test": "node tests/auto71.cjs"
+  }
 }

@@ -1,3 +1,5 @@
+> **Paused in 0.72:** the live game now uses local Auto Farm, with no login or server connection. The following 0.71 server notes describe retained prototype source, not the current browser flow. Re-enabling online requires a separate implementation/review; the old browser integration test is superseded by `tests/auto72.cjs`.
+
 # Online / Auto Farm 0.71 — development release
 
 The public Sites release can show the Auto configuration window. No public game backend has been provisioned. The Node server below is a tested development implementation, not a deployed MMO service. Party is still locked.

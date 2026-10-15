@@ -1,3 +1,9 @@
+# Fernvale 0.72 — local Auto Farm
+
+Auto Farm now works with existing browser-local characters while the game is open and unpaused. Buy a 1-hour ticket for 10,000 money from the potion shop, activate it from the usable inventory or Auto window, choose four Active skills in your own order, enter the desired dungeon and Start. Maximum activated balance is 24 hours. It skips unusable/CD/MP slots, never casts Buffs, and stays in the selected map. Pause/hidden tabs stop simulation and time consumption. Closing/reloading preserves remaining time and requires starting Auto again; no offline rewards. Manual controls stop Auto.
+
+The live frontend no longer loads online login/client code or makes backend requests. Online/party work is deferred at the user's request. The 0.71 server prototype is retained as inactive source only. See [AUTO-FARM.md](AUTO-FARM.md).
+
 # Fernvale 0.71 — Auto Farm / online development server
 
 Adds the four configurable Auto slots, prepaid 1-hour tickets (10,000 money), 24-hour cap, server-side skill/AI/loot simulation, accounts, durable checkpoints and real closed-browser farming. PC/mobile connection and reconnect tests pass. The public site only publishes the frontend; no public backend has been provisioned. Party remains locked. See [ONLINE-SETUP.md](ONLINE-SETUP.md) for local use, deployment steps and current limitations. Local guest saves remain separate and playable.

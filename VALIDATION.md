@@ -1,3 +1,9 @@
+# Version 0.72 validation
+
+- `tests/auto72.cjs`: actual local shop purchase, inventory ticket use, custom slots, 24-hour cap, CD skip, real Auto combat, paused/hidden time freeze, map/manual/expiry stops, save/reload with no offline rewards, no online requests, and mobile touch start/stop plus screenshots.
+- `support63.cjs` and `combat60.cjs` pass; the shared engine and save behavior are retained.
+- 0.71 online UI browser tests are historical and superseded while online work is deferred. No online feature is enabled by this release.
+
 # Version 0.71 validation
 
 - `tests/auto71.cjs`: tickets/price/cap, custom slot order, immediate CD/MP skip, real navigation/combat/loot, all 12 weapon families, checkpoint and graph roundtrip, server auth/origin/ownership, duplicate purchase idempotency, no-client farming, restart/reconnect, and Stop.

@@ -1,6 +1,6 @@
-# Fernvale — source 0.71
+# Fernvale — source 0.72
 
-Browser pixel RPG with local single-player saves and an optional authoritative Node development server for Auto Farm. No public backend is provisioned; Party is still locked.
+Browser pixel RPG with local saves and Auto Farm while the game is open. Online work is deferred; Party and Enchant remain locked.
 
 Play: https://fernvale-adventure.ochremouse32.chatgpt.site/
 
@@ -8,11 +8,11 @@ Play: https://fernvale-adventure.ochremouse32.chatgpt.site/
 
 From this folder, run `python -m http.server 8000 --directory dist` and open http://localhost:8000. Saves stay in each browser under localStorage.
 
-## Auto Farm / online development release 0.71
+## Auto Farm 0.72
 
-Run `node server/server.cjs` and open http://127.0.0.1:8787 to test account-based play and closed-browser Auto Farm. Configure four independent Active slots; tickets cost 10,000 money per hour, with a 24-hour activation cap. CD/MP-unavailable skills are skipped immediately, and Buffs are never auto-cast. Uses shared combat/loot rules, persistent server checkpoints and reconnect. Guest saves remain local and separate.
+Auto now runs with existing local character saves while the game stays open and unpaused. Buy a 1-hour ticket at the potion shop for 10,000 money; activate from usable inventory or the AUTO window. Store up to 24 hours and select four Active skills in your own order. Auto skips unavailable/CD/MP slots, never casts Buffs, and stays in the chosen map. Pause, hidden tabs and screen sleep stop simulation and time consumption. Closing/reloading preserves remaining time with no offline rewards; start Auto again after returning. Manual movement or Active controls stop Auto.
 
-Read [ONLINE-SETUP.md](ONLINE-SETUP.md) for deployment and known development limitations. The optional `render.yaml` requires an owner-approved paid service and persistent disk; it does not deploy itself.
+Online login/client scripts are no longer loaded. Server/party work is deferred. The 0.71 backend prototype is retained as inactive source; no hosting account or paid service is required to use the current game. See [AUTO-FARM.md](AUTO-FARM.md).
 
 ## Current features
 
