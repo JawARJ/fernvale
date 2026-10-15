@@ -1,3 +1,15 @@
+# Validation — release 0.66
+
+2026-10-15, Playwright with headless Microsoft Edge and actual touch events against HTTP-served dist.
+
+- `tests/mobile66.cjs`: four simultaneous Active slots; Buff slots 1–4 and 5–8/page toggle/correct casting/CD locks; actual Q/W/R touch casts and E hold/release channel; potion healing/mana, stock and CD; joystick touch drag/release; jumping and contextual NPC interaction; Status/Skill/Settings actions and Party/Enchant locks. Checks bounds and overflow at 844×390, 740×360, 667×320, 390×844 and 320×568. No page errors.
+- `tests/tutorial65-resume.cjs`: all four new-character families, checkpoint/reward resume, town routes and coarse-pointer mobile Emblem selection pass.
+- `tests/support63.cjs` and `tests/active60.cjs`: support catalog/interactions, Active combat, resource and save regressions pass.
+- Initial chained tutorial smoke test hit the known intermittent local preview file-load timeout; it passed separately after restarting the preview with a larger request queue. No production code change was needed for that local-server issue.
+- All dist JavaScript passes node --check. Landscape Buff page 1/page 2 and portrait screenshots inspected. Short/narrow controls scale down to fit; normal landscape buttons retain their full sizes.
+
+---
+
 # Validation — release 0.65
 
 2026-10-15, Microsoft Edge / Playwright on HTTP-served dist assets.

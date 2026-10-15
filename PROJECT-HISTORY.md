@@ -1,3 +1,11 @@
+# Current release 0.66 · Mobile controls
+
+Rebuilds the mobile HUD to match the supplied sketch: level/HP/MP/EXP at upper left; Status, Skill, locked Party/Enchant and Settings at upper right; analog joystick at lower left. The lower-right deck has a large contextual jump/interact button, four simultaneous Q/W/E/R Active buttons, four rectangular Buff cells with a circular 1/2–2/2 page switch, and round HP/MP potion buttons above. Normal attack remains available as a separate small rectangular button.
+
+Buff page 1 maps slots 1–4 (tiers 1–2), page 2 slots 5–8 (tiers 3–4). No E/R page switch or Buff popup is required. Skill and Buff buttons show cooldowns and lock unavailable slots; potions show stock and cooldown. Pointer hold/release remains supported for charged/channel skills. Layout respects screen safe areas and scales controls on short/narrow screens; portrait keeps the map above the controls. Desktop controls remain unchanged. Tutorial Buff instructions and settings help match the new controls.
+
+---
+
 # Current release 0.65 · Tutorial and town layout
 
 New characters begin in a separate tutorial, spawning at the lower right. Popups and a persistent hint guide left/right movement, talking to the trainer at the lower left, installing and casting Active/Buff skills through the real skill UI, climbing the ladder, jumping across two ledges, dropping through the upper platform with Down + Space, and interacting with the lower portal. Down + Space always drops through, even near an interactable.

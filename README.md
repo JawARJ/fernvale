@@ -1,4 +1,4 @@
-# Fernvale — source 0.65
+# Fernvale — source 0.66
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -60,3 +60,7 @@ Round results and end bonuses removed. All monsters drop level × 10 money. Boxe
 ## Tutorial and town 0.65
 
 New characters enter a guided tutorial: left/right movement, trainer dialog, real Active/Buff installation and activation, ladder, two jumps, Down+Space and portal. Select one of twelve Common Emblems at completion; progress and pending reward persist. Existing saves remain in town. The new town has bottom-left spawn, four left shop spaces (only potion shop active), a ladder, GM at lower right, and ramp to the right-side stage portal. Weapon boxes only roll the three weapons of the character stat family.
+
+## Mobile controls 0.66
+
+Upper-left level/HP/MP/EXP and upper-right Status/Skill/locked Party/Enchant/Settings. Joystick at lower left; jump/interact, all four Active buttons, two pages of four Buff cells and round HP/MP potions at lower right. Includes stock/CD displays, touch hold/release and responsive portrait/landscape layouts. See tests/mobile66.cjs and VALIDATION.md for touch-input checks.
