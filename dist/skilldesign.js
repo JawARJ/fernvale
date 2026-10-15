@@ -7,24 +7,26 @@ const activeFrequency=(lo,hi)=>lo+(hi-lo)*activeSpeed();
 const mobCenter=m=>({x:m.x,y:m.y-monsterHeight(m)/2});
 const activeOrigin=()=>({x:player.x,y:player.y-20});
 function livingMobs(){return monsters.filter(m=>!m.dead)}
-function radialTargets(x,y,r,cap=Infinity){return livingMobs().filter(m=>{const p=mobCenter(m);return Math.hypot(p.x-x,p.y-y)<=r+monsterRadius(m)}).sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y)).slice(0,cap)}
-function frontTargets(range,cap=Infinity,height=90){const o=activeOrigin();return livingMobs().filter(m=>{const p=mobCenter(m),dx=(p.x-o.x)*player.face;return dx>=-monsterRadius(m)&&dx<=range+monsterRadius(m)&&Math.abs(p.y-o.y)<=height/2+monsterRadius(m)}).sort((a,b)=>Math.abs(a.x-o.x)-Math.abs(b.x-o.x)).slice(0,cap)}
-function horizontalTargets(range,cap){const o=activeOrigin();return livingMobs().filter(m=>Math.abs(m.x-o.x)<=range+monsterRadius(m)&&Math.abs(mobCenter(m).y-o.y)<=35+monsterRadius(m)).sort((a,b)=>Math.abs(a.x-o.x)-Math.abs(b.x-o.x)).slice(0,cap)}
-function skillContext(d){return {weapon:d.weapon,id:d.id,direct:true,cast:++activeCastSerial,seenProcs:new Set()}}
+function radialTargets(x,y,r,cap=Infinity,scope='area'){if(scope==='area'){r*=1+supportSum('area')/100;cap+=supportSum('mobCap','count')}if(scope==='search')r*=1+supportSum('search')/100;return livingMobs().filter(m=>{const p=mobCenter(m);return Math.hypot(p.x-x,p.y-y)<=r+monsterRadius(m)}).sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y)).slice(0,cap)}
+function frontTargets(range,cap=Infinity,height=90){range*=1+(supportSum('reach')+supportSum('search'))/100;height*=1+supportSum('area')/100;cap+=supportSum('mobCap','count');const o=activeOrigin();return livingMobs().filter(m=>{const p=mobCenter(m),dx=(p.x-o.x)*player.face;return dx>=-monsterRadius(m)&&dx<=range+monsterRadius(m)&&Math.abs(p.y-o.y)<=height/2+monsterRadius(m)}).sort((a,b)=>Math.abs(a.x-o.x)-Math.abs(b.x-o.x)).slice(0,cap)}
+function horizontalTargets(range,cap){range*=1+supportSum('area')/100;cap+=supportSum('mobCap','count');const o=activeOrigin();return livingMobs().filter(m=>Math.abs(m.x-o.x)<=range+monsterRadius(m)&&Math.abs(mobCenter(m).y-o.y)<=35+monsterRadius(m)).sort((a,b)=>Math.abs(a.x-o.x)-Math.abs(b.x-o.x)).slice(0,cap)}
+function skillContext(d){return {weapon:d.weapon,id:d.id,origin:'manual',direct:true,cast:++activeCastSerial,seenProcs:new Set(),prepared:{...supportState.prepared},attackSnapshot:attackPower(),rounds:new Map(),targetOrder:new Map()}}
 function perRoundDamage(d,scale=1){return attackPower()*d.damage/100*scale}
-function applyActualDamage(m,damage,label){if(m.dead||run?.finished)return false;m.hp=Math.max(0,m.hp-damage);m.hit=.2;floatCombatHit(m,label||String(damage),'#fff1b8');burst(m.x,m.y-18,'#cee9b1',4);if(m.hp<=0){m.dead=1;player.kills++;if(run){run.kills++;recordKill(m)}activeOnKill(m);m.poison=m.executeMark=m.crossMark=m.staffMark=0;m.darkInside=new Set();if(run?.trial&&m.boss)finishStage(true,'clear')}return true}
+function applyActualDamage(m,damage,label,source={}){if(m.dead||run?.finished)return false;m.hp=Math.max(0,m.hp-damage);m.hit=.2;floatCombatHit(m,label||String(damage),'#fff1b8');burst(m.x,m.y-18,'#cee9b1',4);if(m.hp<=0){m.dead=1;player.kills++;if(run){run.kills++;recordKill(m)}supportOnKill(m,source);activeOnKill(m);delete m.supportSlow;delete m.supportWound;delete m.supportSeal;delete m.supportBreak;delete m.supportStar;m.supportLink=0;m.poison=m.executeMark=m.crossMark=m.staffMark=0;m.darkInside=new Set();if(run?.trial&&m.boss)finishStage(true,'clear')}return true}
 function combatDamage(m,base,source={}){
- if(m.dead||run?.finished)return false;const stats=characterStatus();if(Math.random()*100>=monsterHitChance(stats,m)){floatCombatHit(m,'MISS','#b4c3cc');return false}
+ if(m.dead||run?.finished)return false;source.lastActual=0;const stats=characterStatus();if(Math.random()*100>=monsterHitChance(stats,m)){if(source.hitInfo)source.hitInfo.allHit=false;floatCombatHit(m,'MISS','#b4c3cc');return false}
+ const mod=supportDamageModifiers(m,source,false),crit=Math.random()<(stats.cri+mod.cri)/100;
  const inDark=activeFields.some(f=>f.type==='dark'&&Math.hypot(m.x-f.x,mobCenter(m).y-f.y)<=f.radius+monsterRadius(m));
- const crit=Math.random()<stats.cri/100,bonus=(m.staffMark>0?.2:0)+(inDark?.2:0)+(m.crossMark>0?.2:0);
- const damage=Math.max(1,Math.round(base*random(.9,1.1)*(crit?stats.criDamage/100:1)*(1+(stats.damage+(m.boss?stats.bossDamage:0))/100)*(1+bonus)*(1-clamp((m.def||0)/100*(1-stats.ignoreDef/100),0,.95))));
- const wasCrossMarked=m.crossMark>0;
- applyActualDamage(m,damage,(crit?'CRIT ':'')+damage);source.direct&&activeOnDirectHit(m,source);
- if(source.weapon==='crossbow'&&source.direct&&wasCrossMarked)for(const other of livingMobs().filter(n=>n!==m&&n.crossMark>0))applyActualDamage(other,damage,String(damage));
- return true;
+ const bonus=(m.staffMark>0?.2:0)+(inDark?.2:0)+(m.crossMark>0?.2:0),ignore=stats.ignoreDef+mod.ignore+(crit?supportSum('critPierce'):0);
+ if(source.origin==='manual'&&source.direct&&source.attackSnapshot)base*=attackPower()/source.attackSnapshot;
+ const damage=Math.max(1,Math.round(base*mod.damage*random(.9,1.1)*(crit?stats.criDamage/100:1)*(1+(stats.damage+(m.boss?stats.bossDamage:0))/100)*(1+bonus)*(1-clamp(Math.max(0,(m.def||0)-mod.defReduction)/100*(1-Math.min(100,ignore)/100),0,.95))));
+ const wasCrossMarked=m.crossMark>0,wasLinked=m.supportLink>0,actual=Math.min(m.hp,damage);
+ applyActualDamage(m,damage,(crit?'CRIT ':'')+damage,source);source.lastActual=actual;if(source.hitInfo){source.hitInfo.totalActual+=actual;source.hitInfo.wasLinked=wasLinked}
+ supportAfterHit(m,actual,source);if(source.direct)activeOnDirectHit(m,source);
+ if(source.weapon==='crossbow'&&source.direct&&wasCrossMarked)for(const other of livingMobs().filter(n=>n!==m&&n.crossMark>0))applyActualDamage(other,damage,String(damage));return true;
 }
 function activeOnDirectHit(m,source){
- player.lastActiveTarget=m;
+ player.lastActiveTarget=m;if(source.origin!=='manual')return;
  if(m.boss&&m.executeMark>0)for(const id in player.cd)if(WEAPON_SKILLS[id]&&id!==source.id)player.cd[id]=Math.max(0,player.cd[id]-.1);
  if(source.weapon==='wand'&&player.activeToggles?.wand_4_active_0&&!source.proc&&!source.seenProcs?.has(m)){
   source.seenProcs?.add(m);const d=WEAPON_SKILLS.wand_2_active_0;
@@ -33,13 +35,24 @@ function activeOnDirectHit(m,source){
 }
 function activeOnKill(m){if(m.executeMark>0){const marked=radialTargets(m.x,m.y-15,400,4);const source={...skillContext(WEAPON_SKILLS.star_3_active_0),direct:false};for(const target of marked){target.executeMark=10;activeProjectiles.push(makeProjectile('star',m.x,m.y-15,target.x-m.x,target.y-monsterHeight(target)/2-(m.y-15),400,1,1,perRoundDamage(WEAPON_SKILLS.star_3_active_0),source,{homing:target,execute:true}))}}}
 function activeStrike(targets,total,hits,source,visual='slash'){
- for(const m of targets)for(let i=0;i<hits&&!m.dead;i++)combatDamage(m,total/hits,source);
+ for(const [order,m]of targets.entries()){
+  const direct=source.origin==='manual'&&source.direct&&!source.proc;let round=source.rounds?.get(m)||0;
+  if(source.rounds)source.rounds.set(m,round+1);if(source.targetOrder&&!source.targetOrder.has(m))source.targetOrder.set(m,source.targetOrder.size);
+  let count=hits,start=0;const stream=direct&&source.id==='gun_4_active_0'&&source.streamIndex!==undefined;if(stream){start=source.streamIndex;count=10;round=source.streamRound}
+  const extra=direct?supportSum('extraHit','ratio')+(round===0&&source.prepared?.comboHit?supportSum('comboHit','ratio'):0):0;
+  let info={count:count+(extra>0?1:0),targets:source.batchTargets||targets.length,order:source.batchOrder??(targets.length>1?order:source.targetOrder?.get(m)??order),round,totalActual:0,allHit:true,full:m.hp===m.max,indices:new Set()};
+  if(stream){source.streamRounds??=new Map();const prev=source.streamRounds.get(m);if(prev?.round===round)info=prev;else source.streamRounds.set(m,info)}source.hitInfo=info;
+  for(let i=0;i<hits&&!m.dead;i++){info.first=start+i===0;info.last=start+i===count-1&&extra<=0;combatDamage(m,total/hits,source);info.indices.add(start+i)}
+  const finished=start+hits===count;
+  if(direct&&finished&&extra>0&&!m.dead){const next={...source,hitInfo:{...info,first:false,last:true,totalActual:0},origin:'extraHit',direct:false,proc:true,primaryHit:true};const landed=combatDamage(m,total/hits*extra/100,next);info.allHit&&=landed;info.totalActual+=next.lastActual||0;info.indices.add(count);source.hitInfo=info}
+  info.completed=finished&&info.indices.size===info.count;if(direct)supportAfterRound(m,info,source);
+ }
  if(visual==='blade')return;
  if(['impact','meteor','star'].includes(visual)){for(const m of targets){const c=mobCenter(m);activeVisuals.push({type:visual,x:c.x,y:c.y,face:player.face,r:visual==='meteor'?65:25,life:.32})}return}
  const o=activeOrigin();activeVisuals.push({type:visual,x:o.x,y:o.y,face:player.face,r:WEAPON_SKILLS[source.id]?.range||200,life:.32});
 }
 function makeProjectile(type,x,y,dx,dy,range,cap,hits,total,source,extra={}){
- const length=Math.hypot(dx,dy)||1;return {type,x,y,dx:dx/length,dy:dy/length,range,travel:0,speed:620,cap,hits,total,source,seen:new Set(),life:range/620+1,...extra};
+ range*=1+(supportSum('reach')+supportSum('search'))/100;cap+=supportSum('mobCap','count');const length=Math.hypot(dx,dy)||1;return {type,x,y,dx:dx/length,dy:dy/length,range,travel:0,speed:620,cap,hits,total,source,seen:new Set(),life:range/620+1,...extra};
 }
 function fireProjectile(d,range,cap,hits,extra={},direction=null){const o=activeOrigin(),dir=direction||{x:player.face,y:0};activeProjectiles.push(makeProjectile(d.weapon,o.x,o.y,dir.x,dir.y,range,cap,hits,perRoundDamage(d),skillContext(d),extra))}
 function arrowDirection(){const x=(keys.ArrowRight?1:0)-(keys.ArrowLeft?1:0),y=(keys.ArrowDown?1:0)-(keys.ArrowUp?1:0);return x||y?{x,y}:{x:player.face,y:0}}
@@ -47,18 +60,18 @@ function skillCooldown(d){if(d.weapon==='staff'&&d.tier<=3&&player.activeBuffs?.
 function heldSkill(id){const index=player.weaponLoadout.findIndex(r=>r.active[0]===id);return index>=0&&keys['Key'+'QWER'[index]]}
 function canKeepSkill(id){return weaponSkillEnabled(id)&&selectedSkillIds('active').includes(id)}
 function castWeaponSkill(id){
- const d=WEAPON_SKILLS[id];if(!d||paused||screen!=='play'||run?.finished||!canKeepSkill(id))return false;
+ const d=WEAPON_SKILLS[id];if(d?.kind==='buff')return castSupportSkill(id);if(d?.kind==='passive')return false;if(!d||paused||screen!=='play'||run?.finished||!canKeepSkill(id))return false;
  if(player.activeToggles?.[id]){delete player.activeToggles[id];updateUI();return true}
  if(player.charge||player.activeChannel||activeDash)return false;
  if((player.cd.action||0)>0)return queueAction(id);if((player.cd[id]||0)>0)return false;
  if(d.weapon==='fist'&&d.tier===2&&player.ground)return false;
- let target=null;if(d.weapon==='dagger'&&d.tier===3){target=radialTargets(player.x,player.y-20,500,1)[0];if(!target)return false}
- const cost=skillManaCost(d)*(d.weapon==='wand'&&d.tier<4&&player.activeToggles?.wand_4_active_0?2:1);if(player.mp<cost)return false;
+ let target=null;if(d.weapon==='dagger'&&d.tier===3){target=radialTargets(player.x,player.y-20,500,1,'search')[0];if(!target)return false}
+ const cost=supportManaCost(skillManaCost(d)*(d.weapon==='wand'&&d.tier<4&&player.activeToggles?.wand_4_active_0?2:1));if(player.mp<cost)return false;
  const fistReset=d.weapon==='fist'&&d.tier===3&&(player.cd.fist_1_active_0>0||player.cd.fist_2_active_0>0);
- player.mp-=cost;beginActionDelay('slashBlast');const cd=skillCooldown(d);
+ player.mp-=cost;supportOnCast(d,cost);beginActionDelay('slashBlast');const cd=skillCooldown(d);
  if((d.weapon==='staff'&&[2,3].includes(d.tier))||(d.weapon==='crossbow'&&d.tier===3)||(d.weapon==='spear'&&d.tier===4)||(d.weapon==='hammer'&&d.tier===3)){
   if(d.weapon==='staff'&&player.activeBuffs?.staff>0){const max=d.tier===2?2:3;releaseChargedSkill({d,elapsed:max,max,cd:0});return true}
-  player.charge={d,elapsed:0,cd,max:d.weapon==='staff'?(d.tier===2?2:3):d.weapon==='crossbow'?2:d.weapon==='spear'?1.5:3,immobile:['staff','hammer'].includes(d.weapon)};updateUI();return true;
+  player.charge={d,elapsed:0,cd,max:d.weapon==='staff'?(d.tier===2?2:3):d.weapon==='crossbow'?2:d.weapon==='spear'?1.5:3,baseImmobile:['staff','hammer'].includes(d.weapon),immobile:['staff','hammer'].includes(d.weapon)&&!supportFind('walkCharge')};updateUI();return true;
  }
  if(d.weapon==='sword'&&d.tier===3||d.weapon==='gun'&&d.tier===4){
   player.activeChannel={id,d,elapsed:0,timer:0,cd,source:skillContext(d)};if(d.weapon==='gun')player.cd[id]=cd;updateUI();return true;
@@ -86,7 +99,7 @@ function performActiveSkill(d,target){
   if(n===4){player.activeBuffs??={};player.activeBuffs.fist=10}
  }else if(d.weapon==='wand'){
   if(n===1)fireProjectile(d,300,2,2);
-  if(n===2){const m=radialTargets(o.x,o.y,300,1)[0];if(m)activeStrike([m],total,8,source,'meteor')}
+  if(n===2){const m=radialTargets(o.x,o.y,300,1,'search')[0];if(m)activeStrike([m],total,8,source,'meteor')}
   if(n===3){const platform=platforms.filter(p=>player.x>=p.x&&player.x<=p.x+p.w).sort((a,b)=>Math.abs(platformSurface(a,player.x)-player.y)-Math.abs(platformSurface(b,player.x)-player.y))[0];if(platform)activeProjectiles.push(makeProjectile('rolling',o.x,o.y,player.face,0,Infinity,15,1,total,source,{life:15,platform,epoch:0,bossEpoch:new Map(),speed:260*(1+.9*activeSpeed())}))}
  }else if(d.weapon==='staff'){
   if(n===1)activeStrike(frontTargets(400,6,150).filter(m=>{const c=mobCenter(m);return Math.abs(c.y-o.y)<=75*Math.max(0,(m.x-o.x)*player.face)/400+monsterRadius(m)}),total,1,source,'scythe');
@@ -135,18 +148,18 @@ function releaseChargedSkill(c){
  else if(d.weapon==='hammer'){const level=Math.min(3,Math.floor(c.elapsed)),r=[0,500,700,900][level];activeStrike(radialTargets(o.x,o.y,r),total*level/3,1,source,'hammer');activeVisuals.push({type:'circle',x:o.x,y:o.y,r,life:.6})}
  player.charge=null;updateUI();
 }
-function addActiveField(type,x,y,radius,life,total,hits,source){activeFields.push({id:++activeCastSerial,type,x,y,radius,life,total,hits,source,timers:new Map()})}
+function addActiveField(type,x,y,radius,life,total,hits,source){radius*=1+supportSum('area')/100;life*=1+supportSum('fieldDuration')/100;activeFields.push({id:++activeCastSerial,type,x,y,radius,life,total,hits,source,timers:new Map()})}
 function moveControlledMob(m,x){if(m.boss)return;const p=platforms[m.p];const lo=Math.max(m.low??22,p?p.x+monsterRadius(m):22),hi=Math.min(m.high??worldWidth()-22,p?p.x+p.w-monsterRadius(m):worldWidth()-22);m.x=clamp(x,lo,hi);if(p)m.y=platformSurface(p,m.x)}
 function stopActiveChannels(){if(player.activeChannel?.d.weapon==='sword')player.cd[player.activeChannel.id]=player.activeChannel.cd;player.activeChannel=null;player.charge=null;player.activeToggles={};activeDash=null}
 function resetActiveEffects(){activeProjectiles=[];activeFields=[];activeSummons=[];activeVisuals=[];activeDash=null;player.charge=null;player.activeChannel=null;player.activeToggles={};player.activeBuffs={};for(const m of monsters){delete m.poison;delete m.staffMark;delete m.crossMark;delete m.executeMark;m.darkInside=new Set()}}
-function tickWeaponEffects(dt){
+function tickWeaponEffects(dt){tickSupport(dt);
  for(const key of Object.keys(player.activeBuffs||{}))player.activeBuffs[key]=Math.max(0,player.activeBuffs[key]-dt);
- if(player.charge){const c=player.charge;c.elapsed=Math.min(c.max,c.elapsed+dt);if(!canKeepSkill(c.d.id)||!heldSkill(c.d.id)||c.d.weapon==='staff'&&((keys.ArrowLeft||keys.ArrowRight)||c.elapsed>=c.max))releaseChargedSkill(c)}
- if(player.activeChannel){const c=player.activeChannel;c.elapsed+=dt;c.timer-=dt;if(!heldSkill(c.id)||!canKeepSkill(c.id)||c.d.weapon==='sword'&&c.elapsed>5){if(c.d.weapon==='sword')player.cd[c.id]=c.cd;player.activeChannel=null}else while(c.timer<=0){const o=activeOrigin();if(c.d.weapon==='sword'){activeStrike(horizontalTargets(200,6),perRoundDamage(c.d),2,c.source,'orbit');c.timer+=1/activeFrequency(2,4)}else{activeProjectiles.push(makeProjectile('gun',o.x,o.y,player.face,0,300,Infinity,1,perRoundDamage(c.d)/10,c.source));c.timer+=1/activeFrequency(10,30)}}}
+ if(player.charge){const c=player.charge;c.immobile=c.baseImmobile&&!supportFind('walkCharge');c.elapsed=Math.min(c.max,c.elapsed+dt/Math.max(.1,1-supportSum('chargeSpeed')/100));if(!canKeepSkill(c.d.id)||!heldSkill(c.d.id)||c.d.weapon==='staff'&&((c.immobile&&(keys.ArrowLeft||keys.ArrowRight))||c.elapsed>=c.max))releaseChargedSkill(c)}
+ if(player.activeChannel){const c=player.activeChannel;c.elapsed+=dt;c.timer-=dt;if(!heldSkill(c.id)||!canKeepSkill(c.id)||c.d.weapon==='sword'&&c.elapsed>5){if(c.d.weapon==='sword')player.cd[c.id]=c.cd;player.activeChannel=null}else while(c.timer<=0){const o=activeOrigin();if(c.d.weapon==='sword'){activeStrike(horizontalTargets(200,6),c.source.attackSnapshot*c.d.damage/100,2,c.source,'orbit');c.timer+=1/activeFrequency(2,4)}else{c.shots??=0;c.source.streamRounds??=new Map();const bulletSource={...c.source,streamIndex:c.shots%10,streamRound:Math.floor(c.shots/10)};c.shots++;activeProjectiles.push(makeProjectile('gun',o.x,o.y,player.face,0,300,Infinity,1,c.source.attackSnapshot*c.d.damage/1000,bulletSource));c.timer+=1/activeFrequency(10,30)}}}
  for(const [id,t]of Object.entries(player.activeToggles||{})){
   if(!canKeepSkill(id)){delete player.activeToggles[id];continue}t.manaTimer+=dt;t.damageTimer-=dt;
   while(t.manaTimer>=1){const cost=skillManaCost(WEAPON_SKILLS[id]);if(player.mp<cost){delete player.activeToggles[id];break}player.mp-=cost;t.manaTimer-=1}
-  if(id==='hammer_4_active_0'&&player.activeToggles[id]&&t.damageTimer<=0){t.damageTimer+=.5;activeStrike(horizontalTargets(200,12),perRoundDamage(WEAPON_SKILLS[id]),4,t.source,'orbit')}
+  if(id==='hammer_4_active_0'&&player.activeToggles[id]&&t.damageTimer<=0){t.damageTimer+=.5;activeStrike(horizontalTargets(200,12),t.source.attackSnapshot*WEAPON_SKILLS[id].damage/100,4,t.source,'orbit')}
  }
  for(const m of monsters){m.staffMark=Math.max(0,(m.staffMark||0)-dt);m.crossMark=Math.max(0,(m.crossMark||0)-dt);m.executeMark=Math.max(0,(m.executeMark||0)-dt);m.darkInside=new Set();if(m.poison>0&&!m.dead){const elapsed=Math.min(dt,m.poison);m.poison-=dt;m.poisonTimer=(m.poisonTimer||0)+elapsed;const period=1/activeFrequency(2,4);while(m.poisonTimer>=period&&!m.dead){m.poisonTimer-=period;combatDamage(m,m.poisonPower,m.poisonSource)}}}
  tickActiveDash(dt);tickActiveProjectiles(dt);tickActiveFields(dt);tickActiveSummons(dt);
@@ -169,7 +182,7 @@ function tickActiveProjectiles(dt){
   const step=Math.min(p.range-p.travel,p.speed*dt);p.x+=p.dx*step;p.y+=p.dy*step;p.travel+=step;
   if(p.type==='rolling'){const platform=p.platform;const lo=platform.x+10,hi=platform.x+platform.w-10;if(p.x<lo||p.x>hi){p.x=clamp(p.x,lo,hi);p.dx*=-1;p.epoch++}p.y=platformSurface(platform,p.x)-18}
   const candidates=livingMobs().filter(m=>segmentDistance(mobCenter(m),before,p)<=monsterRadius(m)+12).sort((a,b)=>Math.hypot(a.x-before.x,a.y-before.y)-Math.hypot(b.x-before.x,b.y-before.y));
-  if(p.placed){const boss=candidates.find(m=>m.boss);if(boss){p.x=boss.x;p.y=boss.y-18;placeRotatingStar(p)}else if(p.travel>=p.range)placeRotatingStar(p)}
+  p.source.batchTargets=Math.min(p.cap,candidates.length);if(p.placed){const boss=candidates.find(m=>m.boss);if(boss){p.x=boss.x;p.y=boss.y-18;placeRotatingStar(p)}else if(p.travel>=p.range)placeRotatingStar(p)}
   else if(p.platformExplosion){const surface=platforms.find(platform=>p.x>=platform.x&&p.x<=platform.x+platform.w&&before.y<=platformSurface(platform,p.x)&&p.y>=platformSurface(platform,p.x));if(surface){p.y=platformSurface(surface,p.x)-10;explodeProjectile(p)}}
   else if(p.blastRadius&&candidates.length){p.x=candidates[0].x;p.y=candidates[0].y-15;explodeProjectile(p)}
   else for(const m of candidates){
@@ -184,13 +197,13 @@ function tickActiveProjectiles(dt){
 function tickActiveFields(dt){for(const f of activeFields){
  const elapsed=Math.min(dt,f.life);f.life-=dt;
  if(f.type==='smoke')continue;
- if(f.type==='spiral'){f.elapsed+=dt;f.radius=Math.min(800,f.elapsed/3*800);const angle=f.elapsed/3*Math.PI*6,point={x:f.x+Math.cos(angle)*f.radius,y:f.y+Math.sin(angle)*f.radius},before=f.point||{x:f.x,y:f.y};for(const m of livingMobs())if(!f.seen.has(m)&&segmentDistance(mobCenter(m),before,point)<=monsterRadius(m)+20){f.seen.add(m);activeStrike([m],f.total,1,f.source,'impact')}f.point=point;continue}
- const inside=radialTargets(f.x,f.y,f.radius,f.type==='rotatingStar'?15:Infinity),set=new Set(inside),period=1/activeFrequency(2,4);
+ if(f.type==='spiral'){f.elapsed+=dt;f.radius=Math.min(800,f.elapsed/(f.duration||3)*800);const angle=f.elapsed/(f.duration||3)*Math.PI*6,point={x:f.x+Math.cos(angle)*f.radius,y:f.y+Math.sin(angle)*f.radius},before=f.point||{x:f.x,y:f.y};for(const m of livingMobs())if(!f.seen.has(m)&&segmentDistance(mobCenter(m),before,point)<=monsterRadius(m)+20){f.seen.add(m);activeStrike([m],f.total,1,f.source,'impact')}f.point=point;continue}
+ const inside=radialTargets(f.x,f.y,f.radius,f.type==='rotatingStar'?15+supportSum('mobCap','count'):Infinity,'fixed'),set=new Set(inside),period=1/activeFrequency(2,4);
  for(const m of f.timers.keys())if(!set.has(m))f.timers.delete(m);
- for(const m of inside){if(f.type==='dark'){m.darkInside.add(f.id);moveControlledMob(m,m.x+(f.x-m.x)*Math.min(1,elapsed*2))}let timer=f.timers.get(m);if(timer===undefined){activeStrike([m],f.total,f.hits,f.source,'impact');timer=period}else timer-=elapsed;while(timer<=0&&!m.dead){activeStrike([m],f.total,f.hits,f.source,'impact');timer+=period}f.timers.set(m,timer)}
+ f.source.batchTargets=inside.length;for(const [batchOrder,m]of inside.entries()){f.source.batchOrder=batchOrder;if(f.type==='dark'){m.darkInside.add(f.id);moveControlledMob(m,m.x+(f.x-m.x)*Math.min(1,elapsed*2))}let timer=f.timers.get(m);if(timer===undefined){activeStrike([m],f.total,f.hits,f.source,'impact');timer=period}else timer-=elapsed;while(timer<=0&&!m.dead){activeStrike([m],f.total,f.hits,f.source,'impact');timer+=period}f.timers.set(m,timer)}
  if(f.life<=0&&f.type==='dark')activeStrike(inside,f.total,3,f.source,'blast');
  }activeFields=activeFields.filter(f=>f.life>0)}
-function tickActiveSummons(dt){for(const s of activeSummons){s.life-=dt;s.timer-=dt;if(s.type==='fairy'){s.x=player.x-player.face*35;s.y=player.y-60}if(s.timer<=0){let target=null;const choices=livingMobs().filter(m=>Math.hypot(m.x-s.x,m.y-20-s.y)<=s.range);if(s.type==='fairy')target=choices.sort((a,b)=>Number(b.boss)-Number(a.boss)||Math.abs(a.x-s.x)-Math.abs(b.x-s.x))[0];else target=choices.includes(player.lastActiveTarget)?player.lastActiveTarget:choices.filter(m=>(m.x-s.x)*s.face>=0).sort((a,b)=>Math.abs(a.x-s.x)-Math.abs(b.x-s.x))[0];if(target){combatDamage(target,s.total,{...s.source,direct:false});activeVisuals.push({type:'arrowTrail',x:s.x,y:s.y,tx:target.x,ty:target.y-18,r:0,life:.22})}s.timer+=1/activeFrequency(1,5)}}activeSummons=activeSummons.filter(s=>s.life>0)}
+function tickActiveSummons(dt){for(const s of activeSummons){s.life-=dt;s.timer-=dt;if(s.type==='fairy'){s.x=player.x-player.face*35;s.y=player.y-60}if(s.timer<=0){let target=null;const choices=livingMobs().filter(m=>Math.hypot(m.x-s.x,m.y-20-s.y)<=s.range);if(s.type==='fairy')target=choices.sort((a,b)=>Number(b.boss)-Number(a.boss)||Math.abs(a.x-s.x)-Math.abs(b.x-s.x))[0];else target=choices.includes(player.lastActiveTarget)?player.lastActiveTarget:choices.filter(m=>(m.x-s.x)*s.face>=0).sort((a,b)=>Math.abs(a.x-s.x)-Math.abs(b.x-s.x))[0];if(target){target.assistedUntil=supportState.clock+3;combatDamage(target,s.total,{...s.source,direct:false,summon:true});activeVisuals.push({type:'arrowTrail',x:s.x,y:s.y,tx:target.x,ty:target.y-18,r:0,life:.22})}s.timer+=1/activeFrequency(1,5)}}activeSummons=activeSummons.filter(s=>s.life>0)}
 function drawActiveEffects(){
  ctx.save();
  for(const f of activeFields){ctx.globalAlpha=.22;ctx.fillStyle=f.type==='dark'?'#674782':f.type==='smoke'?'#d7c5a7':f.type==='rotatingStar'?'#f8d477':'#fff0a5';ctx.beginPath();ctx.arc(f.x,f.y,f.radius,0,Math.PI*2);ctx.fill();ctx.globalAlpha=.7;ctx.strokeStyle=ctx.fillStyle;ctx.lineWidth=3;ctx.stroke();if(f.type==='spiral'&&f.point){ctx.globalAlpha=1;ellipse(f.point.x,f.point.y,13,13,'#fff5ab')}if(['light','dark'].includes(f.type)){ctx.beginPath();ctx.ellipse(f.x,f.y+12,f.radius,f.radius*.22,0,0,Math.PI*2);ctx.stroke()}if(f.type==='rotatingStar'){ctx.save();ctx.translate(f.x,f.y);ctx.rotate(time*6);drawCombatStar(0,0,25);ctx.restore()}}
@@ -207,5 +220,8 @@ function tutorialMark(){}
 function updateTutorial(){}
 function weaponDamageFactor(){return 1}
 function onWeaponHit(){}
+
+
+
 
 

@@ -1,3 +1,15 @@
+# Current release 0.63 · Buff / Passive
+
+Adds all 128 shared/unique Buff and Passive records for twelve weapons and four tiers alongside the 48 existing Active skills. Each tier has two Buff and two Passive slots. Main weapon and Emblem grant eligible support skills; their effects work across weapon types. Open Skill, select Buff or Passive, choose slots and upgrade ranks. Use keys 1–8 or the Buff hotbar to activate equipped Buffs.
+
+Life steal, mana steal, sword-wave assistance and invulnerability last 10 seconds with 60-second cooldowns at all ranks. Sword orbs start at zero and accumulate every 15 seconds; Berserk clears all stacks after five seconds without direct damage. Staff Buffs permit walking while charging and reduce charge time by 40%. Tome extends field/object and Buff durations; invulnerability cannot be extended. Generated extra Hits, waves, reflections and delayed damage cannot trigger special on-hit effects again.
+
+Shared stat Buff I/II/III use only the highest value. Identical support skills do not stack. Removing an enabling weapon/Emblem ends unavailable Buffs. Selection and rank persist in schema v4; active Buff timers and cooldowns reset on loading. Old Active ranks, equipment and progress remain intact. Skill boxes now include Active, Buff and Passive scrolls.
+
+Full Lv.1/Lv.30 values: [BUFF-PASSIVE-REFERENCE.md](BUFF-PASSIVE-REFERENCE.md). Historical release notes below describe earlier versions.
+
+---
+
 # Fernvale — Browser Edition 0.52
 
 เกม pixel RPG เล่นคนเดียว ใช้ HTML, CSS, JavaScript และ Canvas 2D โดยตรง ไม่มี Godot, WASM, npm build หรือเซิร์ฟเวอร์เกม

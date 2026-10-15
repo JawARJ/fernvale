@@ -1,3 +1,7 @@
+# Current catalog · release 0.63
+
+48 Active + 128 Buff/Passive. Support definitions: `dist/supportdata.js`, runtime: `dist/support.js`, UI: `dist/support-ui.js`. See [full support reference](BUFF-PASSIVE-REFERENCE.md). The following Active rules continue to apply.
+
 # Active skills · release 0.60
 
 The live catalog is `dist/skilldata.js` (48 Active skills, 12 weapons × 4 tiers).

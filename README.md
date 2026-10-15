@@ -1,4 +1,4 @@
-# Fernvale — source 0.62
+# Fernvale — source 0.63
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -12,7 +12,9 @@ From this folder, run `python -m http.server 8000 --directory dist` and open htt
 
 - 48 Active skills across 12 weapons and four tiers, with charges, hold channels, toggles, poison, fields, summons and movement.
 - Fixed tier damage totals of 100/120/150/200% per target per round; MP is tier × (skill rank + 5). Toggle skills consume the formula each second.
-- Retired skill, Buff and Passive data is removed when upgrading an old save. New skills start at rank 1; character level, stats, money, equipment and boxes remain.
+- 128 Buff/Passive skills across four tiers: two Buff and two Passive per weapon/tier (one shared family and one unique). Main weapon and Emblem unlock support effects that work across weapons. Select skills in the Buff/Passive tabs; activate Buffs with keys 1–8. Ranks and selections persist.
+- Life steal, mana steal, sword-wave assistance and invulnerability last 10 seconds with 60-second cooldowns. Generated damage cannot trigger special effects again.
+- Legacy retired skills migrate without resetting character level, stats, money, equipment or boxes. Existing Active ranks remain; new support skills start at rank 1.
 - Ten dungeon stages through level 100, bosses at levels 30/60/100, advancement marks for tiers 2/3/4, and GM level +10.
 - Stage 0 removed. Stage 1 is available from level 1; later stage entry requirements remain stage level minus five.
 - Stage menu has a shared top toolbar, five stages per page and circular page buttons 1–5. Empty pages display a message; dungeon and boss pages are independent.
@@ -46,3 +48,7 @@ Hosting configuration and credentials are excluded from this public repository.
 ## Emblems (0.62)
 The secondary weapon slot is now an Emblem slot. Emblems identify any of twelve weapon types and are wearable by every class. Active skills still require the main weapon; Buff/Passive comes later. Separate Emblem boxes drop under existing level rules and Lv.10 boxes cost 1,000 in the town shop. Old secondary equipment migrates into its matching Emblem, preserving id, rarity, level and Options. See `dist/emblem.js` for item generation, migration, icons and equip/unequip.
 
+
+## Buff / Passive 0.63
+
+See [all Lv.1/Lv.30 support values](BUFF-PASSIVE-REFERENCE.md) and [validation](VALIDATION.md). Support definitions, runtime and UI live in dist/supportdata.js, dist/support.js and dist/support-ui.js.

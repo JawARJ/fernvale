@@ -1,3 +1,19 @@
+# Validation — release 0.63
+
+Validated 2026-10-15 in headless Microsoft Edge with Playwright against actual dist assets served over HTTP.
+
+- `tests/support63.cjs`: all 128 support skills at Lv.1/Lv.30 (256 cases): selection, eligibility, finite values, MP, CD and descriptions. Mechanics cover highest shared stat only, timed sword orbs, exact five-second Berserk reset, cross-weapon extra Hits, Emblem removal, 15 shields with reflection, invulnerability, capped life/mana steal, mobile/desktop UI, keyboard activation, rank/slot persistence, legacy migration and duplicate rejection.
+- Focused interactions: last-Hit bonus moves to added Hit, complete-combo bonus includes extra Hit damage, twenty gun bullets produce two extra Hits, MP spending threshold refunds/reduces CD, continuous Berserk damage scales once, walking charge and 40% faster charge, duration exclusions, delayed star/link/slow, no recursive meteor/wave effects.
+- `tests/active60.cjs`: 48 Active casts, costs, core effects, save migrations, boss progression and skill boxes.
+- `tests/combat60.cjs`: combat regressions and actual keyboard/pointer charge/channel/toggle controls.
+- `tests/stages61.cjs`: five stages/page, category pagination, level gates, launch and mobile layout.
+- `tests/emblem62.cjs`: all twelve Emblem types, cross-class equipment, boxes, shop, migrations, capacity and mobile.
+- All dist JavaScript passes `node --check`. Buff/Passive desktop and mobile screenshots inspected; no horizontal overflow.
+
+One initial combat suite navigation timed out before loading a character; rerunning it separately passed. These checks validate implementation and selected interactions, not long-term balance across every possible build. Numeric values remain the approved first draft and can be tuned after playtesting.
+
+---
+
 # Validation — Browser Edition 0.5
 
 Validated on 2026-10-11 with Microsoft Edge (Playwright), serving actual dist assets over HTTP.
