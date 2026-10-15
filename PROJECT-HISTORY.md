@@ -1,3 +1,11 @@
+# Current release 0.64 · Ground drops
+
+Removes the round-results screen and grade/end-of-round rewards. Monster EXP is still awarded on each kill. Every monster drops money equal to its level × 10; ordinary monsters retain a 1% random-box chance, Elites guarantee a random box, bosses drop their weapon box on the ground. Walk close on the same platform to collect after a short spawn delay. Full money/box stacks leave the remaining drop on the ground. Collected items save immediately; uncollected items disappear when leaving the map.
+
+Boss victory keeps the arena open for pickup and grants the existing advancement mark; leave through the portal. Leaving a dungeon or defeat returns directly to town. Party and Enchant are disabled, including D/F shortcuts; Status and Skill remain available.
+
+---
+
 # Current release 0.63 · Buff / Passive
 
 Adds all 128 shared/unique Buff and Passive records for twelve weapons and four tiers alongside the 48 existing Active skills. Each tier has two Buff and two Passive slots. Main weapon and Emblem grant eligible support skills; their effects work across weapon types. Open Skill, select Buff or Passive, choose slots and upgrade ranks. Use keys 1–8 or the Buff hotbar to activate equipped Buffs.

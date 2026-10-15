@@ -19,8 +19,22 @@ function boxDescription(id){if(boxType(id)==='emblem')return 'สุ่ม Emble
 function boxStacks(){return Object.keys(BOX_TYPES).flatMap(type=>Object.entries(player.loot.boxLevels?.[type]||{}).sort(([a],[b])=>a-b).filter(([,count])=>count>0).map(([level,count])=>({type:boxKey(type,level),id:boxKey(type,level),name:boxName(boxKey(type,level)),count})))}
 function addBox(type,level=10){if(!BOX_TYPES[type]||![10,30,60,100].includes(level)||player.loot.boxes[type]>=999999)return false;player.loot.boxLevels??=Object.fromEntries(Object.keys(BOX_TYPES).map(t=>[t,{}]));player.loot.boxLevels[type]??={};player.loot.boxLevels[type][level]=(player.loot.boxLevels[type][level]||0)+1;player.loot.boxes[type]++;return true}
 function consumeBoxes(id,quantity){const type=boxType(id),level=boxLevel(id);if(!Number.isInteger(quantity)||quantity<1||boxCount(id)<quantity)return false;player.loot.boxLevels[type][level]-=quantity;if(!player.loot.boxLevels[type][level])delete player.loot.boxLevels[type][level];player.loot.boxes[type]-=quantity;return true}
-function rollMonsterLoot(m){if(run?.trial||m.boss||(!m.elite&&Math.random()>=.01))return null;const type=randomBoxType();const level=boxTierForLevel(stageById(run.id)?.level||m.level||0);if(!level)return null;if(!addBox(type,level))return null;(run.droppedBoxes??=[]).push(boxKey(type,level));burst(m.x,m.y-15,'#edd58c',12);save();return type}
-function grantRoundLoot(won){const rewards={money:0,boxes:[],drops:[...(run.droppedBoxes||[])]};if(!won||run.tutorial)return rewards;if(run.trial){rewards.money=TRIAL.level*30;player.loot.money=Math.min(999999999,player.loot.money+rewards.money);addBox('main',TRIAL.level);rewards.boxes.push(boxKey('main',TRIAL.level));return rewards;}rewards.money=500*run.id;player.loot.money=Math.min(999999999,player.loot.money+rewards.money);const rank=calculateResult(run).rank,count={S:1,SS:2,SSS:3}[rank]||0;for(let i=0;i<count;i++){const type=randomBoxType();const level=boxTierForLevel(stageById(run.id)?.level||0);if(level&&addBox(type,level))rewards.boxes.push(boxKey(type,level))}return rewards}
+function rollMonsterLoot(m){
+ if(!run||run.tutorial||m.lootDropped)return null;m.lootDropped=true;
+ const level=Math.max(1,Math.floor(m.level||stageById(run.id)?.level||TRIAL.level||1));
+ drops.push({kind:'money',amount:level*10,x:clamp(m.x-10,16,worldWidth()-16),baseY:m.y-4,age:0});
+ if(!m.boss&&!m.elite&&Math.random()>=.01)return null;
+ const type=m.boss?'main':randomBoxType(),tier=boxTierForLevel(level);if(!tier)return null;
+ drops.push({kind:'box',type,level:tier,x:clamp(m.x+12,16,worldWidth()-16),baseY:m.y-4,age:0});
+ burst(m.x,m.y-15,'#edd58c',12);return type;
+}
+function updateGroundLoot(dt){let changed=false;
+ for(const d of drops){d.age+=dt;if(d.age<.35||Math.abs(player.x-d.x)>32||Math.abs(player.y-(d.baseY+4))>28)continue;
+ if(d.kind==='money'){const amount=Math.min(d.amount,999999999-player.loot.money);if(amount<=0)continue;player.loot.money+=amount;d.amount-=amount;d.collected=d.amount===0;floatText(player.x,player.y-48,'+'+amount+' เงิน','#f5d980');changed=true}
+ else if(d.kind==='box'&&addBox(d.type,d.level)){d.collected=true;floatText(player.x,player.y-65,'+'+boxName(boxKey(d.type,d.level)),'#d9eac3');changed=true}
+ }drops=drops.filter(d=>!d.collected);if(changed){save();updateUI()}
+}
+function drawGroundLoot(){for(const d of drops){const y=d.baseY+Math.sin(time*3+d.x)*2;if(d.kind==='money'){ellipse(d.x,y-6,6,8,'#e2bc60');rect(d.x-1,y-11,2,10,'#fff0ae')}else{rect(d.x-9,y-16,18,15,'#9f7b48');rect(d.x-10,y-18,20,5,'#e0c088');rect(d.x-2,y-16,4,15,'#e7cc93');rect(d.x-2,y-10,4,4,'#456451')}}}
 const POTION_PRICES={hpPotion:{buy:100,sell:50},mpPotion:{buy:100,sell:50}};
 function tradePotion(id,buy,quantity=1){if(player.map!=='town'||!POTION_PRICES[id]||!Number.isInteger(quantity)||quantity<1||quantity>9999)return false;const price=POTION_PRICES[id],stock=player.consumables[id];if(buy){if(player.loot.money<price.buy*quantity||stock+quantity>999999)return false;player.loot.money-=price.buy*quantity;player.consumables[id]+=quantity}else{if(stock<quantity||player.loot.money+price.sell*quantity>99999999999)return false;player.consumables[id]-=quantity;player.loot.money+=price.sell*quantity}save();updateUI();return true}
 let tradeOverlay=null;

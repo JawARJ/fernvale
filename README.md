@@ -1,4 +1,4 @@
-# Fernvale — source 0.63
+# Fernvale — source 0.64
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -52,3 +52,7 @@ The secondary weapon slot is now an Emblem slot. Emblems identify any of twelve 
 ## Buff / Passive 0.63
 
 See [all Lv.1/Lv.30 support values](BUFF-PASSIVE-REFERENCE.md) and [validation](VALIDATION.md). Support definitions, runtime and UI live in dist/supportdata.js, dist/support.js and dist/support-ui.js.
+
+## Ground drops 0.64
+
+Round results and end bonuses removed. All monsters drop level × 10 money. Boxes drop on the ground with their existing ordinary/Elite rates; bosses drop weapon boxes. Walk near on the same platform to collect. Boss clear leaves the arena open for pickup and retains advancement marks. Leaving or defeat returns to town. Party and Enchant are locked, including shortcuts.

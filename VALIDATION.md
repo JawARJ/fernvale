@@ -1,3 +1,13 @@
+# Validation — release 0.64
+
+2026-10-15, Microsoft Edge via Playwright against actual HTTP-served dist assets.
+
+- `tests/loot64.cjs` passes: results DOM removed; locked Party/Enchant buttons, shortcuts and direct calls; monster level × 10 cash on ground; box drop/pickup; platform isolation; 0.35-second pickup delay; one drop per monster life; respawn drops again; full box stack preserves drop for retry; no end bonuses; defeat recovery; boss clear stays playable, retains ground loot, grants advancement, resumes after pause/inventory and returns to town; mobile layout and collected money persists after reload. No page errors.
+- `tests/active60.cjs` and `tests/support63.cjs` pass, including 48 Active casts, 128 support skills at rank 1/30, support interactions and save migration.
+- All dist JavaScript passes `node --check`. Desktop ground-drop screenshot inspected.
+
+---
+
 # Validation — release 0.63
 
 Validated 2026-10-15 in headless Microsoft Edge with Playwright against actual dist assets served over HTTP.
