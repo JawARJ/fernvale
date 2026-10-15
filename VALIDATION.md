@@ -1,3 +1,9 @@
+# Validation — release 0.67
+
+2026-10-15. Reused tests/mobile66.cjs in touch-enabled Edge: four Active touch casts including hold/release, both Buff pages and cooldowns, potions, joystick, jump/NPC interaction, menu locks and five landscape/portrait sizes pass without page errors or overflow. Inspected the actual 844×390 screenshot against the annotated reference. This is a mobile layout/opacity adjustment; existing game behavior remains covered by the prior suites.
+
+---
+
 # Validation — release 0.66
 
 2026-10-15, Playwright with headless Microsoft Edge and actual touch events against HTTP-served dist.

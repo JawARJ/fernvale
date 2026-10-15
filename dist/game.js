@@ -1,6 +1,6 @@
 'use strict';
 // Refresh mixed cached HTML/scripts before interacting with character saves.
-(()=>{const release='0.66';if(document.documentElement.dataset.release===release)return;const target=new URL(location.href);if(target.searchParams.get('release')!==release){target.searchParams.set('release',release);location.replace(target.href)}})();
+(()=>{const release='0.67';if(document.documentElement.dataset.release===release)return;const target=new URL(location.href);if(target.searchParams.get('release')!==release){target.searchParams.set('release',release);location.replace(target.href)}})();
 
 const $=id=>document.getElementById(id),canvas=$('game');let ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
 const W=960,H=480,GRAVITY=1120,ROUND_DURATION=180,SAVE_KEY='fernvale.browser.slots.v2',SETTINGS_KEY='fernvale.browser.settings.v1';

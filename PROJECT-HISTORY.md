@@ -1,3 +1,9 @@
+# Current release 0.67 · Compact translucent mobile controls
+
+Moves the lower-right controls to match the annotated sketch: a compact header row with Buff page and HP/MP potions, four Buff cells below, and four Active buttons following a lower arc around Jump/Interact. Reduces joystick background opacity to 14% (knob 27%) and Active/Jump backgrounds to 24%, while preserving readable icons and borders. Buff/potion backgrounds also become translucent. Desktop layout and all controls remain available.
+
+---
+
 # Current release 0.66 · Mobile controls
 
 Rebuilds the mobile HUD to match the supplied sketch: level/HP/MP/EXP at upper left; Status, Skill, locked Party/Enchant and Settings at upper right; analog joystick at lower left. The lower-right deck has a large contextual jump/interact button, four simultaneous Q/W/E/R Active buttons, four rectangular Buff cells with a circular 1/2–2/2 page switch, and round HP/MP potion buttons above. Normal attack remains available as a separate small rectangular button.

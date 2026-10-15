@@ -1,4 +1,4 @@
-# Fernvale — source 0.66
+# Fernvale — source 0.67
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -64,3 +64,7 @@ New characters enter a guided tutorial: left/right movement, trainer dialog, rea
 ## Mobile controls 0.66
 
 Upper-left level/HP/MP/EXP and upper-right Status/Skill/locked Party/Enchant/Settings. Joystick at lower left; jump/interact, all four Active buttons, two pages of four Buff cells and round HP/MP potions at lower right. Includes stock/CD displays, touch hold/release and responsive portrait/landscape layouts. See tests/mobile66.cjs and VALIDATION.md for touch-input checks.
+
+## Mobile layout 0.67
+
+Compact lower-right controls follow the annotated reference: Buff page and potions above the Buff strip, Active arc around Jump/Interact. Joystick, Jump and Active backgrounds are more transparent with readable icons/borders. Touch-input and viewport checks pass.
