@@ -1,4 +1,4 @@
-# Fernvale — source 0.74
+# Fernvale — source 0.75
 
 Browser pixel RPG with local saves and Auto Farm while the game is open. Online work is deferred; Party remains locked; Enchant is available.
 
@@ -8,13 +8,16 @@ Play: https://fernvale-adventure.ochremouse32.chatgpt.site/
 
 From this folder, run `python -m http.server 8000 --directory dist` and open http://localhost:8000. Saves stay in each browser under localStorage.
 
-## Auto Farm and Enchant 0.74
+## Current changes in 0.75
 
-Auto starts immediately without tickets or prepaid time. Configure four Active slots, enter a map, and Start. Keep the game open and unpaused; it does not farm offline. Prior ticket/time balances are preserved but inactive and hidden.
+- Weapon/armor/accessory boxes only for new drops; exact stage level becomes item level, with tiers grouped by Stage 1–3 / 4–6 / 7–9 / 10+. Normal chance per type cycles 1/3/5%; Elite/Boss always choose one box type. Money and boxes enter inventory immediately. Legacy box data is retained.
+- Free twelve-type Emblem selection from the equipment slot preserves the current item's options, level and enhancement.
+- Status/Skill/Enchant and ordinary windows no longer pause combat or Auto. The Auto button is disabled while using windows. Explicit pause/hidden tabs still suspend play.
+- Four unique Auto actions can include normal attack; a visible DEX note states 4 DEX = 1 ATKSPD.
+- Zero HP immediately respawns in town and costs 10% of the XP required for the current level, capped at available XP with no level loss. Positive fractional HP displays at least 1.
+- Enchant retains +20, success/price/downgrade rules; the compact view shows base-stat deltas and cost/wallet/button at the bottom. Online/Party remain deferred.
 
-Enchant supports all owned equipment through +20, including Emblems and the starter weapon. Open Enchant or press F. Success chances for target +1–5 / +6–10 / +11–15 / +16–20 are 100% / 80% / 60% / 40%. Each attempt costs item level × target enhancement × 1,000 money. Enhancement increases only original ATK/DEF/HP/MP by 5% per step; options stay unchanged. On failure only, a second roll has a 10% chance to lose one level when targeting +11–15, and 15% when targeting +16–20. Targets +1–10 never downgrade. Each failure spends one attempt fee; items are never destroyed. Equipped stats are derived from unchanged base values; enhancement persists in saves. See [ENCHANT.md](ENCHANT.md) and [AUTO-FARM.md](AUTO-FARM.md).
-
-Online/Party work is deferred. No paid hosting is needed for the current game.
+References: [LOOT-REFERENCE.md](LOOT-REFERENCE.md), [AUTO-FARM.md](AUTO-FARM.md), [ENCHANT.md](ENCHANT.md).
 
 ## Current features
 

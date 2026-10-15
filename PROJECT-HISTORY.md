@@ -1,3 +1,11 @@
+# Fernvale 0.75 — stage loot and live menus
+
+New drops use only weapon/armor/accessory boxes and are delivered with money immediately on kill. Stage groups 1–3/4–6/7–9/10+ define equipment tiers; exact monster/stage level defines the item level. Per-type normal chances cycle 1/3/5%; Elite/Boss always choose one random type. Existing legacy skill/Emblem boxes remain readable/openable, but new drops/shop stock no longer issue them. Emblem type can be freely selected from its equipment slot, preserving its item stats/+ level.
+
+Menus no longer pause combat/Auto. Auto is disabled while a window is open; its own internal picker/back controls still work. Four unique Auto actions may include normal attack; saved duplicate entries are normalized. DEX conversion is always visible. HP <= 0 immediately respawns and subtracts 10% of the XP needed for the current level, capped at current XP with no level loss. Positive fractional HP displays at least 1. Enchant keeps its rules but now shows only stat deltas and a bottom payment area. Explicit pause, browser hidden/blur and closed pages still suspend gameplay; online remains deferred.
+
+See [LOOT-REFERENCE.md](LOOT-REFERENCE.md), [AUTO-FARM.md](AUTO-FARM.md), and [ENCHANT.md](ENCHANT.md).
+
 # Fernvale 0.74 — confirmed Enchant rules
 
 Enchant now increases only original ATK/DEF/HP/MP by 5% per level; options never scale. Failed attempts targeting +11–15 have a separate 10% chance to lose one level, and +16–20 have 15%; +1–10 never downgrade. Success chances and level × target × 1,000 price are unchanged. The UI shows the conditional risk, unchanged options and actual downgrade result. Existing + levels persist; derived option values automatically follow the corrected rule. Free Auto remains enabled. See [ENCHANT.md](ENCHANT.md).

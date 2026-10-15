@@ -1,3 +1,10 @@
+# Version 0.75 validation
+
+- `refinements75.cjs`: all ten stage rates/tiers and exact box/item levels, independent normal rolls, Elite/Boss single guaranteed box, duplicate-drop guard, instant money/items and exact-level save migration; free Emblem choices preserving stats/+; visible DEX rule; unique normal Auto; actual kills with Status open and Auto button disabled; compact payment footer; immediate zero-HP and lethal-hit death, one XP penalty, positive fractional HP display; PC/mobile real controls.
+- `tutorial70.cjs`, `support63.cjs`, `combat60.cjs` pass. Tutorial progression waits for UI closure without freezing world simulation.
+- `enchant74.cjs` retains downgrade boundaries/power/save checks, with obsolete rules-paragraph UI assertions updated for the requested compact view.
+- Old ground-pickup/locked-Emblem/paused-menu assumptions in earlier release tests are intentionally superseded.
+
 # Version 0.74 validation
 
 - `tests/enchant74.cjs`: base-only projection, raw/derived options unchanged, exact downgrade-roll boundaries at 10/15%, targets 6/10/11/15/16/20, single fee per failure, no downgrade roll on success, equipped max-HP/MP clamp after downgrade, displayed risk/result and save/reload.

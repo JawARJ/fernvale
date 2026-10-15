@@ -1,3 +1,7 @@
+## Current overrides in 0.75
+
+Equipment tiers follow Stage 1–3 / 4–6 / 7–9 / 10+; box and opened equipment level equals the monster/stage level exactly. Three independent normal box rolls use 1% / 3% / 5% per type within each three-stage group. Elite/Boss grant one uniformly chosen box type with certainty. Money is monster level × 10, delivered immediately. Death subtracts min(current XP, ceil(XP required for current level × 0.10)); no level loss.
+
 # สูตร STATUS ปัจจุบัน
 
 เป็นสูตรต้นแบบของ Fernvale โดยใช้พลังหลักและรองตามอาชีพ ปรับสมดุลต่อได้

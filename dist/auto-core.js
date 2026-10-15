@@ -1,22 +1,24 @@
 'use strict';
 // Shared by the browser UI and the authoritative Node game runtime.
+const AUTO_NORMAL='normalAttack';
 const AUTO_TIME_ENABLED=false;
 const AUTO_TICKET_SECONDS=3600,AUTO_TICKET_PRICE=10000,AUTO_MAX_SECONDS=86400;
 function emptyAutoFarm(){return {seconds:0,tickets:0,skills:[null,null,null,null]}}
 function validateAutoFarm(raw){
  if(raw===undefined)return emptyAutoFarm();
  if(!raw||!Number.isFinite(raw.seconds)||raw.seconds<0||raw.seconds>AUTO_MAX_SECONDS||!Number.isInteger(raw.tickets)||raw.tickets<0||raw.tickets>9999||!Array.isArray(raw.skills)||raw.skills.length!==4)throw Error('ข้อมูล Auto Farm ไม่ถูกต้อง');
- for(const id of raw.skills)if(id!==null&&WEAPON_SKILLS[id]?.kind!=='active')throw Error('สกิล Auto ไม่ถูกต้อง');
- return {seconds:raw.seconds,tickets:raw.tickets,skills:[...raw.skills]};
+ for(const id of raw.skills)if(id!==null&&id!==AUTO_NORMAL&&WEAPON_SKILLS[id]?.kind!=='active')throw Error('สกิล Auto ไม่ถูกต้อง');
+ return {seconds:raw.seconds,tickets:raw.tickets,skills:raw.skills.map((id,i,all)=>id!==null&&all.indexOf(id)!==i?null:id)};
 }
 let autoSession=null;
 function autoFarmActive(){return !!autoSession?.running}
 function autoTimeText(seconds){const n=Math.max(0,Math.ceil(seconds));return [Math.floor(n/3600),Math.floor(n/60)%60,n%60].map(n=>String(n).padStart(2,'0')).join(':')}
 function buyAutoTickets(count=1){if(!AUTO_TIME_ENABLED||player.map!=='town'||!Number.isInteger(count)||count<1||count>9999-player.autoFarm.tickets||player.loot.money<count*AUTO_TICKET_PRICE)return false;player.loot.money-=count*AUTO_TICKET_PRICE;player.autoFarm.tickets+=count;save();return true}
 function activateAutoTicket(){if(!AUTO_TIME_ENABLED)return false;if(player.autoFarm.tickets<1||player.autoFarm.seconds+AUTO_TICKET_SECONDS>AUTO_MAX_SECONDS)return false;player.autoFarm.tickets--;player.autoFarm.seconds+=AUTO_TICKET_SECONDS;save();return true}
-function setAutoSkill(index,id){if(autoFarmActive()||!Number.isInteger(index)||index<0||index>3||id!==null&&(!weaponSkillEnabled(id)||WEAPON_SKILLS[id]?.kind!=='active'))return false;player.autoFarm.skills[index]=id;save();return true}
+function autoActionEnabled(id){return id===AUTO_NORMAL?!!weaponInHand('main'):!!id&&weaponSkillEnabled(id)}
+function setAutoSkill(index,id){if(autoFarmActive()||!Number.isInteger(index)||index<0||index>3||id!==null&&(player.autoFarm.skills.some((other,i)=>i!==index&&other===id)||id!==AUTO_NORMAL&&(!weaponSkillEnabled(id)||WEAPON_SKILLS[id]?.kind!=='active')))return false;player.autoFarm.skills[index]=id;save();return true}
 function startAutoFarm(){
- if(!run||run.tutorial||run.finished||AUTO_TIME_ENABLED&&player.autoFarm.seconds<=0||!player.autoFarm.skills.some(id=>id&&weaponSkillEnabled(id)))return false;
+ if(!run||run.tutorial||run.finished||AUTO_TIME_ENABLED&&player.autoFarm.seconds<=0||!player.autoFarm.skills.some(autoActionEnabled))return false;
  stopActiveChannels();queuedAction=null;keys={};autoSession={running:true,mapId:run.id,serial:run.serial,cursor:0,held:null,navigation:null,reason:null};save();return true;
 }
 function stopAutoFarm(reason='manual'){if(!autoSession?.running)return;autoSession.running=false;autoSession.reason=reason;autoSession.held=null;keys={};queuedAction=null;stopActiveChannels();save()}
@@ -37,13 +39,11 @@ function tickAutoFarm(dt){
  if(!autoFarmActive())return;const a=autoSession;
  if(!run||run.tutorial||run.id!==a.mapId||run.serial!==a.serial){stopAutoFarm('mapChanged');return}
  if(AUTO_TIME_ENABLED&&player.autoFarm.seconds<=0){stopAutoFarm('timeExpired');return}
- if(!player.autoFarm.skills.some(id=>id&&weaponSkillEnabled(id))){stopAutoFarm('noSkills');return}
+ if(!player.autoFarm.skills.some(autoActionEnabled)){stopAutoFarm('noSkills');return}
  if(AUTO_TIME_ENABLED){const spent=Math.min(dt,player.autoFarm.seconds);player.autoFarm.seconds=Math.max(0,player.autoFarm.seconds-spent)}keys={};
  if(player.charge){const c=player.charge;a.held=c.elapsed<c.max?c.d.id:null;return}
  if(player.activeChannel){a.held=player.activeChannel.elapsed<3?player.activeChannel.id:null;return}
  a.held=null;if(activeDash)return;
- const loot=drops.filter(d=>Math.abs(d.baseY+4-player.y)<28&&Math.abs(d.x-player.x)<220).sort((x,y)=>Math.abs(x.x-player.x)-Math.abs(y.x-player.x))[0];
- if(loot){autoMoveToward(loot.x,loot.baseY+4,autoSurface(loot.x,loot.baseY+4));return}
  if(run.finished){stopAutoFarm('bossCleared');return}
  const targets=monsters.filter(m=>!m.dead).map(m=>({m,path:autoPath(autoSurface(player.x,player.y),m.p??autoSurface(m.x,m.y))})).filter(t=>t.path!==null).sort((x,y)=>x.path.length*500+Math.abs(x.m.x-player.x)-(y.path.length*500+Math.abs(y.m.x-player.x)));
  const target=targets[0]?.m;if(!target)return;
@@ -52,6 +52,7 @@ function tickAutoFarm(dt){
  player.face=dx<0?-1:1;if((player.cd.action||0)>0)return;
  for(let tried=0;tried<4;tried++){
   const i=a.cursor;a.cursor=(i+1)%4;const id=player.autoFarm.skills[i],d=WEAPON_SKILLS[id];
+  if(id===AUTO_NORMAL){if((player.cd.attack||0)<=0&&weaponInHand('main')){act('attack');return}continue}
   if(!id||d?.kind!=='active'||!weaponSkillEnabled(id)||player.activeToggles?.[id]||(player.cd[id]||0)>0||player.mp<supportManaCost(skillManaCost(d)))continue;
   if(d.weapon==='fist'&&d.tier===2&&player.ground){jump();a.cursor=i;return}
   a.held=id;if(castWeaponSkill(id))return;a.held=null;

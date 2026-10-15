@@ -1,5 +1,5 @@
 'use strict';
-function weaponStatusRows(g){g=enchantedGear(g);return [['ประเภท',WEAPON_NAMES[g.weapon]||'อาวุธ'],['เลเวลอาวุธ','Lv.'+(g.level??(g.stage===4?30:g.stage?g.stage*10:1))],['ATK',String(g.atk||0)],['ความเร็วพื้นฐาน','100'],['การตีบวก','+'+enchantLevel(g)]]}
+function weaponStatusRows(g){g=enchantedGear(g);return [['ประเภท',WEAPON_NAMES[g.weapon]||'อาวุธ'],['เลเวลอาวุธ','Lv.'+(g.level??(g.stage===4?30:g.stage?g.stage*10:1))],['ขั้นอุปกรณ์',String(Math.max(1,g.stage||1))],['ATK',String(g.atk||0)],['ความเร็วพื้นฐาน','100'],['การตีบวก','+'+enchantLevel(g)]]}
 function weaponOptionText(b){return (BONUS_NAMES[b.key]||b.key.toUpperCase())+' +'+b.value+(['cri','criDamage','ignoreDef','damage','bossDamage'].includes(b.key)?'%':'')}
 const gearDescriptionBeforeStatus=gearDescription;
 gearDescription=function(g){if(!g.weapon)return gearDescriptionBeforeStatus(g);return weaponStatusRows(g).map(([name,value])=>name+' : '+value).join('\n')+'\nOption (สเตตัสพิเศษ)\n'+((g.bonuses||[]).map(weaponOptionText).join('\n')||'ไม่มี')};
