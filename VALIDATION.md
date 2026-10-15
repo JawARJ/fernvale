@@ -1,3 +1,15 @@
+# Validation — release 0.65
+
+2026-10-15, Microsoft Edge / Playwright on HTTP-served dist assets.
+
+- `tests/tutorial65.cjs`: completes the tutorial through actual keyboard movement, NPC dialogs and skill-picker clicks; casts Q and Buff 1, climbs ladder, clears both jumps, uses Down+Space and the portal, selects one of twelve Emblems and verifies duplicate-claim prevention. Exercises real ladder route to potion shop, GM and stage portal, completed-save reload and all four family weapon pools (240 samples per family).
+- `tests/tutorial65-resume.cjs`: resumes a saved jumping checkpoint and pending Emblem selection, walks the real town ramp to the portal and underneath it, verifies legacy saves remain in town, creates all four character families and casts their starter Active. Tests a coarse-pointer landscape mobile tutorial/reward screen, selection, overflow and page errors.
+- `tests/active60.cjs`, `tests/support63.cjs`, `tests/loot64.cjs`, `tests/combat60.cjs`, `tests/stages61.cjs`, `tests/emblem62.cjs`: existing systems checked after entering town explicitly; fresh-character tutorial behavior is covered separately above.
+- Local preview intermittently failed to load scripts during the first chained stage/Emblem test runs. Both suites passed separately afterward; six consecutive fresh page loads also loaded the game, skill runtime and tutorial successfully.
+- Desktop town/tutorial and mobile reward screenshots inspected. All dist JavaScript passes node --check.
+
+---
+
 # Validation — release 0.64
 
 2026-10-15, Microsoft Edge via Playwright against actual HTTP-served dist assets.

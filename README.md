@@ -1,4 +1,4 @@
-# Fernvale — source 0.64
+# Fernvale — source 0.65
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -56,3 +56,7 @@ See [all Lv.1/Lv.30 support values](BUFF-PASSIVE-REFERENCE.md) and [validation](
 ## Ground drops 0.64
 
 Round results and end bonuses removed. All monsters drop level × 10 money. Boxes drop on the ground with their existing ordinary/Elite rates; bosses drop weapon boxes. Walk near on the same platform to collect. Boss clear leaves the arena open for pickup and retains advancement marks. Leaving or defeat returns to town. Party and Enchant are locked, including shortcuts.
+
+## Tutorial and town 0.65
+
+New characters enter a guided tutorial: left/right movement, trainer dialog, real Active/Buff installation and activation, ladder, two jumps, Down+Space and portal. Select one of twelve Common Emblems at completion; progress and pending reward persist. Existing saves remain in town. The new town has bottom-left spawn, four left shop spaces (only potion shop active), a ladder, GM at lower right, and ramp to the right-side stage portal. Weapon boxes only roll the three weapons of the character stat family.

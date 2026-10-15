@@ -1,3 +1,13 @@
+# Current release 0.65 · Tutorial and town layout
+
+New characters begin in a separate tutorial, spawning at the lower right. Popups and a persistent hint guide left/right movement, talking to the trainer at the lower left, installing and casting Active/Buff skills through the real skill UI, climbing the ladder, jumping across two ledges, dropping through the upper platform with Down + Space, and interacting with the lower portal. Down + Space always drops through, even near an interactable.
+
+NPC lessons explain Active vs Buff vs Passive, MP/CD, QWER and 1–8, main-weapon/Emblem eligibility, skill boxes and duplicate-scroll upgrades. Completion offers one Common Lv.1 Emblem selected from all twelve weapon types, equips it, then enters town. Progress and pending reward persist; reward claims cannot repeat. Existing characters without a tutorial-progress field keep entering town. New characters start with empty Active slots so installation is taught explicitly.
+
+Town follows the supplied layout: bottom-left spawn, two left-side shop levels (potion shop on the middle-left, three reserved storefronts), one ladder connecting all left levels, GM at the lower right, and a ramp up to the right-hand stage portal. Town/tutorial fit a single 960-unit canvas. Weapon boxes retain class-only pools: STR sword/spear/hammer; DEX bow/crossbow/gun; INT wand/staff/tome; LUK dagger/fist/star.
+
+---
+
 # Current release 0.64 · Ground drops
 
 Removes the round-results screen and grade/end-of-round rewards. Monster EXP is still awarded on each kill. Every monster drops money equal to its level × 10; ordinary monsters retain a 1% random-box chance, Elites guarantee a random box, bosses drop their weapon box on the ground. Walk close on the same platform to collect after a short spawn delay. Full money/box stacks leave the remaining drop on the ground. Collected items save immediately; uncollected items disappear when leaving the map.
