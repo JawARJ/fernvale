@@ -1,0 +1,53 @@
+'use strict';
+function stageLayoutRandom(id){let state=(0x58f37a91+id*2654435761)>>>0;return ()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296}}
+function platformSurface(p,x){return p.y+(p.yEnd===undefined?0:(p.yEnd-p.y)*Math.max(0,Math.min(1,(x-p.x)/p.w)))}
+function makeStageLayout(id,rng=stageLayoutRandom(id)){
+ const width=1600+id*80+Math.floor(rng()*5)*160,layers=[2,3,3,4,3,4][id-1]||2+Math.floor(rng()*3);
+ const family=[0,1,2,3,0,2][id-1]??(id+Math.floor(rng()*4))%4;
+ const ledges=[{x:0,y:420,w:width,layer:0}],links=[];
+ for(let layer=1;layer<layers;layer++){
+  const y=420-layer*105,jitter=Math.floor(rng()*90),margin=70+jitter;
+  if(family===0){
+   const start=margin,end=width-margin,break1=start+(end-start)*.38,break2=break1+100;
+   ledges.push({x:start,y,w:break1-start,layer},{x:break1,y,w:100,yEnd:y-24,layer},{x:break2,y:y-24,w:end-break2,layer});
+  }else if(family===1){
+   const x=layer%2?margin:Math.floor(width*.2)+jitter;
+   ledges.push({x,y,w:width-x-margin,layer});
+  }else if(family===2){
+   const gap=100+Math.floor(rng()*3)*20,mid=width*(.42+rng()*.16);
+   ledges.push({x:40+jitter,y,w:mid-gap/2-40-jitter,layer},{x:mid+gap/2,y,w:width-mid-gap/2-40,layer});
+  }else{
+   if(layer%2)ledges.push({x:margin,y,w:width*.34,layer},{x:width*.6,y,w:width*.34-margin,layer});
+   else ledges.push({x:width*.2+jitter,y,w:width*.6-jitter,layer});
+  }
+ }
+ // Every upper section connects to a reachable lower section, including both sides of gaps.
+ for(let i=1;i<ledges.length;i++){
+  const upper=ledges[i],choices=ledges.slice(0,i).filter(p=>p.layer<upper.layer&&Math.min(p.x+p.w,upper.x+upper.w)-Math.max(p.x,upper.x)>40);
+  const lower=choices.sort((a,b)=>b.layer-a.layer)[0];
+  const lo=Math.max(upper.x,lower.x)+20,hi=Math.min(upper.x+upper.w,lower.x+lower.w)-20,x=Math.round(lo+(hi-lo)*(.25+rng()*.5));
+  links.push({x,top:platformSurface(upper,x),bottom:platformSurface(lower,x),upper:i,lower:ledges.indexOf(lower)});
+ }
+ return {width,layers,family,platforms:ledges,ladders:links};
+}
+function applyStageLayout(){
+ const layout=makeStageLayout(run.id);run.layout=layout;platforms=layout.platforms;ladders=layout.ladders;
+ const stage=stageById(run.id);
+ const routes=[];const seen=new Set();for(let i=0;i<platforms.length;i++){if(seen.has(i))continue;const route=monsterSurfaceRoute(i);route.forEach(n=>seen.add(n));routes.push(route)}
+ monsters=[];for(let i=0;i<30;i++){
+  const route=routes[i%routes.length],left=platforms[route[0]],right=platforms[route.at(-1)],low=left.x+(left.layer===0?200:25),high=right.x+right.w-25,x=low+(high-low)*(Math.floor(i/routes.length)+.5)/Math.ceil(30/routes.length),index=route.find(n=>x>=platforms[n].x&&x<=platforms[n].x+platforms[n].w)??route[0],p=platforms[index];
+  monsters.push({id:i,level:stage.level,x,y:platformSurface(p,x),p:index,patrolPlatforms:route,home:x,low,high,dir:i%2?1:-1,hp:stage.hp,max:stage.hp,atk:stage.atk,def:stage.def,avoid:stage.avoid,exp:stage.exp,dead:0,hit:0,phase:random(0,6),boss:false});
+ }
+ run.total=30;player.x=110;player.y=420;resetMotion();camera=0;
+}
+function drawStageTerrain(){
+ cliffPlatform(platforms[0],true);grassEdge(0,420,worldWidth());
+ for(const p of platforms.slice(1)){
+  const end=p.yEnd??p.y;ctx.save();ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+p.w,end);ctx.lineTo(p.x+p.w,end+32);ctx.lineTo(p.x,p.y+32);ctx.closePath();ctx.fillStyle=getCliffPattern();ctx.fill();ctx.restore();
+  if(end===p.y)grassEdge(p.x,p.y,p.w);else for(let x=p.x;x<p.x+p.w;x+=4){const y=platformSurface(p,x);rect(x,y-4,5,7,'#689348');rect(x,y-5,5,2,'#acc375')}
+  mushroom(p.x+24,platformSurface(p,p.x+24)-2,.65);mushroom(p.x+p.w-24,platformSurface(p,p.x+p.w-24)-2,.5);
+ }
+ mushroom(worldWidth()-45,418,1.1);
+}
+
+function drawStagePortals(){for(const exit of interactables.filter(t=>t.kind==='portal')){portal(exit.x,exit.y);ctx.font='12px Thai,Tahoma';ctx.textAlign='center';ctx.fillStyle='#173929';ctx.fillRect(exit.x-55,exit.y-137,110,23);ctx.fillStyle='#f3dc9e';ctx.fillText(run?.tutorial?'จบการฝึก':'กลับหมู่บ้าน',exit.x,exit.y-121);if(Math.abs(player.x-exit.x)<100){ctx.font='10px Thai,Tahoma';ctx.fillText('Spacebar โต้ตอบ',exit.x,exit.y-102)}}}

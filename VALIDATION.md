@@ -1,3 +1,12 @@
+# Fernvale 0.76
+
+- Main weapon source tabs use gold borders; Emblem uses cyan, including a dual-color state when both match.
+- Drop cards show only weapon/accessory/armor boxes. Normal chance per type follows 1/3/5% within each three-stage tier; Elite/Boss guarantee one randomly selected type. Normal percentages are shown directly without mixing Elite percentages into the same label.
+- Armor boxes generate hat/shirt/pants/gloves. Legacy shoes retain their stats, enchant and equipment slot; new pants validate, equip and save normally.
+- Potion shop sells HP/MP potions only; legacy skill/Emblem boxes remain readable in existing saves.
+- HTML loads content-fingerprinted JS/CSS paths so updated source cannot share the previous asset cache key. Run `node scripts/fingerprint-assets.cjs` after editing source and before packaging.
+- Validation: `tests/refinements76.cjs` covers ten-stage rates, class weapons, armor pool/save compatibility, shop stock, source borders, Auto, death, Enchant and mobile controls.
+
 # Version 0.75 validation
 
 - `refinements75.cjs`: all ten stage rates/tiers and exact box/item levels, independent normal rolls, Elite/Boss single guaranteed box, duplicate-drop guard, instant money/items and exact-level save migration; free Emblem choices preserving stats/+; visible DEX rule; unique normal Auto; actual kills with Status open and Auto button disabled; compact payment footer; immediate zero-HP and lethal-hit death, one XP penalty, positive fractional HP display; PC/mobile real controls.

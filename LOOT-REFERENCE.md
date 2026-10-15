@@ -1,3 +1,6 @@
+## 0.76 armor and stock
+Armor: hat, shirt, pants, gloves. No new shoes; legacy shoes remain usable. Shop: HP/MP potions only. Stage cards show normal chances without combining them with Elite odds.
+
 # Loot 0.75
 
 กล่องดรอปใหม่มี **อาวุธ / ชุดสวมใส่ / ประดับ** เท่านั้น เงินและกล่องเข้าตัวทันที ไม่ต้องเดินเก็บ กล่องจากมอน Lv.N เปิดได้อุปกรณ์ Lv.N จริง (ไม่ปัดลงไปที่ 10/30/60/100) อาวุธยังสุ่มเฉพาะสายตัวละคร

@@ -1,4 +1,4 @@
-# Fernvale — source 0.75
+# Fernvale — source 0.76
 
 Browser pixel RPG with local saves and Auto Farm while the game is open. Online work is deferred; Party remains locked; Enchant is available.
 
@@ -8,7 +8,10 @@ Play: https://fernvale-adventure.ochremouse32.chatgpt.site/
 
 From this folder, run `python -m http.server 8000 --directory dist` and open http://localhost:8000. Saves stay in each browser under localStorage.
 
-## Current changes in 0.75
+## Current changes in 0.76
+
+- Main weapon uses gold borders and Emblem uses cyan. Armor boxes generate hat, shirt, pants or gloves; legacy shoes remain usable. Shop sells HP/MP potions only. Stage cards show normal chances clearly.
+- JS/CSS use content-fingerprinted paths to prevent mixed browser caches. After source edits run `node scripts/fingerprint-assets.cjs` before publishing.
 
 - Weapon/armor/accessory boxes only for new drops; exact stage level becomes item level, with tiers grouped by Stage 1–3 / 4–6 / 7–9 / 10+. Normal chance per type cycles 1/3/5%; Elite/Boss always choose one box type. Money and boxes enter inventory immediately. Legacy box data is retained.
 - Free twelve-type Emblem selection from the equipment slot preserves the current item's options, level and enhancement.
