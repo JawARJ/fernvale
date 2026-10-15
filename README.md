@@ -1,4 +1,4 @@
-# Fernvale — source 0.67
+# Fernvale — source 0.68
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -68,3 +68,7 @@ Upper-left level/HP/MP/EXP and upper-right Status/Skill/locked Party/Enchant/Set
 ## Mobile layout 0.67
 
 Compact lower-right controls follow the annotated reference: Buff page and potions above the Buff strip, Active arc around Jump/Interact. Joystick, Jump and Active backgrounds are more transparent with readable icons/borders. Touch-input and viewport checks pass.
+
+## Full-window gameplay 0.68
+
+Gameplay fills PC and mobile browser windows. An aspect-aware canvas/camera removes fixed-ratio letterboxing without stretching sprites; physics remains unchanged. Desktop HUD stays at the bottom; mobile controls overlay the full scene in either orientation. PC fullscreen toggle and a mobile Settings fullscreen action are available where the browser supports them. See tests/viewport68.cjs.

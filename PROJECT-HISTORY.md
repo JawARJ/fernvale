@@ -1,3 +1,13 @@
+# Current release 0.68 · Full-window gameplay
+
+The play screen fills the available browser window on PC and mobile. Desktop removes the centered width limit, outer margins and footer, while retaining its HUD in a bottom row. Mobile uses the full viewport in both orientations instead of letterboxing a fixed 2:1 canvas.
+
+The renderer keeps 480 world units vertically and adjusts its visible width to the actual playfield aspect ratio. The camera follows the character on narrow screens and centers smaller maps on wide screens, with visual ground extended to the viewport edges. Physics and map dimensions stay unchanged; sprites are not stretched. Resizing/rotating does not reset the character or run. Canvas smoothing remains disabled.
+
+PC has a top-right native fullscreen toggle. Mobile can enter/exit fullscreen from Settings on browsers that support the Fullscreen API. Browser-window filling works independently of native fullscreen. Menus restore their normal layout when leaving play.
+
+---
+
 # Current release 0.67 · Compact translucent mobile controls
 
 Moves the lower-right controls to match the annotated sketch: a compact header row with Buff page and HP/MP potions, four Buff cells below, and four Active buttons following a lower arc around Jump/Interact. Reduces joystick background opacity to 14% (knob 27%) and Active/Jump backgrounds to 24%, while preserving readable icons and borders. Buff/potion backgrounds also become translucent. Desktop layout and all controls remain available.

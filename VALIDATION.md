@@ -1,3 +1,14 @@
+# Validation — release 0.68
+
+2026-10-15, HTTP preview / Microsoft Edge / Playwright.
+
+- `tests/viewport68.cjs`: full-window PC bounds at 1366×768, 1920×1080, 2560×1080 and 1024×768; canvas aspect matches layout, camera keeps character visible, terrain fills both bottom corners, smoothing remains off, no scroll overflow, native fullscreen enters/exits and stage menus restore normal layout.
+- Touch-mobile canvas fills 844×390, 740×360, 667×320, 390×844 and 320×568 without letterboxing or geometric stretch. Controls remain within viewport and character stays visible; fullscreen option is available in Settings. No page errors.
+- `tests/mobile66.cjs`, `tests/tutorial65.cjs`, `tests/combat60.cjs` pass: touch controls, full tutorial walk-through and town routes, combat mechanics and real keyboard/pointer charge/channel controls.
+- PC, mobile landscape and mobile portrait screenshots inspected. All dist JavaScript passed node --check. Native fullscreen tested in Edge; browser support varies on other devices, while full-window layout is independent of that API.
+
+---
+
 # Validation — release 0.67
 
 2026-10-15. Reused tests/mobile66.cjs in touch-enabled Edge: four Active touch casts including hold/release, both Buff pages and cooldowns, potions, joystick, jump/NPC interaction, menu locks and five landscape/portrait sizes pass without page errors or overflow. Inspected the actual 844×390 screenshot against the annotated reference. This is a mobile layout/opacity adjustment; existing game behavior remains covered by the prior suites.
