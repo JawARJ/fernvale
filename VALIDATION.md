@@ -1,3 +1,13 @@
+# Validation — release 0.69
+
+2026-10-15, HTTP preview / Microsoft Edge / Playwright.
+
+- tests/drops69.cjs passes: six cells per dungeon card, correct normal/Elite odds, box levels/skill tiers, money through Lv.100 and guaranteed boss drops; checks the actual RNG boundary below/at 1%, every box type, Elite guarantee and boss weapon/money outcomes. Verifies desktop and 844/740/390/320 layouts without overflow.
+- tests/stages61.cjs and tests/loot64.cjs pass: pagination, level entry, ground loot/pickup/save, boss progression and mobile checks.
+- Desktop and mobile previews inspected against supplied reference. All dist JavaScript passed node --check. No combat tuning changes.
+
+---
+
 # Validation — release 0.68
 
 2026-10-15, HTTP preview / Microsoft Edge / Playwright.

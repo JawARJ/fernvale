@@ -1,4 +1,4 @@
-# Fernvale — source 0.68
+# Fernvale — source 0.69
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -72,3 +72,7 @@ Compact lower-right controls follow the annotated reference: Buff page and potio
 ## Full-window gameplay 0.68
 
 Gameplay fills PC and mobile browser windows. An aspect-aware canvas/camera removes fixed-ratio letterboxing without stretching sprites; physics remains unchanged. Desktop HUD stays at the bottom; mobile controls overlay the full scene in either orientation. PC fullscreen toggle and a mobile Settings fullscreen action are available where the browser supports them. See tests/viewport68.cjs.
+
+## Stage drop previews 0.69
+
+Stage cards show item icons, box level/skill tier, money quantity and actual drop rates. Dungeon box cells list Normal / Elite odds; boss cells show guaranteed weapon boxes and money. Metadata shares the real drop probability, tier and money rules. Tests cover RNG boundaries and responsive layouts.

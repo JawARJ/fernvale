@@ -19,11 +19,14 @@ function boxDescription(id){if(boxType(id)==='emblem')return 'สุ่ม Emble
 function boxStacks(){return Object.keys(BOX_TYPES).flatMap(type=>Object.entries(player.loot.boxLevels?.[type]||{}).sort(([a],[b])=>a-b).filter(([,count])=>count>0).map(([level,count])=>({type:boxKey(type,level),id:boxKey(type,level),name:boxName(boxKey(type,level)),count})))}
 function addBox(type,level=10){if(!BOX_TYPES[type]||![10,30,60,100].includes(level)||player.loot.boxes[type]>=999999)return false;player.loot.boxLevels??=Object.fromEntries(Object.keys(BOX_TYPES).map(t=>[t,{}]));player.loot.boxLevels[type]??={};player.loot.boxLevels[type][level]=(player.loot.boxLevels[type][level]||0)+1;player.loot.boxes[type]++;return true}
 function consumeBoxes(id,quantity){const type=boxType(id),level=boxLevel(id);if(!Number.isInteger(quantity)||quantity<1||boxCount(id)<quantity)return false;player.loot.boxLevels[type][level]-=quantity;if(!player.loot.boxLevels[type][level])delete player.loot.boxLevels[type][level];player.loot.boxes[type]-=quantity;return true}
+const NORMAL_BOX_DROP_CHANCE=.01;
+function monsterMoneyDrop(level){return Math.max(1,Math.floor(level))*10}
+function monsterLootPreview(level,kind='normal'){const tier=boxTierForLevel(level),types=kind==='boss'?['main']:Object.keys(BOX_TYPES),chance=kind==='normal'?NORMAL_BOX_DROP_CHANCE:1;return [...(tier?types.map(type=>({kind:'box',type,level:tier,chance:chance/types.length})):[]),{kind:'money',amount:monsterMoneyDrop(level),chance:1}]}
 function rollMonsterLoot(m){
  if(!run||run.tutorial||m.lootDropped)return null;m.lootDropped=true;
  const level=Math.max(1,Math.floor(m.level||stageById(run.id)?.level||TRIAL.level||1));
- drops.push({kind:'money',amount:level*10,x:clamp(m.x-10,16,worldWidth()-16),baseY:m.y-4,age:0});
- if(!m.boss&&!m.elite&&Math.random()>=.01)return null;
+ drops.push({kind:'money',amount:monsterMoneyDrop(level),x:clamp(m.x-10,16,worldWidth()-16),baseY:m.y-4,age:0});
+ if(!m.boss&&!m.elite&&Math.random()>=NORMAL_BOX_DROP_CHANCE)return null;
  const type=m.boss?'main':randomBoxType(),tier=boxTierForLevel(level);if(!tier)return null;
  drops.push({kind:'box',type,level:tier,x:clamp(m.x+12,16,worldWidth()-16),baseY:m.y-4,age:0});
  burst(m.x,m.y-15,'#edd58c',12);return type;

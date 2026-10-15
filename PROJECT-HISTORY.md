@@ -1,3 +1,11 @@
+# Current release 0.69 · Stage drop previews
+
+Stage cards show six drop cells in the previously empty center: the five random box types and money. Each cell shows an icon, box level/skill tier or money quantity at upper left, and its actual drop chance at the bottom. Dungeon boxes show Normal / Elite rates (0.2% / 20% per type); money shows 100% and level × 10. Boss cards show their guaranteed weapon box and money. Hover for item names and descriptions.
+
+Preview data shares the normal-box probability constant, box-type catalog, tier mapping and money formula with actual ground drops. Drop odds remain unchanged: 1% total box chance from normal monsters, one guaranteed random box from Elite, one weapon box from bosses. Five stages per page and entry level requirements remain unchanged. Drop cells move beneath the title on narrow screens; the toolbar now also fits 320-pixel widths.
+
+---
+
 # Current release 0.68 · Full-window gameplay
 
 The play screen fills the available browser window on PC and mobile. Desktop removes the centered width limit, outer margins and footer, while retaining its HUD in a bottom row. Mobile uses the full viewport in both orientations instead of letterboxing a fixed 2:1 canvas.
