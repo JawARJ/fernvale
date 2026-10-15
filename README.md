@@ -1,4 +1,4 @@
-# Fernvale — source 0.61
+# Fernvale — source 0.62
 
 Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
 
@@ -37,8 +37,12 @@ Controls: arrows move/climb; Space jump/interact; C attack; Q/W/E/R use assigned
 
 ## Validation
 
-Current browser checks: `tests/active60.cjs`, `tests/combat60.cjs` and `tests/stages61.cjs`. They use Playwright and Edge against a local server on port 8765; set `PLAYWRIGHT_MODULE` to the installed Playwright module path. Older test files document earlier releases and may assert retired behavior.
+Current browser checks: `tests/active60.cjs`, `tests/combat60.cjs` and `tests/stages61.cjs` and `tests/emblem62.cjs`. They use Playwright and Edge against a local server on port 8765; set `PLAYWRIGHT_MODULE` to the installed Playwright module path. Older test files document earlier releases and may assert retired behavior.
 
 See [skill rules](SKILLS-REFERENCE.md), [validation notes](VALIDATION.md) and [development history](PROJECT-HISTORY.md). Font licensing is in `dist/FONT-OFL.txt`.
 
 Hosting configuration and credentials are excluded from this public repository.
+
+## Emblems (0.62)
+The secondary weapon slot is now an Emblem slot. Emblems identify any of twelve weapon types and are wearable by every class. Active skills still require the main weapon; Buff/Passive comes later. Separate Emblem boxes drop under existing level rules and Lv.10 boxes cost 1,000 in the town shop. Old secondary equipment migrates into its matching Emblem, preserving id, rarity, level and Options. See `dist/emblem.js` for item generation, migration, icons and equip/unequip.
+

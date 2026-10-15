@@ -21,4 +21,4 @@ showItemDetail=function(anchor,item,count,pinned=false){
  upgradeTooltip.style.left=Math.max(8,Math.min(innerWidth-width-8,x))+'px';upgradeTooltip.style.top=Math.max(8,Math.min(innerHeight-height-8,rect.top))+'px';
 };
 const showGearBeforeWeaponStatus=showGearDialog;
-showGearDialog=function(g){if(!g.weapon)return showGearBeforeWeaponStatus(g);modal(g.name,weaponStatusCard(g),[['สวมมือหลัก',()=>equipWeaponHand(g,'main'),true],['สวมมือรอง',()=>equipWeaponHand(g,'secondary')]])};
+showGearDialog=function(g){if(g.slot==='emblem'){showEmblemDialog(g);return}if(!g.weapon)return showGearBeforeWeaponStatus(g);modal(g.name,weaponStatusCard(g),[['สวมมือหลัก',()=>equipWeaponHand(g,'main'),true]])};

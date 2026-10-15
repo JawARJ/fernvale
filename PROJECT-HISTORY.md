@@ -300,3 +300,11 @@ Save migration removes retired skill data without resetting character levels, mo
 
 ## Release 0.61 · Stage menu
 Removes the stage title, combines category tabs and town navigation in a top toolbar, and shows five stages per page with circular page buttons 1–5 at the lower right. Dungeon and boss categories keep their own page selections; unused pages show an empty message.
+
+## Release 0.62 · Emblems
+
+Replaces the secondary weapon equipment slot with an Emblem slot. Emblems identify one of all twelve weapon families and can be equipped by any class, independently of the main weapon. They do not unlock Active skills; Buff/Passive implementation is deferred. Base ATK/DEF/HP/MP are zero; rarity-based Options use the existing equipment system.
+
+Adds distinct Emblem boxes at levels 10/30/60/100 to the normal random box pool. The town shop sells Lv.10 Emblem boxes for 1,000 money each, with quantity purchasing, standard opening and equipment-capacity checks. Skill boxes retain their original separate inventory key and contents. Emblems support inventory sorting, details, equip/unequip, replacement and sale after unequipping.
+
+Old saves gain empty Emblem box stacks. Secondary equipment becomes the same weapon-family Emblem with its id, rarity, level and Options retained, including its equipped binding. Old shields without a weapon type become sword Emblems, matching the former secondary type fallback. No new skills or passive effects are added.

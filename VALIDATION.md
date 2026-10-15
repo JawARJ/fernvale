@@ -239,3 +239,7 @@ Validated in headless Edge through tests/active60.cjs and tests/combat60.cjs:
 
 ## Release 0.61
 tests/stages61.cjs passed in Edge: five rows per page, page 2 contains stages 6–10, pages 3–5 show empty states, separate boss pagination, preserved entry level gates, stage 1/10 launch, no horizontal overflow at 1102/740/360px and no JavaScript errors. Desktop and mobile screenshots inspected.
+
+## Release 0.62
+
+Edge tests/emblem62.cjs passed: shop purchase and payment; distinct skill/Emblem boxes; opening into gear; generation of all twelve families; cross-class equip and correct emblem type; no Active unlock or main weapon changes; rejected weapon-hand placement; equipped sale protection; migrated old secondary equipment and old box schemas without mutating the input; invalid family rejection; v4 roundtrip and browser reload; unequip and capacity protection; desktop/mobile screenshots and no page errors. Regression suites active60.cjs, combat60.cjs and stages61.cjs also passed after Emblem integration. All distributed JavaScript passes node --check.

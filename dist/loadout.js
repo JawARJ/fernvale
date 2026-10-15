@@ -4,7 +4,7 @@ const WEAPON_NAMES={sword:'ดาบ',spear:'หอก',hammer:'ค้อน',bo
 const SKILL_MIN_LEVEL=[0,1,30,60,100],SKILL_KINDS={active:'Active'},WEAPON_SKILLS=ACTIVE_SKILLS;
 function emptyWeaponLoadout(){return Array.from({length:4},()=>({active:[null],buff:[],passive:[]}))}
 function validClass(p=player){return BASE_CLASSES[p.baseClass]||BASE_CLASSES.warrior}
-function weaponInHand(hand,p=player){const g=p.loot.gear.find(g=>g.id===p.loot.equipped[hand]);if(g)return g.weapon||'sword';return hand==='main'&&!p.starterStored?validClass(p).weapons[0]:null}
+function weaponInHand(hand,p=player){if(hand!=='main')return null;const g=p.loot.gear.find(g=>g.id===p.loot.equipped[hand]);if(g)return g.weapon||'sword';return hand==='main'&&!p.starterStored?validClass(p).weapons[0]:null}
 function weaponSkillEnabled(id,p=player){const d=WEAPON_SKILLS[id];return !!d&&(p.weaponSkills?.[id]||0)>0&&p.level>=SKILL_MIN_LEVEL[d.tier]&&(p.classTier||1)>=d.tier&&validClass(p).weapons.includes(d.weapon)&&weaponInHand('main',p)===d.weapon}
 function selectedSkillIds(kind,p=player){return kind==='active'?(p.weaponLoadout||[]).flatMap(row=>row.active||[]).filter(id=>weaponSkillEnabled(id,p)):[]}
 function ensureBaselineSkills(p){p.weaponSkills??={};for(const id of Object.keys(WEAPON_SKILLS))p.weaponSkills[id]=Math.max(1,p.weaponSkills[id]||0);return p}
@@ -13,7 +13,7 @@ function validateWeaponSystem(raw,p){
  p.classTier=raw.classTier??(p.level>=100?4:p.level>=60?3:p.level>=30?2:1);p.advancementMark=raw.advancementMark??0;
  if(!Number.isInteger(p.classTier)||p.classTier<1||p.classTier>4||!Number.isInteger(p.advancementMark)||p.advancementMark<0||p.advancementMark>4||p.advancementMark&&p.advancementMark!==p.classTier+1)throw Error('ขั้นอาชีพไม่ถูกต้อง');
  p.starterStored=raw.starterStored??p.loot.gear.some(g=>g.name.includes('ฝึก'));
- for(const g of p.loot.gear){if(g.weapon==='axe'){g.weapon='hammer';g.name=g.name.replace('ขวาน','ค้อน')}if(g.weapon==='claw'){g.weapon='fist';g.name=g.name.replace('กรงเล็บ','หมัด')}if(['main','secondary'].includes(g.slot)&&!g.weapon)g.weapon=raw.job==='spearman'?'spear':'sword'}
+ for(const g of p.loot.gear){if(g.weapon==='axe'){g.weapon='hammer';g.name=g.name.replace('ขวาน','ค้อน')}if(g.weapon==='claw'){g.weapon='fist';g.name=g.name.replace('กรงเล็บ','หมัด')}if(g.slot==='main'&&!g.weapon)g.weapon=raw.job==='spearman'?'spear':'sword'}
  p.weaponSkills={};p.skillScrolls={};p.weaponLoadout=emptyWeaponLoadout();
  // v4 replaces the old skill catalog, including its ranks, scrolls and selections.
  for(const [field,max]of [['weaponSkills',30],['skillScrolls',999999]]){const data=raw[field]||{};if(typeof data!=='object'||Array.isArray(data))throw Error('กระเป๋าสกิลไม่ถูกต้อง');for(const [id,n]of Object.entries(data)){if(!Number.isInteger(n)||n<0||n>max)throw Error('สกิลอาวุธไม่ถูกต้อง');if(raw.skillVersion===4){if(!WEAPON_SKILLS[id])throw Error('สกิลอาวุธไม่ถูกต้อง');if(n)p[field][id]=n}else if(!/^(sword|spear|hammer|axe|bow|crossbow|gun|wand|staff|tome|dagger|claw|star)_[1-4]_(active|buff|passive)_[0-2]$/.test(id))throw Error('สกิลเก่าไม่ถูกต้อง')}}
