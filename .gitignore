@@ -2,3 +2,6 @@ __pycache__/
 *.log
 node_modules/
 test-output/
+
+server/data/
+.env

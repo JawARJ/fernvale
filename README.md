@@ -1,12 +1,18 @@
-# Fernvale — source 0.70
+# Fernvale — source 0.71
 
-Single-player browser pixel RPG using HTML, CSS, JavaScript and Canvas. No build step or backend required.
+Browser pixel RPG with local single-player saves and an optional authoritative Node development server for Auto Farm. No public backend is provisioned; Party is still locked.
 
 Play: https://fernvale-adventure.ochremouse32.chatgpt.site/
 
 ## Run locally
 
 From this folder, run `python -m http.server 8000 --directory dist` and open http://localhost:8000. Saves stay in each browser under localStorage.
+
+## Auto Farm / online development release 0.71
+
+Run `node server/server.cjs` and open http://127.0.0.1:8787 to test account-based play and closed-browser Auto Farm. Configure four independent Active slots; tickets cost 10,000 money per hour, with a 24-hour activation cap. CD/MP-unavailable skills are skipped immediately, and Buffs are never auto-cast. Uses shared combat/loot rules, persistent server checkpoints and reconnect. Guest saves remain local and separate.
+
+Read [ONLINE-SETUP.md](ONLINE-SETUP.md) for deployment and known development limitations. The optional `render.yaml` requires an owner-approved paid service and persistent disk; it does not deploy itself.
 
 ## Current features
 

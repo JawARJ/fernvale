@@ -1,3 +1,11 @@
+# Version 0.71 validation
+
+- `tests/auto71.cjs`: tickets/price/cap, custom slot order, immediate CD/MP skip, real navigation/combat/loot, all 12 weapon families, checkpoint and graph roundtrip, server auth/origin/ownership, duplicate purchase idempotency, no-client farming, restart/reconnect, and Stop.
+- `tests/auto71-browser.cjs`: actual account creation, shop purchase/activation, PC/mobile slots/Auto panel, close all game clients and continue farming, mobile reconnect/Stop, isolated guest saves, no page errors; screenshots visually reviewed.
+- Existing `support63.cjs` and `combat60.cjs` passed against shared-engine changes.
+- Additional navigation probe reached and killed the highest-floor target in all ten stages.
+- Public backend deployment, party/co-op, production load and operational recovery are not verified/delivered. The static frontend publication must not be reported as a hosted game server.
+
 # Validation — release 0.70
 
 2026-10-15, Microsoft Edge / Playwright on actual HTTP-served game assets.

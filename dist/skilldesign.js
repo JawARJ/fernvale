@@ -57,8 +57,8 @@ function makeProjectile(type,x,y,dx,dy,range,cap,hits,total,source,extra={}){
 function fireProjectile(d,range,cap,hits,extra={},direction=null){const o=activeOrigin(),dir=direction||{x:player.face,y:0};activeProjectiles.push(makeProjectile(d.weapon,o.x,o.y,dir.x,dir.y,range,cap,hits,perRoundDamage(d),skillContext(d),extra))}
 function arrowDirection(){const x=(keys.ArrowRight?1:0)-(keys.ArrowLeft?1:0),y=(keys.ArrowDown?1:0)-(keys.ArrowUp?1:0);return x||y?{x,y}:{x:player.face,y:0}}
 function skillCooldown(d){if(d.weapon==='staff'&&d.tier<=3&&player.activeBuffs?.staff>0)return 0;if(d.weapon==='wand'&&d.tier===1&&player.activeToggles?.wand_4_active_0)return 0;return (d.cd||0)*(d.weapon==='crossbow'&&d.tier<=3?1-(.01+.44*activeSpeed()):1)}
-function heldSkill(id){const index=player.weaponLoadout.findIndex(r=>r.active[0]===id);return index>=0&&keys['Key'+'QWER'[index]]}
-function canKeepSkill(id){return weaponSkillEnabled(id)&&selectedSkillIds('active').includes(id)}
+function heldSkill(id){if(typeof autoFarmActive==='function'&&autoFarmActive())return autoSession.held===id;const index=player.weaponLoadout.findIndex(r=>r.active[0]===id);return index>=0&&keys['Key'+'QWER'[index]]}
+function canKeepSkill(id){return weaponSkillEnabled(id)&&(selectedSkillIds('active').includes(id)||typeof autoFarmActive==='function'&&autoFarmActive()&&player.autoFarm.skills.includes(id))}
 function castWeaponSkill(id){
  const d=WEAPON_SKILLS[id];if(d?.kind==='buff')return castSupportSkill(id);if(d?.kind==='passive')return false;if(!d||paused||screen!=='play'||run?.finished||!canKeepSkill(id))return false;
  if(player.activeToggles?.[id]){delete player.activeToggles[id];updateUI();return true}

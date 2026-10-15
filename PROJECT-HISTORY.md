@@ -1,3 +1,7 @@
+# Fernvale 0.71 — Auto Farm / online development server
+
+Adds the four configurable Auto slots, prepaid 1-hour tickets (10,000 money), 24-hour cap, server-side skill/AI/loot simulation, accounts, durable checkpoints and real closed-browser farming. PC/mobile connection and reconnect tests pass. The public site only publishes the frontend; no public backend has been provisioned. Party remains locked. See [ONLINE-SETUP.md](ONLINE-SETUP.md) for local use, deployment steps and current limitations. Local guest saves remain separate and playable.
+
 # Current release 0.70 · Tutorial, patrols and stats
 
 Moves Buff installation/use to the upper-left end of the tutorial route after climbing and jumping. Three non-hostile training monsters stand on the upper-right platform. Only damage from manually cast Active skills during that lesson defeats them; all three must be defeated before the drop-through/portal lesson. They give no money, drops, EXP or persistent kill credit. Saved Buff/Active checkpoints resume at the upper platform with safe fresh targets. All four starter weapon families can complete the lesson without waiting for mana regeneration.

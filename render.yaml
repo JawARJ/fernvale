@@ -1,0 +1,26 @@
+# Optional paid hosting template. This file does not provision a service by itself.
+services:
+  - type: web
+    name: fernvale-game
+    runtime: node
+    plan: starter
+    region: singapore
+    numInstances: 1
+    buildCommand: node --check server/server.cjs
+    startCommand: node server/server.cjs
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 22.16.0
+      - key: HOST
+        value: 0.0.0.0
+      - key: DATA_DIR
+        value: /var/data/fernvale
+      - key: ALLOWED_ORIGINS
+        value: https://fernvale-adventure.ochremouse32.chatgpt.site
+      - key: MAX_ACCOUNTS
+        value: 20
+    disk:
+      name: fernvale-data
+      mountPath: /var/data
+      sizeGB: 1

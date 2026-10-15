@@ -1,0 +1,7 @@
+'use strict';
+// Preserve Maps, Sets, shared references and cycles in combat snapshots.
+const StateCodec={
+ encode(root){const seen=new Map(),nodes=[];function pack(v){if(v===undefined)return {u:1};if(typeof v==='number'&&!Number.isFinite(v))return {n:String(v)};if(v===null||typeof v!=='object')return v;if(seen.has(v))return {r:seen.get(v)};const id=nodes.length;seen.set(v,id);nodes.push(null);const tag=Object.prototype.toString.call(v);nodes[id]=tag==='[object Map]'?['m',[...v].map(([k,v])=>[pack(k),pack(v)])]:tag==='[object Set]'?['s',[...v].map(pack)]:Array.isArray(v)?['a',v.map(pack)]:['o',Object.entries(v).filter(([,v])=>typeof v!=='function').map(([k,v])=>[k,pack(v)])];return {r:id}}const value=pack(root);return {value,nodes}},
+ decode(data){if(!data||!Array.isArray(data.nodes)||data.nodes.length>200000)throw Error('Invalid snapshot');const values=data.nodes.map(([t])=>t==='m'?new Map():t==='s'?new Set():t==='a'?[]:{});function unpack(v){if(v&&typeof v==='object'){if('r'in v)return values[v.r];if(v.u)return undefined;if(v.n)return Number(v.n)}return v}data.nodes.forEach(([t,entries],i)=>{const out=values[i];for(const entry of entries){if(t==='m')out.set(unpack(entry[0]),unpack(entry[1]));else if(t==='s')out.add(unpack(entry));else if(t==='a')out.push(unpack(entry));else if(!['__proto__','constructor','prototype'].includes(entry[0]))out[entry[0]]=unpack(entry[1])}});return unpack(data.value)}
+};
+if(typeof module!=='undefined')module.exports=StateCodec;
