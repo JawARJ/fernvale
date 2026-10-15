@@ -1,4 +1,4 @@
-# Fernvale — source 0.73
+# Fernvale — source 0.74
 
 Browser pixel RPG with local saves and Auto Farm while the game is open. Online work is deferred; Party remains locked; Enchant is available.
 
@@ -8,11 +8,11 @@ Play: https://fernvale-adventure.ochremouse32.chatgpt.site/
 
 From this folder, run `python -m http.server 8000 --directory dist` and open http://localhost:8000. Saves stay in each browser under localStorage.
 
-## Auto Farm and Enchant 0.73
+## Auto Farm and Enchant 0.74
 
 Auto starts immediately without tickets or prepaid time. Configure four Active slots, enter a map, and Start. Keep the game open and unpaused; it does not farm offline. Prior ticket/time balances are preserved but inactive and hidden.
 
-Enchant supports all owned equipment through +20, including Emblems and the starter weapon. Open Enchant or press F. Success chances for target +1–5 / +6–10 / +11–15 / +16–20 are 100% / 80% / 60% / 40%. Each attempt costs item level × target enhancement × 1,000 money. The initial power/failure rules proposed while awaiting further detail are +5% original base stats/options per step and failure retaining the item and level while spending the fee. Equipped stats are derived from unchanged base values; enhancement persists in saves. See [ENCHANT.md](ENCHANT.md) and [AUTO-FARM.md](AUTO-FARM.md).
+Enchant supports all owned equipment through +20, including Emblems and the starter weapon. Open Enchant or press F. Success chances for target +1–5 / +6–10 / +11–15 / +16–20 are 100% / 80% / 60% / 40%. Each attempt costs item level × target enhancement × 1,000 money. Enhancement increases only original ATK/DEF/HP/MP by 5% per step; options stay unchanged. On failure only, a second roll has a 10% chance to lose one level when targeting +11–15, and 15% when targeting +16–20. Targets +1–10 never downgrade. Each failure spends one attempt fee; items are never destroyed. Equipped stats are derived from unchanged base values; enhancement persists in saves. See [ENCHANT.md](ENCHANT.md) and [AUTO-FARM.md](AUTO-FARM.md).
 
 Online/Party work is deferred. No paid hosting is needed for the current game.
 

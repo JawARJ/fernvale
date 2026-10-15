@@ -1,3 +1,8 @@
+# Version 0.74 validation
+
+- `tests/enchant74.cjs`: base-only projection, raw/derived options unchanged, exact downgrade-roll boundaries at 10/15%, targets 6/10/11/15/16/20, single fee per failure, no downgrade roll on success, equipped max-HP/MP clamp after downgrade, displayed risk/result and save/reload.
+- Updated `tests/enchant73.cjs` passes the corrected unchanged-option rule along with all-20 costs/cap, all equipment slots, free Auto, migration and actual mobile UI.
+
 # Version 0.73 validation
 
 - `tests/enchant73.cjs`: Auto starts and performs real kills at zero balance without tickets; no timer shop/use controls; all 20 target costs and cap; deterministic success/failure per tier; no funds, owned-item validation; starter materialization preserves stats; all 8 slots/Emblem enhance; effective equipped stats derive from unchanged raw stats; save migration, invalid +21 rejection and reload; desktop F and mobile touch UI. Screenshots reviewed.
