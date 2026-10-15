@@ -1,3 +1,7 @@
+# Fernvale 0.73 — free Auto and equipment Enchant
+
+Auto can start immediately without tickets or prepaid time. The old ticket/balance data is preserved but inactive and hidden. Enchant is enabled on PC/mobile (F shortcut), for all owned equipment including Emblems and the starter weapon. Maximum +20; chances for target +1–5/+6–10/+11–15/+16–20 are 100/80/60/40%. Each attempt costs item level × target enhancement × 1,000 money. Current initial balance rule: +5% of original base stats and options per level (+20 doubles), failure spends the fee and retains the item/level. Stats are derived from unchanged base data; + levels persist in old saves. Party/online work stays deferred. See [ENCHANT.md](ENCHANT.md) and [AUTO-FARM.md](AUTO-FARM.md).
+
 # Fernvale 0.72 — local Auto Farm
 
 Auto Farm now works with existing browser-local characters while the game is open and unpaused. Buy a 1-hour ticket for 10,000 money from the potion shop, activate it from the usable inventory or Auto window, choose four Active skills in your own order, enter the desired dungeon and Start. Maximum activated balance is 24 hours. It skips unusable/CD/MP slots, never casts Buffs, and stays in the selected map. Pause/hidden tabs stop simulation and time consumption. Closing/reloading preserves remaining time and requires starting Auto again; no offline rewards. Manual controls stop Auto.

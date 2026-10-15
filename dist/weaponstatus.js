@@ -1,9 +1,9 @@
 'use strict';
-function weaponStatusRows(g){return [['ประเภท',WEAPON_NAMES[g.weapon]||'อาวุธ'],['เลเวลอาวุธ','Lv.'+(g.level??(g.stage===4?30:g.stage?g.stage*10:1))],['ATK',String(g.atk||0)],['ความเร็วพื้นฐาน','100'],['การตีบวก','+0']]}
+function weaponStatusRows(g){g=enchantedGear(g);return [['ประเภท',WEAPON_NAMES[g.weapon]||'อาวุธ'],['เลเวลอาวุธ','Lv.'+(g.level??(g.stage===4?30:g.stage?g.stage*10:1))],['ATK',String(g.atk||0)],['ความเร็วพื้นฐาน','100'],['การตีบวก','+'+enchantLevel(g)]]}
 function weaponOptionText(b){return (BONUS_NAMES[b.key]||b.key.toUpperCase())+' +'+b.value+(['cri','criDamage','ignoreDef','damage','bossDamage'].includes(b.key)?'%':'')}
 const gearDescriptionBeforeStatus=gearDescription;
 gearDescription=function(g){if(!g.weapon)return gearDescriptionBeforeStatus(g);return weaponStatusRows(g).map(([name,value])=>name+' : '+value).join('\n')+'\nOption (สเตตัสพิเศษ)\n'+((g.bonuses||[]).map(weaponOptionText).join('\n')||'ไม่มี')};
-function weaponStatusCard(g){
+function weaponStatusCard(g){g=enchantedGear(g);
  const card=document.createElement('div');card.className='weapon-status-card';
  const emblem=document.createElement('div');emblem.className='weapon-status-emblem';const icon=document.createElement('span');icon.innerHTML=weaponIcon(g.weapon);
  const quality=document.createElement('span');quality.textContent=LOOT_RARITIES[g.rarity]?.name||'Common';quality.style.color=LOOT_RARITIES[g.rarity]?.color||'#f0e7c8';emblem.append(icon,quality);card.append(emblem);

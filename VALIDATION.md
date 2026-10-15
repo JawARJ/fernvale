@@ -1,3 +1,9 @@
+# Version 0.73 validation
+
+- `tests/enchant73.cjs`: Auto starts and performs real kills at zero balance without tickets; no timer shop/use controls; all 20 target costs and cap; deterministic success/failure per tier; no funds, owned-item validation; starter materialization preserves stats; all 8 slots/Emblem enhance; effective equipped stats derive from unchanged raw stats; save migration, invalid +21 rejection and reload; desktop F and mobile touch UI. Screenshots reviewed.
+- `support63.cjs` and `combat60.cjs` pass for support behavior, save, direct/proc effects and actual charge/channel controls.
+- The paid-time assertions in `auto71.cjs`/`auto72.cjs` are historical and superseded while the time system is disabled. `npm test` requires the same Playwright/Edge setup as the browser tests.
+
 # Version 0.72 validation
 
 - `tests/auto72.cjs`: actual local shop purchase, inventory ticket use, custom slots, 24-hour cap, CD skip, real Auto combat, paused/hidden time freeze, map/manual/expiry stops, save/reload with no offline rewards, no online requests, and mobile touch start/stop plus screenshots.

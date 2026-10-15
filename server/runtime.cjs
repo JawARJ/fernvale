@@ -1,7 +1,7 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),v8=require('node:v8'),crypto=require('node:crypto');
 const root=path.resolve(__dirname,'../dist');
-const files=['rounds','character','interface','sword','upgrades','loot','second','quest','skilldata','loadout','supportdata','skilldesign','support','emblem','stagelayout','auto-core','game','tutorial','refinements'];
+const files=['rounds','character','interface','sword','upgrades','loot','second','quest','skilldata','loadout','supportdata','skilldesign','support','emblem','stagelayout','auto-core','enchant-core','game','tutorial','refinements'];
 const sources=files.map(name=>{let source=fs.readFileSync(path.join(root,name+'.js'),'utf8');if(name==='game'){const marker=source.indexOf("$('startBtn').onclick=");if(marker<0)throw Error('Game startup marker changed; update server adapter');source=source.slice(0,marker);}return {name,source}});
 const stateNames=['run','platforms','ladders','monsters','drops','shots','effects','texts','keys','camera','time','runSerial','supportState','swordSwipes','swordWaves','queuedAction','activeProjectiles','activeFields','activeSummons','activeVisuals','activeDash','activeCastSerial','autoSession'];
 function makeDOM(){const elements=new Map();const context=new Proxy({},{get:(o,k)=>o[k]??(()=>{})});function el(){return {hidden:true,dataset:{},style:{},classList:{add(){},remove(){},toggle(){}},addEventListener(){},setAttribute(){},getContext:()=>context,focus(){},append(){},prepend(){},replaceChildren(){},querySelector:()=>el(),querySelectorAll:()=>[],getBoundingClientRect:()=>({}),textContent:''}}return {documentElement:{dataset:{release:'0.71'},classList:{toggle(){}}},body:el(),getElementById:id=>{if(!elements.has(id))elements.set(id,el());return elements.get(id)},querySelectorAll:()=>[],querySelector:()=>el(),createElement:()=>el(),addEventListener(){}}}
@@ -14,7 +14,7 @@ function createRuntime({character,checkpoint}={}){
  globalThis.engine={
  init(raw){Object.assign(player,validateCharacter(raw));enterTown();},
  fresh(name,baseClass){Object.assign(player,fresh());player.name=name;player.job=player.baseClass=baseClass;player.tutorialCompleted=true;ensureBaselineSkills(player);player.weaponLoadout[0].active[0]=validClass().weapons[0]+'_1_active_0';player.autoFarm.skills[0]=player.weaponLoadout[0].active[0];enterTown();},
- tick(dt){paused=false;screen='play';tickAutoFarm(dt);update(dt);if(player.autoFarm.seconds<=0)stopAutoFarm('timeExpired');},
+ tick(dt){paused=false;screen='play';tickAutoFarm(dt);update(dt);if(AUTO_TIME_ENABLED&&player.autoFarm.seconds<=0)stopAutoFarm('timeExpired');},
  snapshot(){return {player,${stateNames.map(n=>n).join(',')},status:characterStatus(),auto:autoSession};},
  restore(s){Object.assign(player,s.player);${stateNames.map(n=>`${n}=s.${n};`).join('')}keys={};queuedAction=null;paused=false;screen='play';interactables=[];},
  command(c){

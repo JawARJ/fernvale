@@ -1,6 +1,6 @@
-# Fernvale — source 0.72
+# Fernvale — source 0.73
 
-Browser pixel RPG with local saves and Auto Farm while the game is open. Online work is deferred; Party and Enchant remain locked.
+Browser pixel RPG with local saves and Auto Farm while the game is open. Online work is deferred; Party remains locked; Enchant is available.
 
 Play: https://fernvale-adventure.ochremouse32.chatgpt.site/
 
@@ -8,11 +8,13 @@ Play: https://fernvale-adventure.ochremouse32.chatgpt.site/
 
 From this folder, run `python -m http.server 8000 --directory dist` and open http://localhost:8000. Saves stay in each browser under localStorage.
 
-## Auto Farm 0.72
+## Auto Farm and Enchant 0.73
 
-Auto now runs with existing local character saves while the game stays open and unpaused. Buy a 1-hour ticket at the potion shop for 10,000 money; activate from usable inventory or the AUTO window. Store up to 24 hours and select four Active skills in your own order. Auto skips unavailable/CD/MP slots, never casts Buffs, and stays in the chosen map. Pause, hidden tabs and screen sleep stop simulation and time consumption. Closing/reloading preserves remaining time with no offline rewards; start Auto again after returning. Manual movement or Active controls stop Auto.
+Auto starts immediately without tickets or prepaid time. Configure four Active slots, enter a map, and Start. Keep the game open and unpaused; it does not farm offline. Prior ticket/time balances are preserved but inactive and hidden.
 
-Online login/client scripts are no longer loaded. Server/party work is deferred. The 0.71 backend prototype is retained as inactive source; no hosting account or paid service is required to use the current game. See [AUTO-FARM.md](AUTO-FARM.md).
+Enchant supports all owned equipment through +20, including Emblems and the starter weapon. Open Enchant or press F. Success chances for target +1–5 / +6–10 / +11–15 / +16–20 are 100% / 80% / 60% / 40%. Each attempt costs item level × target enhancement × 1,000 money. The initial power/failure rules proposed while awaiting further detail are +5% original base stats/options per step and failure retaining the item and level while spending the fee. Equipped stats are derived from unchanged base values; enhancement persists in saves. See [ENCHANT.md](ENCHANT.md) and [AUTO-FARM.md](AUTO-FARM.md).
+
+Online/Party work is deferred. No paid hosting is needed for the current game.
 
 ## Current features
 
