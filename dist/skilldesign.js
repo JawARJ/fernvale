@@ -1,39 +1,211 @@
 'use strict';
-const WEAPON_DESIGNS={
-sword:{active:'ฟันสองจังหวะ',buff:'คมดาบพร้อมรบ',passives:['จังหวะดาบ','ฟันเสริม','ต่อท่าคล่อง'],hits:2,targets:6,range:130},
-spear:{active:'แทงทะลวง',buff:'ตั้งแนวหอก',passives:['ทะลวงเกราะ','แนวหอกยาว','ยืนหยัด'],hits:1,targets:6,range:185},
-hammer:{active:'ทุบพื้น',buff:'ร่างเหล็ก',passives:['บดขยี้','อ่อนแรง','รับศึก'],hits:1,targets:6,range:120},
-bow:{active:'ศรทะลุแถว',buff:'สายตาเหยี่ยว',passives:['ยิงไกล','ศรเจาะ','เดินยิง'],hits:1,targets:5,ranged:true},
-crossbow:{active:'ลูกดอกเจาะเกราะ',buff:'เตรียมลูกดอก',passives:['เปิดศึก','จุดอ่อนสะสม','ตั้งยิง'],hits:1,targets:1,ranged:true},
-gun:{active:'ยิงชุดสั้น',buff:'บรรจุกระสุนเร็ว',passives:['เล็งต่อเนื่อง','กระสุนเสริม','ยิงประชิด'],hits:3,targets:1,ranged:true},
-wand:{active:'ลูกพลังเวท',buff:'รวมสมาธิ',passives:['ดูดซับมานา','เวทจุดเดียว','พลังสะท้อน'],hits:1,targets:1,ranged:true},
-staff:{active:'ระเบิดเวท',buff:'ขยายวงเวท',passives:['พลังหมู่','เวทเผาไหม้','ไหลเวท'],hits:1,targets:6,ranged:true},
-tome:{active:'อักขระพันธนาการ',buff:'เกราะอักขระ',passives:['พันธนาการลึก','อักขระยาวนาน','ฟื้นมานา'],hits:1,targets:5,ranged:true},
+// Active combat v4. All distances are world units; totals are per target and per round.
+let activeProjectiles=[],activeFields=[],activeSummons=[],activeVisuals=[],activeDash=null,activeCastSerial=0;
+const skillManaCost=(d,rank=player.weaponSkills[d.id]||1)=>d.tier*(rank+5);
+const activeSpeed=()=>clamp((characterStatus().atkspd-100)/90,0,1);
+const activeFrequency=(lo,hi)=>lo+(hi-lo)*activeSpeed();
+const mobCenter=m=>({x:m.x,y:m.y-monsterHeight(m)/2});
+const activeOrigin=()=>({x:player.x,y:player.y-20});
+function livingMobs(){return monsters.filter(m=>!m.dead)}
+function radialTargets(x,y,r,cap=Infinity){return livingMobs().filter(m=>{const p=mobCenter(m);return Math.hypot(p.x-x,p.y-y)<=r+monsterRadius(m)}).sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y)).slice(0,cap)}
+function frontTargets(range,cap=Infinity,height=90){const o=activeOrigin();return livingMobs().filter(m=>{const p=mobCenter(m),dx=(p.x-o.x)*player.face;return dx>=-monsterRadius(m)&&dx<=range+monsterRadius(m)&&Math.abs(p.y-o.y)<=height/2+monsterRadius(m)}).sort((a,b)=>Math.abs(a.x-o.x)-Math.abs(b.x-o.x)).slice(0,cap)}
+function horizontalTargets(range,cap){const o=activeOrigin();return livingMobs().filter(m=>Math.abs(m.x-o.x)<=range+monsterRadius(m)&&Math.abs(mobCenter(m).y-o.y)<=35+monsterRadius(m)).sort((a,b)=>Math.abs(a.x-o.x)-Math.abs(b.x-o.x)).slice(0,cap)}
+function skillContext(d){return {weapon:d.weapon,id:d.id,direct:true,cast:++activeCastSerial,seenProcs:new Set()}}
+function perRoundDamage(d,scale=1){return attackPower()*d.damage/100*scale}
+function applyActualDamage(m,damage,label){if(m.dead||run?.finished)return false;m.hp=Math.max(0,m.hp-damage);m.hit=.2;floatCombatHit(m,label||String(damage),'#fff1b8');burst(m.x,m.y-18,'#cee9b1',4);if(m.hp<=0){m.dead=1;player.kills++;if(run){run.kills++;recordKill(m)}activeOnKill(m);m.poison=m.executeMark=m.crossMark=m.staffMark=0;m.darkInside=new Set();if(run?.trial&&m.boss)finishStage(true,'clear')}return true}
+function combatDamage(m,base,source={}){
+ if(m.dead||run?.finished)return false;const stats=characterStatus();if(Math.random()*100>=monsterHitChance(stats,m)){floatCombatHit(m,'MISS','#b4c3cc');return false}
+ const inDark=activeFields.some(f=>f.type==='dark'&&Math.hypot(m.x-f.x,mobCenter(m).y-f.y)<=f.radius+monsterRadius(m));
+ const crit=Math.random()<stats.cri/100,bonus=(m.staffMark>0?.2:0)+(inDark?.2:0)+(m.crossMark>0?.2:0);
+ const damage=Math.max(1,Math.round(base*random(.9,1.1)*(crit?stats.criDamage/100:1)*(1+(stats.damage+(m.boss?stats.bossDamage:0))/100)*(1+bonus)*(1-clamp((m.def||0)/100*(1-stats.ignoreDef/100),0,.95))));
+ const wasCrossMarked=m.crossMark>0;
+ applyActualDamage(m,damage,(crit?'CRIT ':'')+damage);source.direct&&activeOnDirectHit(m,source);
+ if(source.weapon==='crossbow'&&source.direct&&wasCrossMarked)for(const other of livingMobs().filter(n=>n!==m&&n.crossMark>0))applyActualDamage(other,damage,String(damage));
+ return true;
+}
+function activeOnDirectHit(m,source){
+ player.lastActiveTarget=m;
+ if(m.boss&&m.executeMark>0)for(const id in player.cd)if(WEAPON_SKILLS[id]&&id!==source.id)player.cd[id]=Math.max(0,player.cd[id]-.1);
+ if(source.weapon==='wand'&&player.activeToggles?.wand_4_active_0&&!source.proc&&!source.seenProcs?.has(m)){
+  source.seenProcs?.add(m);const d=WEAPON_SKILLS.wand_2_active_0;
+  activeStrike([m],perRoundDamage(d),4,{...skillContext(d),direct:false,proc:true},'meteor');
+ }
+}
+function activeOnKill(m){if(m.executeMark>0){const marked=radialTargets(m.x,m.y-15,400,4);const source={...skillContext(WEAPON_SKILLS.star_3_active_0),direct:false};for(const target of marked){target.executeMark=10;activeProjectiles.push(makeProjectile('star',m.x,m.y-15,target.x-m.x,target.y-monsterHeight(target)/2-(m.y-15),400,1,1,perRoundDamage(WEAPON_SKILLS.star_3_active_0),source,{homing:target,execute:true}))}}}
+function activeStrike(targets,total,hits,source,visual='slash'){
+ for(const m of targets)for(let i=0;i<hits&&!m.dead;i++)combatDamage(m,total/hits,source);
+ if(visual==='blade')return;
+ if(['impact','meteor','star'].includes(visual)){for(const m of targets){const c=mobCenter(m);activeVisuals.push({type:visual,x:c.x,y:c.y,face:player.face,r:visual==='meteor'?65:25,life:.32})}return}
+ const o=activeOrigin();activeVisuals.push({type:visual,x:o.x,y:o.y,face:player.face,r:WEAPON_SKILLS[source.id]?.range||200,life:.32});
+}
+function makeProjectile(type,x,y,dx,dy,range,cap,hits,total,source,extra={}){
+ const length=Math.hypot(dx,dy)||1;return {type,x,y,dx:dx/length,dy:dy/length,range,travel:0,speed:620,cap,hits,total,source,seen:new Set(),life:range/620+1,...extra};
+}
+function fireProjectile(d,range,cap,hits,extra={},direction=null){const o=activeOrigin(),dir=direction||{x:player.face,y:0};activeProjectiles.push(makeProjectile(d.weapon,o.x,o.y,dir.x,dir.y,range,cap,hits,perRoundDamage(d),skillContext(d),extra))}
+function arrowDirection(){const x=(keys.ArrowRight?1:0)-(keys.ArrowLeft?1:0),y=(keys.ArrowDown?1:0)-(keys.ArrowUp?1:0);return x||y?{x,y}:{x:player.face,y:0}}
+function skillCooldown(d){if(d.weapon==='staff'&&d.tier<=3&&player.activeBuffs?.staff>0)return 0;if(d.weapon==='wand'&&d.tier===1&&player.activeToggles?.wand_4_active_0)return 0;return (d.cd||0)*(d.weapon==='crossbow'&&d.tier<=3?1-(.01+.44*activeSpeed()):1)}
+function heldSkill(id){const index=player.weaponLoadout.findIndex(r=>r.active[0]===id);return index>=0&&keys['Key'+'QWER'[index]]}
+function canKeepSkill(id){return weaponSkillEnabled(id)&&selectedSkillIds('active').includes(id)}
+function castWeaponSkill(id){
+ const d=WEAPON_SKILLS[id];if(!d||paused||screen!=='play'||run?.finished||!canKeepSkill(id))return false;
+ if(player.activeToggles?.[id]){delete player.activeToggles[id];updateUI();return true}
+ if(player.charge||player.activeChannel||activeDash)return false;
+ if((player.cd.action||0)>0)return queueAction(id);if((player.cd[id]||0)>0)return false;
+ if(d.weapon==='fist'&&d.tier===2&&player.ground)return false;
+ let target=null;if(d.weapon==='dagger'&&d.tier===3){target=radialTargets(player.x,player.y-20,500,1)[0];if(!target)return false}
+ const cost=skillManaCost(d)*(d.weapon==='wand'&&d.tier<4&&player.activeToggles?.wand_4_active_0?2:1);if(player.mp<cost)return false;
+ const fistReset=d.weapon==='fist'&&d.tier===3&&(player.cd.fist_1_active_0>0||player.cd.fist_2_active_0>0);
+ player.mp-=cost;beginActionDelay('slashBlast');const cd=skillCooldown(d);
+ if((d.weapon==='staff'&&[2,3].includes(d.tier))||(d.weapon==='crossbow'&&d.tier===3)||(d.weapon==='spear'&&d.tier===4)||(d.weapon==='hammer'&&d.tier===3)){
+  if(d.weapon==='staff'&&player.activeBuffs?.staff>0){const max=d.tier===2?2:3;releaseChargedSkill({d,elapsed:max,max,cd:0});return true}
+  player.charge={d,elapsed:0,cd,max:d.weapon==='staff'?(d.tier===2?2:3):d.weapon==='crossbow'?2:d.weapon==='spear'?1.5:3,immobile:['staff','hammer'].includes(d.weapon)};updateUI();return true;
+ }
+ if(d.weapon==='sword'&&d.tier===3||d.weapon==='gun'&&d.tier===4){
+  player.activeChannel={id,d,elapsed:0,timer:0,cd,source:skillContext(d)};if(d.weapon==='gun')player.cd[id]=cd;updateUI();return true;
+ }
+ player.cd[id]=cd;
+ if(d.cd===null){player.activeToggles??={};player.activeToggles[id]={manaTimer:0,damageTimer:0,source:skillContext(d)};updateUI();return true}
+ performActiveSkill(d,target);
+ if(fistReset)for(const tier of [1,2,3])player.cd['fist_'+tier+'_active_0']=0;
+ tone(440,.1,'triangle');updateUI();return true;
+}
+function performActiveSkill(d,target){
+ const n=d.tier,o=activeOrigin(),source=skillContext(d),total=perRoundDamage(d),buff=player.activeBuffs?.fist>0?2:1;
+ if(d.weapon==='dagger'){
+  if(n===1){activeStrike(frontTargets(300,3),total,2,source,'return');player.invuln=Math.max(player.invuln,.42)}
+  if(n===2)activeStrike(radialTargets(o.x,o.y,250,6),total,1,source,'circle');
+  if(n===3){const before=target.hp;player.x=clamp(target.x-player.face*35,22,worldWidth()-22);player.y=target.y;player.vy=0;player.ground=true;activeStrike([target],total,6,source,'teleport');if(target.dead&&before>0)player.cd[d.id]=0;else if(target.boss&&target.hp<before)player.cd[d.id]=d.cd*.75}
+  if(n===4){activeVisuals.push({type:'circle',x:o.x,y:o.y,r:500,life:.5});for(const m of radialTargets(o.x,o.y,500,20)){combatDamage(m,total,source);if(!m.dead){m.poison=Math.min(20,(m.poison||0)+10);m.poisonTimer=0;m.poisonPower=total;m.poisonSource={...source,direct:false}}}}
+ }else if(d.weapon==='star'){
+  if(n<=3)fireProjectile(d,400,n===2?8:1,n===1?2:1,{push:n===2,execute:n===3});
+  if(n===4)fireProjectile(d,400,Infinity,0,{placed:true,radius:80});
+ }else if(d.weapon==='fist'){
+  if(n===1){activeStrike(livingMobs().filter(m=>Math.abs(m.x-player.x)<60&&m.y<=player.y+20&&player.y-m.y<=150+monsterHeight(m)).slice(0,3*buff),total*buff,buff,source,'uppercut');player.vy=-Math.sqrt(2*GRAVITY*150);player.ground=false}
+  if(n===2){activeDash={d,source,fromX:player.x,fromY:player.y,dx:player.face/Math.sqrt(2),dy:1/Math.sqrt(2),distance:300,travel:0,speed:800,seen:new Set(),cap:3*buff,hits:buff,total:total*buff,carry:true};player.ground=false}
+  if(n===3)activeStrike(frontTargets(300,6*buff),total*buff,3*buff,source,'beam');
+  if(n===4){player.activeBuffs??={};player.activeBuffs.fist=10}
+ }else if(d.weapon==='wand'){
+  if(n===1)fireProjectile(d,300,2,2);
+  if(n===2){const m=radialTargets(o.x,o.y,300,1)[0];if(m)activeStrike([m],total,8,source,'meteor')}
+  if(n===3){const platform=platforms.filter(p=>player.x>=p.x&&player.x<=p.x+p.w).sort((a,b)=>Math.abs(platformSurface(a,player.x)-player.y)-Math.abs(platformSurface(b,player.x)-player.y))[0];if(platform)activeProjectiles.push(makeProjectile('rolling',o.x,o.y,player.face,0,Infinity,15,1,total,source,{life:15,platform,epoch:0,bossEpoch:new Map(),speed:260*(1+.9*activeSpeed())}))}
+ }else if(d.weapon==='staff'){
+  if(n===1)activeStrike(frontTargets(400,6,150).filter(m=>{const c=mobCenter(m);return Math.abs(c.y-o.y)<=75*Math.max(0,(m.x-o.x)*player.face)/400+monsterRadius(m)}),total,1,source,'scythe');
+  if(n===4){player.activeBuffs??={};player.activeBuffs.staff=5;for(const tier of [1,2,3])player.cd['staff_'+tier+'_active_0']=0}
+ }else if(d.weapon==='tome'){
+  if(n===1)activeFields.push({id:++activeCastSerial,type:'spiral',x:o.x,y:o.y,radius:0,maxRadius:800,life:3,elapsed:0,seen:new Set(),total,source});
+  if(n===2||n===3)addActiveField(n===2?'light':'dark',o.x,o.y,250,10,total,n===2?3:1,source);
+  if(n===4){const targets=radialTargets(o.x,o.y,400);for(const m of targets){combatDamage(m,total,source);const type=Math.random()<.5?'light':'dark',stage=type==='light'?2:3;addActiveField(type,m.x,m.y-15,85,5,perRoundDamage(WEAPON_SKILLS['tome_'+stage+'_active_0'],.34),type==='light'?3:1,{...source,direct:false})}}
+ }else if(d.weapon==='bow'){
+  if(n===1)fireProjectile(d,600,1,1,{blastRadius:150,blastCap:3});
+  if(n===2)activeStrike(radialTargets(o.x+player.face*150,o.y,400,15),total,1,source,'rain');
+  if(n>=3)activeSummons.push({type:n===3?'fairy':'turret',x:player.x,y:player.y-60,face:player.face,range:600,life:n===3?30:10,timer:0,total,source});
+ }else if(d.weapon==='crossbow'){
+  if(n===1)fireProjectile(d,800,8,1);
+  if(n===2){jumpForSkill();fireProjectile(d,400,1,1,{blastRadius:200,blastCap:6,platformExplosion:true},{x:player.face,y:.7})}
+  if(n===4)for(const m of radialTargets(o.x,o.y,800,15))m.crossMark=10;
+ }else if(d.weapon==='gun'){
+  if(n===1){jumpForSkill();fireProjectile(d,300,1,2,{}, {x:player.face,y:.7})}
+  if(n===2)activeStrike(radialTargets(o.x,o.y,400,10),total,1,source,'circle');
+  if(n===3){const m=frontTargets(400,1)[0];if(m){activeDash={d,source,dx:player.face,dy:0,distance:Math.max(0,Math.abs(m.x-player.x)-monsterRadius(m)-28),travel:0,speed:900,seen:new Set(),cap:0,hits:0,total:0,smoke:total};player.vy=0}else{activeStrike(radialTargets(o.x,o.y,200,5),total,1,source,'blast');addActiveField('smoke',o.x,o.y,200,10,0,0,source)}}
+ }else if(d.weapon==='sword'){
+  if(n===1)activeStrike(frontTargets(200,3),total,3,source);
+  if(n===2)fireProjectile(d,600,8,1,{},arrowDirection());
+  if(n===4){const aim=o.x+player.face*400,candidates=livingMobs();const m=candidates.sort((a,b)=>Math.abs(a.x-aim)-Math.abs(b.x-aim))[0],x=m?m.x:aim;activeStrike(livingMobs().filter(m=>Math.abs(m.x-x)<=90+monsterRadius(m)).slice(0,10),total,6,source,'blade');activeVisuals.push({type:'blade',x,y:0,r:90,life:.8})}
+ }else if(d.weapon==='spear'){
+  if(n===1){const targets=livingMobs().filter(m=>{const c=mobCenter(m),dx=(c.x-o.x)*player.face,dy=c.y-o.y;return dx>=-monsterRadius(m)&&dy<=monsterRadius(m)&&Math.hypot(dx,dy)<=300+monsterRadius(m)}).slice(0,6);activeStrike(targets,total,1,source,'quarter');for(const m of targets)moveControlledMob(m,player.x+player.face*300)}
+  if(n===2)activeDash={d,source,dx:player.face,dy:0,distance:400,travel:0,speed:900,seen:new Set(),cap:6,hits:1,total,carry:true,fromX:player.x,fromY:player.y};
+  if(n===3){const hits=3+Math.floor(3*activeSpeed());activeStrike(frontTargets(300,6),total,hits,source,'thrust')}
+ }else if(d.weapon==='hammer'){
+  if(n===1){activeStrike(frontTargets(200,8),total,1,source,'hammer');activeDash={d,source,dx:player.face,dy:0,distance:300,travel:0,speed:900,seen:new Set(),cap:0,hits:0,total:0,bounce:true}}
+  if(n===2){if(!player.ground){const ground=platforms.filter(p=>player.x>=p.x&&player.x<=p.x+p.w&&platformSurface(p,player.x)>=player.y).sort((a,b)=>platformSurface(a,player.x)-platformSurface(b,player.x))[0];if(ground)player.y=platformSurface(ground,player.x);player.vy=0;player.ground=true}activeStrike(livingMobs().filter(m=>Math.abs(m.x-player.x)<=50+monsterRadius(m)&&Math.abs(m.y-player.y)<50).slice(0,4),total,1,source,'slam')}
+ }
+}
+function jumpForSkill(){player.vy=-360*characterStatus().jump/100;player.ground=false;player.climbing=false;player.y-=2}
+function releaseChargedSkill(c){
+ const d=c.d,n=d.tier,o=activeOrigin(),source=skillContext(d),ratio=clamp(c.elapsed/c.max,0,1),total=perRoundDamage(d);
+ if(d.weapon==='hammer'&&c.elapsed<1){player.cd.action=0;player.charge=null;return}
+ player.cd[d.id]=c.cd;
+ if(d.weapon==='staff'){
+  const r=n===2?200+200*ratio:100+500*ratio,targets=radialTargets(o.x,o.y,r,n===2?15:Infinity);
+  activeStrike(targets,total*(n===2?.5+.5*ratio:1/6+5/6*ratio),1,source,'blast');
+  activeVisuals.push({type:'circle',x:o.x,y:o.y,r,life:.5});
+  if(n===3)for(const m of targets){m.staffMark=10;if(!m.boss&&!m.dead)m.stun=1.5}
+ }else if(d.weapon==='crossbow')fireProjectile(d,400+400*ratio,1,1,{total:total*(.5+.5*ratio)});
+ else if(d.weapon==='spear'){const dir=arrowDirection(),len=Math.hypot(dir.x,dir.y);activeDash={d,source,dx:dir.x/len,dy:dir.y/len,distance:300+300*ratio,travel:0,speed:850,seen:new Set(),cap:Infinity,hits:3,total:total*.75*(.5+.5*ratio),explosion:total*.25*(.5+.5*ratio),iframe:true,fromX:player.x,fromY:player.y};player.ground=false}
+ else if(d.weapon==='hammer'){const level=Math.min(3,Math.floor(c.elapsed)),r=[0,500,700,900][level];activeStrike(radialTargets(o.x,o.y,r),total*level/3,1,source,'hammer');activeVisuals.push({type:'circle',x:o.x,y:o.y,r,life:.6})}
+ player.charge=null;updateUI();
+}
+function addActiveField(type,x,y,radius,life,total,hits,source){activeFields.push({id:++activeCastSerial,type,x,y,radius,life,total,hits,source,timers:new Map()})}
+function moveControlledMob(m,x){if(m.boss)return;const p=platforms[m.p];const lo=Math.max(m.low??22,p?p.x+monsterRadius(m):22),hi=Math.min(m.high??worldWidth()-22,p?p.x+p.w-monsterRadius(m):worldWidth()-22);m.x=clamp(x,lo,hi);if(p)m.y=platformSurface(p,m.x)}
+function stopActiveChannels(){if(player.activeChannel?.d.weapon==='sword')player.cd[player.activeChannel.id]=player.activeChannel.cd;player.activeChannel=null;player.charge=null;player.activeToggles={};activeDash=null}
+function resetActiveEffects(){activeProjectiles=[];activeFields=[];activeSummons=[];activeVisuals=[];activeDash=null;player.charge=null;player.activeChannel=null;player.activeToggles={};player.activeBuffs={};for(const m of monsters){delete m.poison;delete m.staffMark;delete m.crossMark;delete m.executeMark;m.darkInside=new Set()}}
+function tickWeaponEffects(dt){
+ for(const key of Object.keys(player.activeBuffs||{}))player.activeBuffs[key]=Math.max(0,player.activeBuffs[key]-dt);
+ if(player.charge){const c=player.charge;c.elapsed=Math.min(c.max,c.elapsed+dt);if(!canKeepSkill(c.d.id)||!heldSkill(c.d.id)||c.d.weapon==='staff'&&((keys.ArrowLeft||keys.ArrowRight)||c.elapsed>=c.max))releaseChargedSkill(c)}
+ if(player.activeChannel){const c=player.activeChannel;c.elapsed+=dt;c.timer-=dt;if(!heldSkill(c.id)||!canKeepSkill(c.id)||c.d.weapon==='sword'&&c.elapsed>5){if(c.d.weapon==='sword')player.cd[c.id]=c.cd;player.activeChannel=null}else while(c.timer<=0){const o=activeOrigin();if(c.d.weapon==='sword'){activeStrike(horizontalTargets(200,6),perRoundDamage(c.d),2,c.source,'orbit');c.timer+=1/activeFrequency(2,4)}else{activeProjectiles.push(makeProjectile('gun',o.x,o.y,player.face,0,300,Infinity,1,perRoundDamage(c.d)/10,c.source));c.timer+=1/activeFrequency(10,30)}}}
+ for(const [id,t]of Object.entries(player.activeToggles||{})){
+  if(!canKeepSkill(id)){delete player.activeToggles[id];continue}t.manaTimer+=dt;t.damageTimer-=dt;
+  while(t.manaTimer>=1){const cost=skillManaCost(WEAPON_SKILLS[id]);if(player.mp<cost){delete player.activeToggles[id];break}player.mp-=cost;t.manaTimer-=1}
+  if(id==='hammer_4_active_0'&&player.activeToggles[id]&&t.damageTimer<=0){t.damageTimer+=.5;activeStrike(horizontalTargets(200,12),perRoundDamage(WEAPON_SKILLS[id]),4,t.source,'orbit')}
+ }
+ for(const m of monsters){m.staffMark=Math.max(0,(m.staffMark||0)-dt);m.crossMark=Math.max(0,(m.crossMark||0)-dt);m.executeMark=Math.max(0,(m.executeMark||0)-dt);m.darkInside=new Set();if(m.poison>0&&!m.dead){const elapsed=Math.min(dt,m.poison);m.poison-=dt;m.poisonTimer=(m.poisonTimer||0)+elapsed;const period=1/activeFrequency(2,4);while(m.poisonTimer>=period&&!m.dead){m.poisonTimer-=period;combatDamage(m,m.poisonPower,m.poisonSource)}}}
+ tickActiveDash(dt);tickActiveProjectiles(dt);tickActiveFields(dt);tickActiveSummons(dt);
+ for(const v of activeVisuals)v.life-=dt;activeVisuals=activeVisuals.filter(v=>v.life>0);
+}
+function tickActiveDash(dt){if(!activeDash)return;const a=activeDash,o=activeOrigin(),step=Math.min(a.distance-a.travel,a.speed*dt);player.x=clamp(player.x+a.dx*step,22,worldWidth()-22);player.y=clamp(player.y+a.dy*step,20,420);player.vy=0;a.travel+=step;
+ const hits=livingMobs().filter(m=>!a.seen.has(m)&&a.seen.size<a.cap&&segmentDistance(mobCenter(m),o,activeOrigin())<=monsterRadius(m)+30);
+ for(const m of hits){a.seen.add(m);activeStrike([m],a.total,a.hits,a.source,'thrust')}if(a.carry)for(const m of a.seen)if(!m.dead)moveControlledMob(m,player.x+a.dx*10);
+ player.dashTime=dt*2;player.dashV=0;if(a.iframe)player.invuln=Math.max(player.invuln,dt*3);
+ if(a.travel>=a.distance){const at=activeOrigin();if(a.explosion)activeStrike(radialTargets(at.x,at.y,300),a.explosion,1,a.source,'blast');if(a.smoke){activeStrike(radialTargets(at.x,at.y,200,5),a.smoke,1,a.source,'blast');addActiveField('smoke',at.x,at.y,200,10,0,0,a.source)}if(a.bounce){player.vy=-200;player.ground=false}activeDash=null;player.dashTime=0}
+}
+function segmentDistance(p,a,b){const dx=b.x-a.x,dy=b.y-a.y,length=dx*dx+dy*dy,t=length?clamp(((p.x-a.x)*dx+(p.y-a.y)*dy)/length,0,1):0;return Math.hypot(p.x-a.x-dx*t,p.y-a.y-dy*t)}
+function explodeProjectile(p){activeStrike(radialTargets(p.x,p.y,p.blastRadius,p.blastCap),p.total,p.hits,p.source,'blast');activeVisuals.push({type:'circle',x:p.x,y:p.y,r:p.blastRadius,life:.45});p.life=0}
+function placeRotatingStar(p){addActiveField('rotatingStar',p.x,p.y,80,10,p.total,4,p.source);p.life=0}
+function tickActiveProjectiles(dt){
+ const current=activeProjectiles;activeProjectiles=[];
+ for(const p of current){
+  const before={x:p.x,y:p.y};p.life-=dt;
+  if(p.homing&&!p.homing.dead){const c=mobCenter(p.homing),len=Math.hypot(c.x-p.x,c.y-p.y)||1;p.dx=(c.x-p.x)/len;p.dy=(c.y-p.y)/len}
+  const step=Math.min(p.range-p.travel,p.speed*dt);p.x+=p.dx*step;p.y+=p.dy*step;p.travel+=step;
+  if(p.type==='rolling'){const platform=p.platform;const lo=platform.x+10,hi=platform.x+platform.w-10;if(p.x<lo||p.x>hi){p.x=clamp(p.x,lo,hi);p.dx*=-1;p.epoch++}p.y=platformSurface(platform,p.x)-18}
+  const candidates=livingMobs().filter(m=>segmentDistance(mobCenter(m),before,p)<=monsterRadius(m)+12).sort((a,b)=>Math.hypot(a.x-before.x,a.y-before.y)-Math.hypot(b.x-before.x,b.y-before.y));
+  if(p.placed){const boss=candidates.find(m=>m.boss);if(boss){p.x=boss.x;p.y=boss.y-18;placeRotatingStar(p)}else if(p.travel>=p.range)placeRotatingStar(p)}
+  else if(p.platformExplosion){const surface=platforms.find(platform=>p.x>=platform.x&&p.x<=platform.x+platform.w&&before.y<=platformSurface(platform,p.x)&&p.y>=platformSurface(platform,p.x));if(surface){p.y=platformSurface(surface,p.x)-10;explodeProjectile(p)}}
+  else if(p.blastRadius&&candidates.length){p.x=candidates[0].x;p.y=candidates[0].y-15;explodeProjectile(p)}
+  else for(const m of candidates){
+   if(p.type==='rolling'){if(m.boss){if(p.bossEpoch.get(m)===p.epoch)continue;p.bossEpoch.set(m,p.epoch)}else if(p.seen.has(m))continue;if(p.quota>=15)break;p.quota=(p.quota||0)+1}else if(p.seen.has(m)||p.seen.size>=p.cap)continue;
+   p.seen.add(m);if(p.execute)m.executeMark=10;activeStrike([m],p.total,p.hits,p.source,p.type==='star'?'star':'impact');if(p.push&&!m.dead)moveControlledMob(m,p.x+p.dx*monsterRadius(m));
+  }
+  if(p.push)for(const m of p.seen)if(!m.dead)moveControlledMob(m,p.x+p.dx*monsterRadius(m));
+  if(p.type==='rolling'){if(p.quota>=15)p.life=0}else if(p.travel>=p.range||!p.placed&&p.seen.size>=p.cap)p.life=0;
+  if(p.life>0)activeProjectiles.push(p);
+ }
+}
+function tickActiveFields(dt){for(const f of activeFields){
+ const elapsed=Math.min(dt,f.life);f.life-=dt;
+ if(f.type==='smoke')continue;
+ if(f.type==='spiral'){f.elapsed+=dt;f.radius=Math.min(800,f.elapsed/3*800);const angle=f.elapsed/3*Math.PI*6,point={x:f.x+Math.cos(angle)*f.radius,y:f.y+Math.sin(angle)*f.radius},before=f.point||{x:f.x,y:f.y};for(const m of livingMobs())if(!f.seen.has(m)&&segmentDistance(mobCenter(m),before,point)<=monsterRadius(m)+20){f.seen.add(m);activeStrike([m],f.total,1,f.source,'impact')}f.point=point;continue}
+ const inside=radialTargets(f.x,f.y,f.radius,f.type==='rotatingStar'?15:Infinity),set=new Set(inside),period=1/activeFrequency(2,4);
+ for(const m of f.timers.keys())if(!set.has(m))f.timers.delete(m);
+ for(const m of inside){if(f.type==='dark'){m.darkInside.add(f.id);moveControlledMob(m,m.x+(f.x-m.x)*Math.min(1,elapsed*2))}let timer=f.timers.get(m);if(timer===undefined){activeStrike([m],f.total,f.hits,f.source,'impact');timer=period}else timer-=elapsed;while(timer<=0&&!m.dead){activeStrike([m],f.total,f.hits,f.source,'impact');timer+=period}f.timers.set(m,timer)}
+ if(f.life<=0&&f.type==='dark')activeStrike(inside,f.total,3,f.source,'blast');
+ }activeFields=activeFields.filter(f=>f.life>0)}
+function tickActiveSummons(dt){for(const s of activeSummons){s.life-=dt;s.timer-=dt;if(s.type==='fairy'){s.x=player.x-player.face*35;s.y=player.y-60}if(s.timer<=0){let target=null;const choices=livingMobs().filter(m=>Math.hypot(m.x-s.x,m.y-20-s.y)<=s.range);if(s.type==='fairy')target=choices.sort((a,b)=>Number(b.boss)-Number(a.boss)||Math.abs(a.x-s.x)-Math.abs(b.x-s.x))[0];else target=choices.includes(player.lastActiveTarget)?player.lastActiveTarget:choices.filter(m=>(m.x-s.x)*s.face>=0).sort((a,b)=>Math.abs(a.x-s.x)-Math.abs(b.x-s.x))[0];if(target){combatDamage(target,s.total,{...s.source,direct:false});activeVisuals.push({type:'arrowTrail',x:s.x,y:s.y,tx:target.x,ty:target.y-18,r:0,life:.22})}s.timer+=1/activeFrequency(1,5)}}activeSummons=activeSummons.filter(s=>s.life>0)}
+function drawActiveEffects(){
+ ctx.save();
+ for(const f of activeFields){ctx.globalAlpha=.22;ctx.fillStyle=f.type==='dark'?'#674782':f.type==='smoke'?'#d7c5a7':f.type==='rotatingStar'?'#f8d477':'#fff0a5';ctx.beginPath();ctx.arc(f.x,f.y,f.radius,0,Math.PI*2);ctx.fill();ctx.globalAlpha=.7;ctx.strokeStyle=ctx.fillStyle;ctx.lineWidth=3;ctx.stroke();if(f.type==='spiral'&&f.point){ctx.globalAlpha=1;ellipse(f.point.x,f.point.y,13,13,'#fff5ab')}if(['light','dark'].includes(f.type)){ctx.beginPath();ctx.ellipse(f.x,f.y+12,f.radius,f.radius*.22,0,0,Math.PI*2);ctx.stroke()}if(f.type==='rotatingStar'){ctx.save();ctx.translate(f.x,f.y);ctx.rotate(time*6);drawCombatStar(0,0,25);ctx.restore()}}
+ ctx.globalAlpha=1;
+ for(const p of activeProjectiles){ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.atan2(p.dy,p.dx));ctx.fillStyle='#ffe9a4';if(p.type==='star'){ctx.rotate(time*12);drawCombatStar(0,0,12)}else if(['wand','rolling'].includes(p.type)){ellipse(0,0,p.type==='rolling'?16:10,p.type==='rolling'?16:10,'#ba9ee0');ellipse(-3,-3,4,4,'#f4e3ff')}else{ctx.strokeStyle=p.type==='sword'?'#b6f2ee':'#ffdc87';ctx.lineWidth=p.type==='gun'?4:3;ctx.beginPath();ctx.moveTo(-22,0);ctx.lineTo(10,0);ctx.stroke();if(p.type!=='gun'){ctx.beginPath();ctx.moveTo(4,-5);ctx.lineTo(11,0);ctx.lineTo(4,5);ctx.stroke()}}ctx.restore()}
+ for(const s of activeSummons){if(s.type==='fairy'){ellipse(s.x,s.y,9,12,'#fff0a9');ellipse(s.x-11,s.y,8,5,'#d3f3f1');ellipse(s.x+11,s.y,8,5,'#d3f3f1')}else{rect(s.x-18,s.y+40,36,8,'#866c47');rect(s.x-3,s.y+15,6,30,'#b28e5d');ctx.strokeStyle='#e9d294';ctx.lineWidth=3;ctx.beginPath();ctx.arc(s.x,s.y+15,18,-1.4,1.4);ctx.stroke()}}
+ for(const v of activeVisuals){ctx.globalAlpha=clamp(v.life*4,0,1);ctx.strokeStyle='#e5f5bc';ctx.lineWidth=4;ctx.beginPath();if(v.type==='meteor'){ctx.moveTo(v.x,v.y-120);ctx.lineTo(v.x,v.y);ctx.arc(v.x,v.y,35,0,Math.PI*2)}else if(v.type==='rain'){for(let i=-3;i<=3;i++){ctx.moveTo(v.x+v.face*150+i*65,v.y-140);ctx.lineTo(v.x+v.face*150+i*65,v.y+20)}}else if(v.type==='uppercut'){ctx.moveTo(v.x,v.y);ctx.lineTo(v.x,v.y-150)}else if(v.type==='scythe'){ctx.moveTo(v.x,v.y);ctx.lineTo(v.x+v.face*400,v.y-75);ctx.quadraticCurveTo(v.x+v.face*450,v.y,v.x+v.face*400,v.y+75);ctx.closePath()}else if(v.type==='quarter'){ctx.arc(v.x,v.y,300,v.face>0?-Math.PI/2:-Math.PI,v.face>0?0:-Math.PI/2)}else if(v.type==='return'){ctx.moveTo(v.x,v.y);ctx.lineTo(v.x+v.face*300,v.y);ctx.lineTo(v.x,v.y+12)}else if(v.type==='star'){drawCombatStar(v.x,v.y,25)}else if(v.type==='hammer'||v.type==='slam'){ctx.fillStyle='#eadcb3';ctx.fillRect(v.x+v.face*80,v.y-35,36,26);ctx.moveTo(v.x,v.y-50);ctx.lineTo(v.x+v.face*100,v.y)}else if(v.type==='blade'){ctx.fillStyle='#e7efd1';ctx.fillRect(v.x-8,0,16,410);ctx.fillStyle='#cab47c';ctx.fillRect(v.x-45,70,90,8)}else if(v.type==='arrowTrail'){ctx.moveTo(v.x,v.y);ctx.quadraticCurveTo((v.x+v.tx)/2,Math.min(v.y,v.ty)-50,v.tx,v.ty)}else if(['circle','blast','meteor'].includes(v.type)){ctx.arc(v.x,v.y,Math.min(v.r,600),0,Math.PI*2)}else if(v.type==='orbit'){ctx.ellipse(v.x,v.y,200,35,time*0,0,Math.PI*2)}else if(v.type==='beam'||v.type==='thrust'){ctx.moveTo(v.x,v.y);ctx.lineTo(v.x+v.face*Math.min(v.r,600),v.y)}else{ctx.ellipse(v.x+v.face*v.r*.4,v.y,v.r*.5,45,0,-1.4,1.4)}ctx.stroke()}
+ ctx.globalAlpha=1;
+ if(player.charge){const c=player.charge,x=player.x-50,y=player.y-65;rect(x,y,100,9,'#283c35');rect(x+1,y+1,98*c.elapsed/c.max,7,'#dfc779');ctx.font='12px Thai,Tahoma';ctx.fillStyle='#fff1be';ctx.textAlign='center';ctx.fillText(c.d.name+' '+c.elapsed.toFixed(1)+'s',player.x,y-7)}
+ ctx.restore();
+}
+function drawCombatStar(x,y,r){ctx.fillStyle='#f4d785';ctx.beginPath();for(let i=0;i<8;i++){const a=i*Math.PI/4,rr=i%2?r*.3:r;ctx.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr)}ctx.closePath();ctx.fill()}
+function tutorialMark(){}
+function updateTutorial(){}
+function weaponDamageFactor(){return 1}
+function onWeaponHit(){}
 
-claw:{active:'ฉีกสามจังหวะ',buff:'สัญชาตญาณล่า',passives:['กรงเล็บต่อเนื่อง','คมคริติคอล','ดูดซับชีวิต'],hits:3,targets:3,range:85},
-star:{active:'ดาวสะท้อน',buff:'ม่านลวงตา',passives:['ดาวต่อเนื่อง','ดาวกลางอากาศ','ดาวเสริม'],hits:1,targets:4,ranged:true}}
-WEAPON_DESIGNS.dagger={active:'แทงจุดอ่อน',buff:'ก้าวเงา',passives:['ลอบแทง','ปิดฉาก','หลบแล้วสวน'],hits:1,targets:1,range:80};
-for(const [weapon,name]of Object.entries(WEAPON_NAMES)){const design=WEAPON_DESIGNS[weapon],family=Object.values(BASE_CLASSES).find(c=>c.weapons.includes(weapon));for(const d of Object.values(WEAPON_SKILLS).filter(d=>d.weapon===weapon&&d.tier===1)){d.name=d.kind==='active'?design.active:d.kind==='buff'?(d.index===0?'เพิ่ม '+STAT_NAMES_PLACEHOLDER(family.main):design.buff):design.passives[d.index];d.designed=true}const id=weapon+'_1_passive_2';WEAPON_SKILLS[id]={id,weapon,tier:1,kind:'passive',index:2,name:design.passives[2],designed:true}}
-function STAT_NAMES_PLACEHOLDER(main){return main.toUpperCase()}
-function weaponSkillEnabled(id,p=player){const d=WEAPON_SKILLS[id];return !!d?.designed&&(p.weaponSkills?.[id]||0)>0&&(d.tier===1||p.level>=SKILL_MIN_LEVEL[d.tier])&&(p.classTier||1)>=d.tier&&validClass(p).weapons.includes(d.weapon)&&(weaponInHand('main',p)===d.weapon||d.kind!=='active'&&weaponInHand('secondary',p)===d.weapon)}
-function selectedSkillIds(kind,p=player){return (p.weaponLoadout||[]).flatMap(row=>row[kind]||[]).filter(id=>id&&weaponSkillEnabled(id,p))}
-function skillRankFor(weapon,index,p=player){const id=weapon+'_1_passive_'+index;return selectedSkillIds('passive',p).includes(id)?p.weaponSkills[id]:0}
-function buffRankFor(weapon,index,p=player){const id=weapon+'_1_buff_'+index;return selectedSkillIds('buff',p).includes(id)&&p.weaponBuffs?.[id]>0?p.weaponSkills[id]:0}
-function weaponLoadoutBonuses(p=player){const out={atk:0,def:0,spd:0,str:0,dex:0,int:0,luk:0,acc:0,cri:0,criDamage:0,ignoreDef:0,reach:0,attackSpeed:0,recovery:0,reduction:0,stance:0,mpDiscount:0,mpRegen:0,mpShield:0,area:0};const seen=new Set();for(const id of selectedSkillIds('buff',p)){const d=WEAPON_SKILLS[id],lv=p.weaponSkills[id];if(!(p.weaponBuffs?.[id]>0)||seen.has(d.name))continue;seen.add(d.name);if(d.index===0){const main=Object.values(BASE_CLASSES).find(c=>c.weapons.includes(d.weapon)).main;out[main]+=2+Math.floor(lv/3)}else{const n=5+lv;switch(d.weapon){case'sword':case'gun':out.attackSpeed+=Math.min(.25,.1+lv*.005);break;case'spear':out.reach+=20+lv;break;case'hammer':out.reduction+=.1+lv*.003;break;case'bow':out.acc+=n;break;case'crossbow':out.criDamage+=10+lv;break;case'wand':out.mpDiscount+=.15+lv*.003;break;case'staff':out.area+=30+lv;break;case'tome':out.mpShield=.3;break;case'dagger':out.spd+=10+lv;break;case'claw':out.cri+=3+lv*.1;break;case'star':out.avoid=3+lv*.1;break}}}out.ignoreDef+=skillRankFor('spear',0,p)*.3+ (skillRankFor('spear',0,p)?2:0)+skillRankFor('bow',1,p)*.2;out.reach+=skillRankFor('spear',1,p)*2;out.stance+=skillRankFor('spear',2,p)*.015;out.spd+=skillRankFor('bow',2,p);out.acc+=skillRankFor('gun',0,p)*Math.min(5,p.weaponChain||0);out.attackSpeed+=Math.min(.15,skillRankFor('claw',0,p)*.001*Math.min(5,p.weaponChain||0));out.recovery+=skillRankFor('sword',2,p)*.003;out.mpRegen+=skillRankFor('tome',2,p)*.04;if(skillRankFor('hammer',2,p))out.def+=Math.min(5,(typeof monsters==='undefined'?[]:monsters).filter(m=>!m.dead&&Math.abs(m.x-p.x)<150).length)*(1+Math.floor(skillRankFor('hammer',2,p)/5));return out}
-const PASSIVE_DESCS={sword:['ตีเป้าหมายเดิมสะสมดาเมจ สูงสุด 5 ชั้น','มีโอกาสโจมตีเสริม 1 ครั้ง ไม่เรียกซ้ำ','ลดช่วงพักท่า'],spear:['ลดผล DEF เป้าหมายบางส่วน','เพิ่มระยะโจมตีของอาวุธหลัก','เพิ่มโอกาสต้านกระเด็น'],hammer:['ศัตรูติดสถานะควบคุมได้รับดาเมจเพิ่ม','โจมตีโดนมีโอกาสลด ATK ศัตรู 3 วินาที','เพิ่ม DEF ตามจำนวนศัตรูใกล้ตัว มีเพดาน'],bow:['โจมตีจากระยะไกลแรงขึ้น','เพิ่มเจาะ DEF','เพิ่ม SPD'],crossbow:['โจมตีเป้าหมาย HP สูงแรงขึ้น','เป้าหมายเดิมสะสมจุดอ่อน สูงสุด 5 ชั้น','โจมตีหลังพัก 2 วินาทีแรงขึ้น'],gun:['สะสมการโจมตีเพิ่ม ACC สูงสุด 5 ชั้น','ทุก 5 ครั้งมีดาเมจเสริม','โจมตีใกล้เป้าหมายแรงขึ้น'],wand:['โจมตีมีโอกาสคืน MP','โจมตีเป้าหมายเดี่ยวแรงขึ้น','คริติคอลมีโอกาสโจมตีเสริม'],staff:['โจมตีเมื่อศัตรูอยู่รวมกลุ่มแรงขึ้น','โจมตีมีโอกาสทำดาเมจต่อเนื่อง 3 วินาที ไม่ซ้อน','กำจัดศัตรูลดคูลดาวน์เล็กน้อย'],tome:['ศัตรูเดินช้ารับดาเมจเพิ่ม','ยืดสถานะชะงัก/เดินช้าของมอนทั่วไป','ฟื้น MP เพิ่มขึ้น'],dagger:['โจมตีด้านหลังศัตรูแรงขึ้น','ศัตรู HP ต่ำกว่า 30% รับดาเมจเพิ่ม','หลบแล้วโจมตีถัดไปแรงขึ้น'],claw:['สะสมการโจมตีเพิ่มความเร็ว มีเพดาน','คริติคอลเป้าหมายเดิมแรงขึ้นตาม Stack','ดูด HP เล็กน้อย ไม่เกิน 1 ครั้งต่อวินาที'],star:['โจมตีศัตรูรวมกลุ่มแรงขึ้น และเสริมการชิ่งของดาว','โจมตีกลางอากาศแรงขึ้น','มีโอกาสโจมตีเสริม']};
-function weaponSkillText(id){const d=WEAPON_SKILLS[id],lv=player.weaponSkills[id]||0;if(!d?.designed)return 'รอออกแบบ';if(d.kind==='active')return 'มือหลัก '+WEAPON_NAMES[d.weapon]+' · '+(90+lv*2)+'% ATK × '+WEAPON_DESIGNS[d.weapon].hits+' · MP 8 · พักท่า 0.4 วิ · CD 3 วิ';if(d.kind==='passive')return PASSIVE_DESCS[d.weapon][d.index]+' · ใช้ได้จากทั้งสองมือ';if(d.index===0)return d.name+' +'+(2+Math.floor(lv/3))+' · MP 8 · 120 วินาที · CD 8 วิ · ไม่ซ้อนชื่อเดียวกัน';const b=weaponLoadoutBonuses({...player,weaponLoadout:[{active:[],buff:[id],passive:[]}],weaponBuffs:{[id]:120}});return 'ใช้กับอาวุธหลัก · บัฟ 120 วินาที · MP 8 · CD 8 วิ\n'+Object.entries(b).filter(([,n])=>n).map(([k,n])=>({attackSpeed:'ความเร็วโจมตี',reach:'ระยะโจมตี',reduction:'ลดดาเมจ',mpDiscount:'ลดการใช้ MP',mpShield:'รับดาเมจด้วย MP',area:'พื้นที่โจมตี',acc:'ACC',cri:'CRI',criDamage:'CRI.DAMAGE',spd:'SPD',avoid:'AVOID'}[k]||k.toUpperCase())+' +'+Number((['attackSpeed','reduction','mpDiscount','mpShield'].includes(k)?n*100:n).toFixed(1))+(['attackSpeed','reduction','mpDiscount','mpShield','cri','criDamage','spd','avoid'].includes(k)?'%':'')).join(' · ')}
-function learnOrUpgradeWeaponSkill(id){const d=WEAPON_SKILLS[id],lv=player.weaponSkills[id]||0;if(!d?.designed||!player.skillScrolls[id]||lv>=30)return false;player.skillScrolls[id]--;if(!player.skillScrolls[id])delete player.skillScrolls[id];const success=!lv||Math.random()*100<upgradeWeaponChance(lv+1);if(success)player.weaponSkills[id]=lv+1;save();toast(success?'สำเร็จ · '+d.name+' Lv.'+player.weaponSkills[id]:'อัปไม่สำเร็จ · เลเวลเดิมยังอยู่');return success}
-function rollSkillScroll(tier){const pool=Object.values(WEAPON_SKILLS).filter(d=>d.tier===tier&&d.designed);return pool.length?pool[Math.floor(Math.random()*pool.length)].id:null}
-function equipPooledSkill(id,index){const d=WEAPON_SKILLS[id];if(!weaponSkillEnabled(id))return false;const row=player.weaponLoadout[d.tier-1][d.kind];if(row.some((other,i)=>i!==index&&other&&WEAPON_SKILLS[other].name===d.name)){toast('ชื่อสกิลนี้อยู่ในช่องอื่นแล้ว');return false}row[index]=id;save();return true}
-function selectedPool(tier,kind){const choices=new Map();for(const d of Object.values(WEAPON_SKILLS)){if(d.tier!==tier||d.kind!==kind||!weaponSkillEnabled(d.id))continue;const old=choices.get(d.name);if(!old||(player.weaponSkills[d.id]||0)>(player.weaponSkills[old.id]||0))choices.set(d.name,d)}return [...choices.values()]}
-function pickWeaponSkill(tier,kind,index){const body=document.createElement('div');body.className='weapon-picker';for(const d of selectedPool(tier,kind)){const b=document.createElement('button');b.textContent=d.name+' Lv.'+player.weaponSkills[d.id]+' · '+WEAPON_NAMES[d.weapon];b.onclick=()=>{if(equipPooledSkill(d.id,index)){closeModal();openControlWindow('skill')}};body.append(b)}if(!body.children.length)body.textContent='เรียนสกิลจากกล่องและสวมอาวุธที่ตรงก่อน';modal('เลือก '+kind+' ขั้น '+tier,body,[['ถอดสกิล',()=>{player.weaponLoadout[tier-1][kind][index]=null;save();closeModal();openControlWindow('skill')}],['กระเป๋าสกิล',()=>{closeModal();openCharacterWindow('skills')}]])}
-function renderSwordSkillWindow(body){body.className='weapon-skill-window';body.replaceChildren();$('modalTitle').textContent='ชุดสกิลอาวุธ';const close=document.createElement('button');close.id='closeSkillBtn';close.className='window-close';close.textContent='×';close.onclick=closeModal;body.append(close);const grid=document.createElement('div');grid.className='weapon-skill-grid';for(const text of ['ขั้น','Active','Buff','Passive']){const h=document.createElement('strong');h.textContent=text;grid.append(h)}for(let tier=1;tier<=4;tier++){const label=document.createElement('strong');label.textContent=tier;grid.append(label);for(const kind of ['active','buff','passive']){const group=document.createElement('div');group.className='weapon-slot-group';player.weaponLoadout[tier-1][kind].forEach((id,index)=>{const b=document.createElement('button');b.className='weapon-skill-cell';b.disabled=tier>1;b.textContent=tier>1?'รอออกแบบ':id?WEAPON_SKILLS[id].name+'\nLv.'+player.weaponSkills[id]+(weaponSkillEnabled(id)?'':'\nอาวุธไม่ตรง'):'เลือกสกิล';b.onclick=()=>pickWeaponSkill(tier,kind,index);group.append(b);if(id&&tier===1){const info=document.createElement('button');info.textContent=kind==='buff'?'ใช้ / อัป':'รายละเอียด / อัป';info.className='skill-detail-action';info.onclick=()=>openWeaponSkillDetail(id);group.append(info)}});grid.append(group)}}body.append(grid);const text=document.createElement('p');text.textContent='Buff/Passive เลือกอย่างละ 2 จากอาวุธทั้งสองมือ · ห้ามชื่อซ้ำ · มี Passive 3 ตัวเลือกต่ออาวุธ';body.append(text)}
-function openWeaponSkillDetail(id){const d=WEAPON_SKILLS[id],lv=player.weaponSkills[id]||0;if(!d?.designed){modal('รอออกแบบ','สกิลนี้เก็บไว้ก่อน',[]);return}modal(d.name+' · Lv.'+lv+'/30',weaponSkillText(id)+'\nสกิลซ้ำ '+(player.skillScrolls[id]||0)+' · โอกาสอัป '+upgradeWeaponChance(lv+1)+'%',[['เรียน / อัปด้วยสกิลซ้ำ',()=>{learnOrUpgradeWeaponSkill(id);if(!$('characterOverlay').hidden)renderInventory();openWeaponSkillDetail(id)},true],...(d.kind==='buff'&&selectedSkillIds('buff').includes(id)?[['ใช้บัฟ',()=>useLoadoutBuff(id)]]:[])]);$('modalButtons').firstElementChild.disabled=lv>=30||!(player.skillScrolls[id]>0)}
-function updateWeaponHUD(){for(const [tier,key]of ['q','w','e','r'].entries()){const id=player.weaponLoadout[tier]?.active[0],button=$('hotbar'+key.toUpperCase());player.skillSlots[key]=id;if(!button)continue;button.disabled=!id||!weaponSkillEnabled(id)||(player.cd[id]||0)>0;button.querySelector('span').textContent=key.toUpperCase()+'['+(id&&WEAPON_SKILLS[id].designed?WEAPON_SKILLS[id].name:'ว่าง')+']'}const hud=$('buffHUD');hud.replaceChildren();for(const id of selectedSkillIds('buff'))if(player.weaponBuffs?.[id]>0){const tile=document.createElement('div');tile.className='buff-placeholder';tile.title=WEAPON_SKILLS[id].name;const n=document.createElement('b');n.textContent=Math.ceil(player.weaponBuffs[id]);tile.append(n);hud.append(tile)}}
 
-function castWeaponSkill(id){const d=WEAPON_SKILLS[id];if(paused||screen!=='play'||run?.finished||!weaponSkillEnabled(id)||!selectedSkillIds(d.kind).includes(id)||d.kind==='passive')return false;if((player.cd.action||0)>0)return queueAction(id);if((player.cd[id]||0)>0)return false;const bonuses=weaponLoadoutBonuses(),design=getWeaponDesign(d),cost=Math.ceil((d.kind==='buff'?(d.tier===2?14:8):design.cost)*(1-bonuses.mpDiscount));if(player.mp<cost)return false;player.mp-=cost;player.cd[id]=d.kind==='buff'?(d.tier===2?12:8):design.cd;beginActionDelay('slashBlast');if(d.kind==='buff'){player.weaponBuffs??={};player.weaponBuffs[id]=d.tier===2?90:120;save();updateUI();return true}const lv=player.weaponSkills[id],power=attackPower()*(design.damageBase+lv*design.damagePerLevel)/100;if(design.ranged){let dx=(keys.ArrowRight?1:0)-(keys.ArrowLeft?1:0),dy=(keys.ArrowDown?1:0)-(keys.ArrowUp?1:0);if(!dx&&!dy)dx=player.face;const len=Math.hypot(dx,dy);for(let i=0;i<design.hits;i++)swordWaves.push({x:player.x-dx*8*i,y:player.y-22-dy*8*i,vx:dx/len*560,vy:dy/len*560,life:1.1,damage:power,seen:new Set(),targets:design.targets+(d.weapon==='staff'?Math.floor(bonuses.area/20):0),weapon:d.weapon,tier:d.tier})}else{const targets=skillTargets(id,(design.range||130)+bonuses.reach,design.targets);for(const m of targets){for(let i=0;i<design.hits&&!m.dead;i++)hitMonster(m,power);if(d.weapon==='hammer'&&!m.boss&&!m.elite)m.stun=(d.tier===2?1:.6)+lv*.01+skillRankFor('tome',1)*.01} swordSwipes.push({x:player.x,y:player.y-20,face:player.face,reach:(design.range||130)+bonuses.reach,life:.3,key:id})}tutorialMark('attack');tone(440,.12,'triangle');updateUI();return true}
-function weaponDamageFactor(m){let factor=1;const chain=Math.min(5,player.weaponChain||0),rank=(w,i)=>skillRankFor(w,i);if(rank('sword',0)&&player.lastWeaponTarget===m.id)factor+=chain*(.01+rank('sword',0)*.001);if(rank('hammer',0)&&(m.stun>0||m.slow>0))factor+=.1+rank('hammer',0)*.003;if(rank('bow',0)&&Math.abs(m.x-player.x)>150)factor+=.1+rank('bow',0)*.003;if(rank('crossbow',0)&&m.hp/m.max>.7)factor+=.1+rank('crossbow',0)*.003;if(rank('crossbow',1)&&player.lastWeaponTarget===m.id)factor+=chain*.015;if(rank('crossbow',2)&&time-(player.lastWeaponHitTime||-99)>2)factor+=.1+rank('crossbow',2)*.003;if(rank('gun',2)&&Math.abs(m.x-player.x)<100)factor+=.1+rank('gun',2)*.003;if(rank('wand',1)&&monsters.filter(n=>!n.dead&&Math.abs(n.x-m.x)<100).length===1)factor+=.1+rank('wand',1)*.003;if(rank('staff',0)&&monsters.filter(n=>!n.dead&&Math.abs(n.x-m.x)<100).length>=2)factor+=.1+rank('staff',0)*.003;if(rank('tome',0)&&m.slow>0)factor+=.1+rank('tome',0)*.003;if(rank('dagger',0)&&(player.x-m.x)*(m.dir||1)<0)factor+=.1+rank('dagger',0)*.003;if(rank('dagger',1)&&m.hp/m.max<.3)factor+=.15+rank('dagger',1)*.003;if(rank('dagger',2)&&player.dodgeReady>0)factor+=.15+rank('dagger',2)*.003;if(rank('star',0)&&monsters.filter(n=>!n.dead&&Math.abs(n.x-m.x)<140).length>=2)factor+=.05+rank('star',0)*.002;if(rank('star',1)&&!player.ground)factor+=.1+rank('star',1)*.003;return factor}
-function onWeaponHit(m,damage,crit){const rank=(w,i)=>skillRankFor(w,i);player.weaponChain=player.lastWeaponTarget===m.id?Math.min(5,(player.weaponChain||0)+1):1;player.lastWeaponTarget=m.id;player.lastWeaponHitTime=time;player.weaponHits=(player.weaponHits||0)+1;if(rank('hammer',1)&&Math.random()<.1+rank('hammer',1)*.003)m.weaken=3;if(rank('wand',0)&&Math.random()<.2)player.mp=Math.min(maxMP(),player.mp+1+Math.floor(rank('wand',0)/10));if(rank('staff',1)&&!m.dead&&Math.random()<.2){m.dot=3;m.dotTimer=0;m.dotDamage=Math.max(1,Math.round(attackPower()*.08))}if(rank('tome',1)&&!m.boss&&!m.elite){if(m.stun)m.stun+=Math.min(.5,rank('tome',1)*.01);if(m.slow)m.slow+=Math.min(.5,rank('tome',1)*.01)}if(rank('claw',2)&&time-(player.lastLeechTime||-99)>=1){player.hp=Math.min(maxHP(),player.hp+Math.max(1,Math.round(damage*.02)));player.lastLeechTime=time}const extra=rank('sword',1)&&Math.random()<.08+rank('sword',1)*.003||rank('star',2)&&Math.random()<.08+rank('star',2)*.003||rank('gun',1)&&player.weaponHits%5===0||rank('wand',2)&&crit&&Math.random()<.2;if(!m.dead&&extra&&time-(player.lastExtraHit||-99)>.18){player.lastExtraHit=time;hitMonster(m,attackPower()*.5,false)}if(m.dead&&rank('staff',2))for(const id in player.cd)if(WEAPON_SKILLS[id]?.kind==='active')player.cd[id]=Math.max(0,player.cd[id]-.1-rank('staff',2)*.01);player.dodgeReady=0;if(m.dead){player.weaponChain=0;player.lastWeaponTarget=null}}
-function tickWeaponEffects(dt){if(time-(player.lastWeaponHitTime||0)>3){player.weaponChain=0;player.lastWeaponTarget=null}player.dodgeReady=Math.max(0,(player.dodgeReady||0)-dt);for(const m of monsters){m.weaken=Math.max(0,(m.weaken||0)-dt);if(m.dot>0&&!m.dead){m.dot-=dt;m.dotTimer=(m.dotTimer||0)+dt;if(m.dotTimer>=1){m.dotTimer=0;hitMonster(m,m.dotDamage,false)}}}}
-
-const baseWeaponHUD=updateWeaponHUD;updateWeaponHUD=function(){baseWeaponHUD();for(const id of selectedSkillIds('passive')){const d=WEAPON_SKILLS[id];if(!['จังหวะดาบ','จุดอ่อนสะสม','เล็งต่อเนื่อง','กรงเล็บต่อเนื่อง','คมคริติคอล'].includes(d.name))continue;const tile=document.createElement('div');tile.className='buff-placeholder';tile.title=d.name;const count=document.createElement('b');count.textContent=Math.min(5,player.weaponChain||0);tile.append(count);$('buffHUD').append(tile)}};

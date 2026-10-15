@@ -289,3 +289,14 @@ SP and old advancement replaced. Legacy characters migrate towarrior, preserve l
 0.58: Each stage now has one fixed generated layout shared across reentries/reloads. Six stages cover ramp/staggered/split/bridge layouts with2-4 layers. Town-return portals at entry and far end, including bosses. Kill combo UI and score contribution removed.
 
 0.59: Removed unconditional second-jump air dash. Added72 tier2 skills across12 weapons:1 active/2 buffs/3 passive choices each, baselineLv1, unlockLv30+tier2 mark, activeCD5-8s and MP14-20, buffCD12s/duration90s. Tier2 boxes now open and upgrade scrolls. Tier3/4 remain pending.
+
+## Release 0.60 · Active skill replacement and Lv.100 progression
+
+Replaces the previous Active/Buff/Passive system with the agreed 48 Active skills, including charges, channels, toggles, poison, persistent fields, execute chains, summons, movement and boss resistance. Fixed tier damage totals and rank-based mana replace the old rank damage scaling. See SKILLS-REFERENCE.md for timing and resource rules.
+
+Adds GM level +10 (uses ten normal level-ups and awards AP), dungeon stages 7–10 / Lv.70–100, and the Lv.100 boss. The existing Lv.60 boss now awards the tier 3 advancement mark; Lv.100 awards tier 4. Removes stage 0 and its tutorial. Stage 1 is accessible from Lv.1 so new characters can progress; stages 2–10 preserve level-minus-five entry requirements, 30 monsters, layouts, respawns, Elite meter and three-minute rounds.
+
+Save migration removes retired skill data without resetting character levels, money, gear or boxes. Old claw weapons become fist weapons. New skill rank upgrades and scrolls persist under schema v4.
+
+## Release 0.61 · Stage menu
+Removes the stage title, combines category tabs and town navigation in a top toolbar, and shows five stages per page with circular page buttons 1–5 at the lower right. Dungeon and boss categories keep their own page selections; unused pages show an empty message.

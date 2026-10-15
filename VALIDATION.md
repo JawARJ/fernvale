@@ -226,3 +226,16 @@ PASS sp35.cjs Lv29 budget, preserved balances, migration idempotence/reload/post
 0.58: stages58.cjs passed fixed geometry across reentry and reload, distinct six maps,30 monsters, return portal flow and no combo scoring/UI. Updated stages57 checks passed connected paths, continuous ladder climbing, ramp walking and both bosses. update53 tutorial regression passed.
 
 0.59: tier259.cjs passed12 active hit counts, second jump no dash,144 baseline skills, tier2 gates, buffs/passives actual stat/damage effects, tier2 box roll and upgradeLv2, save validation and UI. stages58 and multihit56 regressions passed.
+
+## Release 0.60
+
+Validated in headless Edge through tests/active60.cjs and tests/combat60.cjs:
+- All 48 casts, mana formulas and damage-producing skills; catalog contains only Active skills.
+- Teleport radius/no-target/boss cooldown, poison duration cap and out-of-area ticks, fist cooldown reset, charge release/undercharge, horizontal hold channel, crossbow CD snapshot and damage sharing.
+- Rolling ball bounce gating, field exit/reentry, smoke AVOID removal, giant blade across platforms, execute chains, rotating-star boss collision, wand meteor proc and doubled manual MP, fixed hammer frequency, platform-triggered explosion, spear flight and around-player hammer.
+- Real keyboard and pointer controls for holding, release, immobilization, waiting at full charge and toggling.
+- All ten dungeon stages, three boss levels and advancement rewards, tier 3/4 skill boxes, retired v3 skill migration and v4 save/reload, desktop and small-screen skill windows; no page errors.
+- All distributed JavaScript files pass node --check. Screenshots inspected for skill loadout, stage menu, mobile layout and combat.
+
+## Release 0.61
+tests/stages61.cjs passed in Edge: five rows per page, page 2 contains stages 6–10, pages 3–5 show empty states, separate boss pagination, preserved entry level gates, stage 1/10 launch, no horizontal overflow at 1102/740/360px and no JavaScript errors. Desktop and mobile screenshots inspected.
