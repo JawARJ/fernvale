@@ -1,6 +1,6 @@
 'use strict';
 // Refresh mixed cached HTML/scripts before interacting with character saves.
-(()=>{if(globalThis.FERNVALE_SERVER)return;const release='0.78';if(document.documentElement.dataset.release===release)return;const target=new URL(location.href);if(target.searchParams.get('release')!==release){target.searchParams.set('release',release);location.replace(target.href)}})();
+(()=>{if(globalThis.FERNVALE_SERVER)return;const release='0.79';if(document.documentElement.dataset.release===release)return;const target=new URL(location.href);if(target.searchParams.get('release')!==release){target.searchParams.set('release',release);location.replace(target.href)}})();
 
 const $=id=>document.getElementById(id),canvas=$('game');let ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
 let W=960;const H=480,GRAVITY=1120,ROUND_DURATION=180,SAVE_KEY='fernvale.browser.slots.v2',SETTINGS_KEY='fernvale.browser.settings.v1';
@@ -52,8 +52,8 @@ function monsterHitChance(stats,m){if(m.training)return 100;return clamp(stats.a
 function hitMonster(m,base,allowProc=true){return combatDamage(m,base,{weapon:weaponInHand('main'),origin:'normal',direct:allowProc,cast:++activeCastSerial,seenProcs:new Set()})}
 function finishStage(won,reason=won?'clear':'defeat'){
  if(!run||run.finished)return;run.finished=true;keys={};shots=[];resetActiveEffects();
- let advance=false;if(won){if(run.trial){const tier={100:2,101:3,102:4}[run.id];if(tier===player.classTier+1&&!player.advancementMark){player.advancementMark=tier;advance=true}}else player.cleared=Math.max(player.cleared,run.id)}
- if(won&&run.trial&&reason==='clear'){paused=false;save();updateUI();toast('ผ่านบททดสอบแล้ว · เก็บของแล้วกลับทางวาร์ป'+(advance?' · ได้รับตราเลื่อนขั้น':''));return}
+ if(won&&!run.trial)player.cleared=Math.max(player.cleared,run.id);
+ if(won&&run.trial&&reason==='clear'){paused=false;save();updateUI();toast('ชนะบอสแล้ว · รับรางวัลแล้วกลับทางวาร์ป');return}
  player.hp=maxHP();enterTown();save();toast(reason==='defeat'?'หมดแรงแล้ว · กลับหมู่บ้าน':won?'กลับหมู่บ้านแล้ว · บันทึกไอเทมที่เก็บแล้ว':'กลับหมู่บ้านแล้ว');
 }
 function act(action){if(paused||screen!=='play'||['heal','haste','light'].includes(action))return;if(action==='pickup')return;if(action==='attack'){if(run?.finished||player.charge||player.activeChannel||activeDash)return;if((player.cd.action||0)>0){queueAction('attack');return}if(player.cd.attack>0)return;beginActionDelay('attack');player.cd.attack=player.cd.action;player.swing=.25;tutorialMark('normalAttack');tone(135,.08,'sawtooth',.018);if(['bow','crossbow','gun','wand','staff','tome','star'].includes(weaponInHand('main'))){swordWaves.push({x:player.x,y:player.y-22,vx:player.face*560,vy:0,life:1.1,damage:attackPower(),seen:new Set(),targets:1});return}const target=monsters.filter(m=>{const dx=(m.x-player.x)*player.face;return !m.dead&&dx>-(monsterRadius(m)+10)&&dx<jobProfile().reach+monsterRadius(m)&&player.y>m.y-monsterHeight(m)-15&&player.y<m.y+46}).sort((a,b)=>Math.abs(a.x-player.x)-Math.abs(b.x-player.x))[0];if(target)hitMonster(target,attackPower()*jobProfile().multiplier);return}return;}

@@ -1,3 +1,7 @@
+# Fernvale 0.79
+
+Boss victories no longer award advancement marks or show mark-reward text. Existing equipment/Emblem material loot is unchanged; skill tiers unlock automatically at Lv.10/20/30. Verified all three boss victories and saved reward state in emblems78.
+
 # Fernvale 0.78
 
 - Elite/Boss guarantee an additional skill-Emblem material box, alongside their existing one random equipment box. Normal monsters do not drop the material box. Stage tier grouping remains 1–3 / 4–6 / 7–9 / 10+.

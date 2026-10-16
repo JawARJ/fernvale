@@ -1,4 +1,4 @@
-# Fernvale — source 0.78
+# Fernvale — source 0.79
 
 Browser pixel RPG with local saves and Auto Farm while the game is open. Online work is deferred; Party remains locked; Enchant is available.
 
@@ -8,7 +8,9 @@ Play: https://fernvale-adventure.ochremouse32.chatgpt.site/
 
 From this folder, run `python -m http.server 8000 --directory dist` and open http://localhost:8000. Saves stay in each browser under localStorage.
 
-## Current changes in 0.78
+## Current changes in 0.79
+
+- Bosses no longer award advancement marks; the victory toast no longer mentions them. All three boss reward/save paths are tested. Equipment and skill-Emblem box rewards are retained.
 
 - Elite/Boss drop an extra guaranteed skill-Emblem material box alongside equipment. Tier quantities are uniformly 0–2 / 1–3 / 2–4 / 2–5; each material picks one of twelve weapon types.
 - Active/Buff/Passive upgrades consume one matching weapon material, separate from equipment Emblems. Shared-family skills allow a material from the family. Failure retains rank; max rank 30. Target-rank success rates: 1–10 100%, 11–15 90%, 16–20 70%, 21–25 50%, 26–30 30%.
