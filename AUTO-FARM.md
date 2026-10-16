@@ -1,3 +1,6 @@
+## 0.77 navigation
+Keeps a target until killed/unreachable, finishes ladder traversal before re-evaluating, and prioritizes the least-visited connected surfaces after kills. This avoids ground-respawn starvation.
+
 # Auto Farm 0.75
 
 **ใช้ Auto ได้ทันที ไม่ต้องซื้อใบหรือสะสมเวลา** ระบบเวลา/ใบปิดไว้ก่อนตามคำขอ ข้อมูลใบและเวลาที่เคยมีเก็บในเซฟเดิมแต่ไม่แสดง ไม่หัก และไม่เปิดให้ใช้หรือซื้อเพิ่ม

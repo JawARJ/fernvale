@@ -1,3 +1,10 @@
+# Fernvale 0.77
+
+- Auto keeps its target and completes ladder traversal before choosing another target. After a kill, it prioritizes connected surfaces with fewer visits, preventing endlessly respawning ground monsters from monopolizing the session. It follows connected platform segments to the next ladder and approaches within actual normal-attack range.
+- Skill tiers 2/3/4 unlock automatically at character level 10/20/30, on level gain and loading older saves. Existing higher unlocked tiers remain; consumed/obsolete advancement marks clear. Boss levels and combat remain unchanged.
+- Mobile joystick is inset from safe screen edges. The training hint shows a compact step title and help button; full instructions remain in the help dialog.
+- `tests/refinements77.cjs`: real movement/combat physics cover all connected surfaces in all ten stages with normal 2-second monster respawns; XP and save tier boundaries; actual joystick input/help in 844×390, 915×412, 390×844 viewports. Existing refinements76/tutorial70 checks also pass.
+
 # Fernvale 0.76
 
 - Main weapon source tabs use gold borders; Emblem uses cyan, including a dual-color state when both match.

@@ -1,7 +1,8 @@
 'use strict';
 const BASE_CLASSES={warrior:{name:'นักรบ',main:'str',weapons:['sword','spear','hammer'],ratings:[4,4,5]},shooter:{name:'นักยิง',main:'dex',weapons:['bow','crossbow','gun'],ratings:[3,4,3]},mage:{name:'นักเวท',main:'int',weapons:['wand','staff','tome'],ratings:[5,3,2]},rogue:{name:'นักลอบโจมตี',main:'luk',weapons:['dagger','fist','star'],ratings:[3,3,3]}};
 const WEAPON_NAMES={sword:'ดาบ',spear:'หอก',hammer:'ค้อน',bow:'ธนู',crossbow:'หน้าไม้',gun:'ปืน',wand:'คทา',staff:'ไม้เท้า',tome:'หนังสือเวท',dagger:'มีด',fist:'หมัด',star:'ดาวกระจาย'};
-const SKILL_MIN_LEVEL=[0,1,30,60,100],SKILL_KINDS={active:'Active',buff:'Buff',passive:'Passive'},WEAPON_SKILLS=ACTIVE_SKILLS;
+const SKILL_MIN_LEVEL=[0,1,10,20,30],SKILL_KINDS={active:'Active',buff:'Buff',passive:'Passive'},WEAPON_SKILLS=ACTIVE_SKILLS;
+function syncSkillTier(p=player){const tier=p.level>=30?4:p.level>=20?3:p.level>=10?2:1;p.classTier=Math.max(p.classTier||1,tier);if(p.advancementMark&&p.advancementMark<=p.classTier)p.advancementMark=0;return p.classTier}
 function emptyWeaponLoadout(){return Array.from({length:4},()=>({active:[null],buff:[null,null],passive:[null,null]}))}
 function validClass(p=player){return BASE_CLASSES[p.baseClass]||BASE_CLASSES.warrior}
 function weaponInHand(hand,p=player){if(hand!=='main')return null;const g=p.loot.gear.find(g=>g.id===p.loot.equipped[hand]);if(g)return g.weapon||'sword';return hand==='main'&&!p.starterStored?validClass(p).weapons[0]:null}
@@ -10,8 +11,9 @@ function selectedSkillIds(kind,p=player){const seen=new Set();return (p.weaponLo
 function ensureBaselineSkills(p){p.weaponSkills??={};for(const id of Object.keys(WEAPON_SKILLS))p.weaponSkills[id]=Math.max(1,p.weaponSkills[id]||0);return p}
 function validateWeaponSystem(raw,p){
  p.baseClass=raw.baseClass||(['mage','rogue','shooter'].includes(raw.job)?raw.job:'warrior');if(!BASE_CLASSES[p.baseClass])throw Error('อาชีพหลักไม่ถูกต้อง');p.job=p.baseClass;
- p.classTier=raw.classTier??(p.level>=100?4:p.level>=60?3:p.level>=30?2:1);p.advancementMark=raw.advancementMark??0;
+ p.classTier=raw.classTier??(p.level>=30?4:p.level>=20?3:p.level>=10?2:1);p.advancementMark=raw.advancementMark??0;
  if(!Number.isInteger(p.classTier)||p.classTier<1||p.classTier>4||!Number.isInteger(p.advancementMark)||p.advancementMark<0||p.advancementMark>4||p.advancementMark&&p.advancementMark!==p.classTier+1)throw Error('ขั้นอาชีพไม่ถูกต้อง');
+ syncSkillTier(p);
  p.starterStored=raw.starterStored??p.loot.gear.some(g=>g.name.includes('ฝึก'));
  for(const g of p.loot.gear){if(g.weapon==='axe'){g.weapon='hammer';g.name=g.name.replace('ขวาน','ค้อน')}if(g.weapon==='claw'){g.weapon='fist';g.name=g.name.replace('กรงเล็บ','หมัด')}if(g.slot==='main'&&!g.weapon)g.weapon=raw.job==='spearman'?'spear':'sword'}
  p.weaponSkills={};p.skillScrolls={};p.weaponLoadout=emptyWeaponLoadout();

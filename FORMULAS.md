@@ -1,3 +1,6 @@
+## 0.77 skill unlock override
+Tier 2/3/4 automatically unlock at character Lv.10/20/30. No boss mark is required. Existing higher-tier saves are retained. Boss enemy levels remain 30/60/100.
+
 ## Current overrides in 0.75
 
 Equipment tiers follow Stage 1–3 / 4–6 / 7–9 / 10+; box and opened equipment level equals the monster/stage level exactly. Three independent normal box rolls use 1% / 3% / 5% per type within each three-stage group. Elite/Boss grant one uniformly chosen box type with certainty. Money is monster level × 10, delivered immediately. Death subtracts min(current XP, ceil(XP required for current level × 0.10)); no level loss.

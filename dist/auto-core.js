@@ -19,7 +19,7 @@ function autoActionEnabled(id){return id===AUTO_NORMAL?!!weaponInHand('main'):!!
 function setAutoSkill(index,id){if(autoFarmActive()||!Number.isInteger(index)||index<0||index>3||id!==null&&(player.autoFarm.skills.some((other,i)=>i!==index&&other===id)||id!==AUTO_NORMAL&&(!weaponSkillEnabled(id)||WEAPON_SKILLS[id]?.kind!=='active')))return false;player.autoFarm.skills[index]=id;save();return true}
 function startAutoFarm(){
  if(!run||run.tutorial||run.finished||AUTO_TIME_ENABLED&&player.autoFarm.seconds<=0||!player.autoFarm.skills.some(autoActionEnabled))return false;
- stopActiveChannels();queuedAction=null;keys={};autoSession={running:true,mapId:run.id,serial:run.serial,cursor:0,held:null,navigation:null,reason:null};save();return true;
+ stopActiveChannels();queuedAction=null;keys={};autoSession={running:true,mapId:run.id,serial:run.serial,cursor:0,held:null,navigation:null,target:null,visits:{},reason:null};save();return true;
 }
 function stopAutoFarm(reason='manual'){if(!autoSession?.running)return;autoSession.running=false;autoSession.reason=reason;autoSession.held=null;keys={};queuedAction=null;stopActiveChannels();save()}
 function autoSurface(x,y){let best=-1,distance=Infinity;for(let i=0;i<platforms.length;i++){const p=platforms[i];if(x<p.x-8||x>p.x+p.w+8)continue;const d=Math.abs(y-platformSurface(p,x));if(d<distance){best=i;distance=d}}return best}
@@ -32,7 +32,7 @@ function autoPath(from,to){
 function autoMoveToward(x,y,index){
  const a=autoSession;if(a.navigation){const nav=a.navigation;if(Math.abs(player.y-nav.y)<2&&!player.climbing){a.navigation=null;return false}const dx=nav.ladder.x-player.x;if(Math.abs(dx)>5){keys[dx>0?'ArrowRight':'ArrowLeft']=true;return false}keys[nav.y<player.y?'ArrowUp':'ArrowDown']=true;return false}
  const here=autoSurface(player.x,player.y),route=autoPath(here,index);if(route===null)return false;
- const next=route[0];if(next?.ladder){const dx=next.ladder.x-player.x;if(Math.abs(dx)>5)keys[dx>0?'ArrowRight':'ArrowLeft']=true;else{a.navigation=next;keys[next.y<player.y?'ArrowUp':'ArrowDown']=true}return false}
+ const next=route.find(edge=>edge.ladder);if(next?.ladder){const dx=next.ladder.x-player.x;if(Math.abs(dx)>5)keys[dx>0?'ArrowRight':'ArrowLeft']=true;else{a.navigation=next;keys[next.y<player.y?'ArrowUp':'ArrowDown']=true}return false}
  const dx=x-player.x;if(Math.abs(dx)>8){keys[dx>0?'ArrowRight':'ArrowLeft']=true;return false}return Math.abs(player.y-y)<42;
 }
 function tickAutoFarm(dt){
@@ -45,10 +45,20 @@ function tickAutoFarm(dt){
  if(player.activeChannel){a.held=player.activeChannel.elapsed<3?player.activeChannel.id:null;return}
  a.held=null;if(activeDash)return;
  if(run.finished){stopAutoFarm('bossCleared');return}
- const targets=monsters.filter(m=>!m.dead).map(m=>({m,path:autoPath(autoSurface(player.x,player.y),m.p??autoSurface(m.x,m.y))})).filter(t=>t.path!==null).sort((x,y)=>x.path.length*500+Math.abs(x.m.x-player.x)-(y.path.length*500+Math.abs(y.m.x-player.x)));
- const target=targets[0]?.m;if(!target)return;
- const sameRoute=(autoPath(autoSurface(player.x,player.y),target.p??0)||[]).every(edge=>!edge.ladder),dx=target.x-player.x;
- if(!sameRoute||Math.abs(player.y-target.y)>40||Math.abs(dx)>100){autoMoveToward(target.x,target.y,target.p??autoSurface(target.x,target.y));return}
+ // Finish a ladder traversal before reconsidering targets or casting attacks.
+ if(a.navigation){autoMoveToward(0,0,0);return}
+ const here=autoSurface(player.x,player.y),surfaceKey=m=>Math.min(...monsterSurfaceRoute(m.p??autoSurface(m.x,m.y)));
+ if(a.target?.dead){const key=surfaceKey(a.target);a.visits[key]=(a.visits[key]||0)+1;a.target=null}
+ if(a.target&&(!monsters.includes(a.target)||autoPath(here,a.target.p??autoSurface(a.target.x,a.target.y))===null))a.target=null;
+ if(!a.target){
+  const targets=monsters.filter(m=>!m.dead).map(m=>({m,path:autoPath(here,m.p??autoSurface(m.x,m.y))})).filter(t=>t.path!==null);
+  const score=t=>(a.visits[surfaceKey(t.m)]||0)*100000+t.path.length*500+Math.abs(t.m.x-player.x);
+  targets.sort((x,y)=>score(x)-score(y));a.target=targets[0]?.m||null;
+ }
+ const target=a.target;if(!target)return;
+ const route=autoPath(here,target.p??autoSurface(target.x,target.y)),sameRoute=route!==null&&route.every(edge=>!edge.ladder),dx=target.x-player.x;
+ const reach=Math.max(24,Math.min(80,jobProfile().reach+monsterRadius(target)-12));
+ if(!sameRoute||Math.abs(player.y-target.y)>40||Math.abs(dx)>reach){autoMoveToward(target.x,target.y,target.p??autoSurface(target.x,target.y));return}
  player.face=dx<0?-1:1;if((player.cd.action||0)>0)return;
  for(let tried=0;tried<4;tried++){
   const i=a.cursor;a.cursor=(i+1)%4;const id=player.autoFarm.skills[i],d=WEAPON_SKILLS[id];

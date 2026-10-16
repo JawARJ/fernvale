@@ -1,4 +1,4 @@
-# Fernvale — source 0.76
+# Fernvale — source 0.77
 
 Browser pixel RPG with local saves and Auto Farm while the game is open. Online work is deferred; Party remains locked; Enchant is available.
 
@@ -8,7 +8,12 @@ Play: https://fernvale-adventure.ochremouse32.chatgpt.site/
 
 From this folder, run `python -m http.server 8000 --directory dist` and open http://localhost:8000. Saves stay in each browser under localStorage.
 
-## Current changes in 0.76
+## Current changes in 0.77
+
+- Auto keeps targets through ladder traversal and rotates across connected surfaces despite ground respawns.
+- Skill tiers 2/3/4 automatically unlock at Lv.10/20/30, including older saves. Boss levels remain unchanged.
+- Mobile training guidance is compact with full help available; joystick has additional safe-edge inset.
+- Validation: `tests/refinements77.cjs` simulates movement/combat in all ten stages and tests level boundaries and actual joystick input in three phone viewports.
 
 - Main weapon uses gold borders and Emblem uses cyan. Armor boxes generate hat, shirt, pants or gloves; legacy shoes remain usable. Shop sells HP/MP potions only. Stage cards show normal chances clearly.
 - JS/CSS use content-fingerprinted paths to prevent mixed browser caches. After source edits run `node scripts/fingerprint-assets.cjs` before publishing.
