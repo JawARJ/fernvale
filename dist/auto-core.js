@@ -57,7 +57,7 @@ function tickAutoFarm(dt){
  }
  const target=a.target;if(!target)return;
  const route=autoPath(here,target.p??autoSurface(target.x,target.y)),sameRoute=route!==null&&route.every(edge=>!edge.ladder),dx=target.x-player.x;
- const reach=Math.max(24,Math.min(80,jobProfile().reach+monsterRadius(target)-12));
+ const reach=Math.max(18,Math.min(30,jobProfile().reach+monsterRadius(target)-12,...player.autoFarm.skills.map(id=>WEAPON_SKILLS[id]?.range||Infinity)));
  if(!sameRoute||Math.abs(player.y-target.y)>40||Math.abs(dx)>reach){autoMoveToward(target.x,target.y,target.p??autoSurface(target.x,target.y));return}
  player.face=dx<0?-1:1;if((player.cd.action||0)>0)return;
  for(let tried=0;tried<4;tried++){

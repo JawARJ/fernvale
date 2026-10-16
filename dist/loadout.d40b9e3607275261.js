@@ -3,6 +3,7 @@ const BASE_CLASSES={warrior:{name:'นักรบ',main:'str',weapons:['sword',
 const WEAPON_NAMES={sword:'ดาบ',spear:'หอก',hammer:'ค้อน',bow:'ธนู',crossbow:'หน้าไม้',gun:'ปืน',wand:'คทา',staff:'ไม้เท้า',tome:'หนังสือเวท',dagger:'มีด',fist:'หมัด',star:'ดาวกระจาย'};
 const SKILL_MIN_LEVEL=[0,1,10,20,30],SKILL_KINDS={active:'Active',buff:'Buff',passive:'Passive'},WEAPON_SKILLS=ACTIVE_SKILLS;
 function syncSkillTier(p=player){const tier=p.level>=30?4:p.level>=20?3:p.level>=10?2:1;p.classTier=Math.max(p.classTier||1,tier);if(p.advancementMark&&p.advancementMark<=p.classTier)p.advancementMark=0;return p.classTier}
+function clearEquippedSkillsForGearChange(){stopAutoFarm('equipmentChanged');queuedAction=null;keys={};resetActiveEffects();resetSupport();player.dashTime=0;player.dashV=0;player.weaponBuffs={};player.lastActiveTarget=null;player.weaponLoadout=emptyWeaponLoadout();player.skillSlots={q:null,w:null,e:null,r:null};player.autoFarm.skills=[null,null,null,null]}
 function emptyWeaponLoadout(){return Array.from({length:4},()=>({active:[null],buff:[null,null],passive:[null,null]}))}
 function validClass(p=player){return BASE_CLASSES[p.baseClass]||BASE_CLASSES.warrior}
 function weaponInHand(hand,p=player){if(hand!=='main')return null;const g=p.loot.gear.find(g=>g.id===p.loot.equipped[hand]);if(g)return g.weapon||'sword';return hand==='main'&&!p.starterStored?validClass(p).weapons[0]:null}

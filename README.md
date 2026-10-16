@@ -1,4 +1,4 @@
-# Fernvale — source 0.79
+# Fernvale — source 0.80
 
 Browser pixel RPG with local saves and Auto Farm while the game is open. Online work is deferred; Party remains locked; Enchant is available.
 
@@ -8,7 +8,13 @@ Play: https://fernvale-adventure.ochremouse32.chatgpt.site/
 
 From this folder, run `python -m http.server 8000 --directory dist` and open http://localhost:8000. Saves stay in each browser under localStorage.
 
-## Current changes in 0.79
+## Current changes in 0.80
+
+- Active range/radius/travel halved; unlimited targets cap at 10 and fixed caps above 10 become 8. Attacks/pulses are one Hit with total round damage preserved. Fields pulse every second without re-entry abuse.
+- Book IV limits overlapping fields and shares per-target pulse gates. Spear sweep moves normal enemies onto the player platform and restores their original lane on respawn.
+- Equipment changes/removal clear Active/Buff/Passive and Auto selections and stop ongoing effects, preserving ranks/items/materials. Same-item clicks retain the build.
+- Monster tiers gain HP ×1/2/3.5/5, ATK ×1/1.5/2/2.5 and DEF +0/5/10/15; normal/Elite/Boss growth uses the same tier scheme. Beginner stage unchanged.
+- `tests/combat80.cjs` exercises all 48 skills at ranks 1 and 30, range/cap/Hit/cadence cases, book overlap, lane pull, saved equipment changes, strength boundaries and actual PC/mobile controls.
 
 - Bosses no longer award advancement marks; the victory toast no longer mentions them. All three boss reward/save paths are tested. Equipment and skill-Emblem box rewards are retained.
 

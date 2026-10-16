@@ -9,13 +9,13 @@ const ACTIVE_SKILLS={
     "name": "พุ่งไปกลับ",
     "designed": true,
     "shape": "return",
-    "range": 300,
-    "rangeLabel": "ด้านหน้า 300",
-    "hitLabel": "2 Hit / 3 Mob",
+    "range": 150.0,
+    "rangeLabel": "ด้านหน้า 150",
+    "hitLabel": "1 Hit / 3 Mob",
     "effects": "อยู่จุดเดิม ภาพโจมตีไป–กลับ\nI-frame ตลอดช่วงสกิลทำงาน",
     "cd": 0.5,
     "damage": 100,
-    "damageLabel": "100% ต่อชุด / เป้า\n2 Hit: Hit ละ 50%"
+    "damageLabel": "100% ต่อรอบ / เป้า · 1 Hit"
   },
   "dagger_2_active_0": {
     "id": "dagger_2_active_0",
@@ -26,13 +26,13 @@ const ACTIVE_SKILLS={
     "name": "ปามีดรอบตัว",
     "designed": true,
     "shape": "circle",
-    "range": 250,
-    "rangeLabel": "รัศมี 250",
+    "range": 125.0,
+    "rangeLabel": "รัศมี 125",
     "hitLabel": "1 Hit / 6 Mob",
     "effects": "โจมตีรอบตัวหนึ่งชุด",
     "cd": 5,
     "damage": 120,
-    "damageLabel": "120% ต่อชุด / เป้า\n1 Hit: Hit ละ 120%"
+    "damageLabel": "120% ต่อรอบ / เป้า · 1 Hit"
   },
   "dagger_3_active_0": {
     "id": "dagger_3_active_0",
@@ -43,13 +43,13 @@ const ACTIVE_SKILLS={
     "name": "วาร์ปกระหน่ำแทง",
     "designed": true,
     "shape": "teleport",
-    "range": 500,
-    "rangeLabel": "ค้นหารอบตัวรัศมี 500 / แทง 100",
-    "hitLabel": "6 Hit / 1 Mob",
+    "range": 250.0,
+    "rangeLabel": "ค้นหารอบตัวรัศมี 250 / แทง 50",
+    "hitLabel": "1 Hit / 1 Mob",
     "effects": "เป้าใกล้ที่สุด วาร์ปก่อนแทงระยะ 100; ไม่มีเป้าใช้ไม่ได้\nฆ่าแล้วรีเซ็ต CD; โดนบอส CD 3.75 วิ",
     "cd": 5,
     "damage": 150,
-    "damageLabel": "150% ต่อชุด / เป้า\n6 Hit: Hit ละ 25%"
+    "damageLabel": "150% ต่อรอบ / เป้า · 1 Hit"
   },
   "dagger_4_active_0": {
     "id": "dagger_4_active_0",
@@ -60,13 +60,13 @@ const ACTIVE_SKILLS={
     "name": "หมอกพิษ",
     "designed": true,
     "shape": "circle",
-    "range": 500,
-    "rangeLabel": "รัศมี 500",
-    "hitLabel": "เปิด 1 Hit / 20 Mob",
-    "effects": "ฝากพิษ 10 วิ; ติดซ้ำบวกเวลา สูงสุด 20 วิ\nATKSPD 100→190: พิษ 2→4 ครั้ง/วิ",
+    "range": 250.0,
+    "rangeLabel": "รัศมี 250",
+    "hitLabel": "1 Hit / 8 Mob",
+    "effects": "ฝากพิษ 10 วิ ติดซ้ำเพิ่มเวลาสูงสุด 20 วิ · พิษ 1 Hit ทุก 1 วินาที",
     "cd": 8,
     "damage": 200,
-    "damageLabel": "200% ต่อรอบ / เป้า\n1 Hit: Hit ละ 200%\nพิษแต่ละจังหวะ 200%"
+    "damageLabel": "200% ต่อรอบ / เป้า · 1 Hit"
   },
   "star_1_active_0": {
     "id": "star_1_active_0",
@@ -77,13 +77,13 @@ const ACTIVE_SKILLS={
     "name": "ปาดาวคู่",
     "designed": true,
     "shape": "front",
-    "range": 400,
-    "rangeLabel": "ด้านหน้า 400",
-    "hitLabel": "2 Hit / 1 Mob",
+    "range": 200.0,
+    "rangeLabel": "ด้านหน้า 200",
+    "hitLabel": "1 Hit / 1 Mob",
     "effects": "ยิงเป็นชุดใส่เป้าหมายเดียว",
     "cd": 0.5,
     "damage": 100,
-    "damageLabel": "100% ต่อชุด / เป้า\n2 Hit: Hit ละ 50%"
+    "damageLabel": "100% ต่อรอบ / เป้า · 1 Hit"
   },
   "star_2_active_0": {
     "id": "star_2_active_0",
@@ -94,13 +94,13 @@ const ACTIVE_SKILLS={
     "name": "ดาวใหญ่",
     "designed": true,
     "shape": "push",
-    "range": 400,
-    "rangeLabel": "ด้านหน้า 400",
+    "range": 200.0,
+    "rangeLabel": "ด้านหน้า 200",
     "hitLabel": "1 Hit / 8 Mob",
     "effects": "ผลักไปพร้อมดาวจนสุดระยะ\nหยุดก่อนกำแพง/ขอบชั้น; บอสไม่ถูกผลัก",
     "cd": 3,
     "damage": 120,
-    "damageLabel": "120% ต่อชุด / เป้า\n1 Hit: Hit ละ 120%"
+    "damageLabel": "120% ต่อรอบ / เป้า · 1 Hit"
   },
   "star_3_active_0": {
     "id": "star_3_active_0",
@@ -111,13 +111,13 @@ const ACTIVE_SKILLS={
     "name": "ดาวสังหาร",
     "designed": true,
     "shape": "spread",
-    "range": 400,
-    "rangeLabel": "ยิง 400 / แพร่รัศมี 400",
-    "hitLabel": "เริ่ม 1 Hit / 1 Mob",
+    "range": 200.0,
+    "rangeLabel": "ยิง 200 / แพร่รัศมี 200",
+    "hitLabel": "1 Hit / 1 Mob",
     "effects": "สถานะ 10 วิ; ตายแพร่สูงสุด 4 ตัวต่อทอด ต่อได้เรื่อย\nบอส: Hit จากการโจมตีลด CD สกิลอื่น 0.1 วิ",
     "cd": 10,
     "damage": 150,
-    "damageLabel": "150% ต่อชุด / เป้า\n1 Hit: Hit ละ 150%"
+    "damageLabel": "150% ต่อรอบ / เป้า · 1 Hit"
   },
   "star_4_active_0": {
     "id": "star_4_active_0",
@@ -128,13 +128,13 @@ const ACTIVE_SKILLS={
     "name": "ดาวหมุน",
     "designed": true,
     "shape": "placed",
-    "range": 80,
-    "rangeLabel": "หยุดด้านหน้า 400 / รัศมี 80",
-    "hitLabel": "4 Hit/รอบ / 15 Mob",
-    "effects": "อยู่ 10 วิ; ชนบอสหยุดทันที\nATKSPD 100→190: 2→4 รอบ/วิ",
+    "range": 40.0,
+    "rangeLabel": "หยุดด้านหน้า 200 / รัศมี 40",
+    "hitLabel": "1 Hit / 8 Mob",
+    "effects": "อยู่ 10 วิ · 1 Hit ทุก 1 วินาที · สูงสุด 8 Mob · ชนบอสหยุดทันที",
     "cd": 15,
     "damage": 200,
-    "damageLabel": "200% ต่อรอบ / เป้า\n4 Hit: Hit ละ 50%"
+    "damageLabel": "200% ต่อรอบ / เป้า · 1 Hit"
   },
   "fist_1_active_0": {
     "id": "fist_1_active_0",
@@ -145,13 +145,13 @@ const ACTIVE_SKILLS={
     "name": "ต่อยขึ้น",
     "designed": true,
     "shape": "up",
-    "range": 150,
-    "rangeLabel": "พุ่งขึ้น 150",
+    "range": 75.0,
+    "rangeLabel": "พุ่งขึ้น 75",
     "hitLabel": "1 Hit / 3 Mob",
     "effects": "ตัวละครลอยขึ้น ใช้ต่อกับเตะลง",
     "cd": 1,
     "damage": 100,
-    "damageLabel": "100% ต่อชุด / เป้า\n1 Hit: Hit ละ 100%"
+    "damageLabel": "100% ต่อรอบ / เป้า · 1 Hit"
   },
   "fist_2_active_0": {
     "id": "fist_2_active_0",
@@ -162,13 +162,13 @@ const ACTIVE_SKILLS={
     "name": "เตะลง",
     "designed": true,
     "shape": "diagonal",
-    "range": 300,
-    "rangeLabel": "เฉียงลงด้านหน้า 300",
+    "range": 150.0,
+    "rangeLabel": "เฉียงลงด้านหน้า 150",
     "hitLabel": "1 Hit / 3 Mob",
     "effects": "ใช้เฉพาะกลางอากาศ พาตัวและศัตรูไปด้านหน้า\nบอสไม่ถูกผลัก; มอนหยุดก่อนกำแพง/ขอบชั้น",
     "cd": 2,
     "damage": 120,
-    "damageLabel": "120% ต่อชุด / เป้า\n1 Hit: Hit ละ 120%"
+    "damageLabel": "120% ต่อรอบ / เป้า · 1 Hit"
   },
   "fist_3_active_0": {
     "id": "fist_3_active_0",
@@ -179,13 +179,13 @@ const ACTIVE_SKILLS={
     "name": "ลำแสงหมัด",
     "designed": true,
     "shape": "front",
-    "range": 300,
-    "rangeLabel": "ด้านหน้า 300",
-    "hitLabel": "3 Hit / 6 Mob",
+    "range": 150.0,
+    "rangeLabel": "ด้านหน้า 150",
+    "hitLabel": "1 Hit / 6 Mob",
     "effects": "ถ้าขั้น 1 หรือ 2 ติด CD: รีเซ็ตขั้น 1/2/3 ทันที\nไม่มีการรีเซ็ตย้อนหลัง",
     "cd": 3,
     "damage": 150,
-    "damageLabel": "150% ต่อชุด / เป้า\n3 Hit: Hit ละ 50%"
+    "damageLabel": "150% ต่อรอบ / เป้า · 1 Hit"
   },
   "fist_4_active_0": {
     "id": "fist_4_active_0",
@@ -196,10 +196,10 @@ const ACTIVE_SKILLS={
     "name": "ฟิลด์พิเศษ",
     "designed": true,
     "shape": "buff",
-    "range": 0,
+    "range": 0.0,
     "rangeLabel": "เสริมตัวเอง",
-    "hitLabel": "Hit/Mob ×2",
-    "effects": "อยู่ 10 วิ เฉพาะ Active หมัดขั้น 1–3\nกลายเป็น 2/6, 2/6, 6/12 (Hit/Mob)",
+    "hitLabel": "ไม่มีดาเมจตรง · สกิลโจมตี 1 Hit/รอบ",
+    "effects": "อยู่ 10 วิ · เพิ่มดาเมจ Active หมัดขั้น 1–3 ×2 และจำนวนเป้า ×2 สูงสุด 8 Mob · ยังคง 1 Hit ต่อรอบ",
     "cd": 15,
     "damage": 200,
     "damageLabel": "ไม่มีดาเมจตรง"
@@ -213,13 +213,13 @@ const ACTIVE_SKILLS={
     "name": "บอลเวททะลุ",
     "designed": true,
     "shape": "front",
-    "range": 300,
-    "rangeLabel": "ด้านหน้า 300",
-    "hitLabel": "2 Hit / 2 Mob",
+    "range": 150.0,
+    "rangeLabel": "ด้านหน้า 150",
+    "hitLabel": "1 Hit / 2 Mob",
     "effects": "บอลทะลุเป้าหมาย",
     "cd": 0.5,
     "damage": 100,
-    "damageLabel": "100% ต่อชุด / เป้า\n2 Hit: Hit ละ 50%"
+    "damageLabel": "100% ต่อรอบ / เป้า · 1 Hit"
   },
   "wand_2_active_0": {
     "id": "wand_2_active_0",
@@ -230,13 +230,13 @@ const ACTIVE_SKILLS={
     "name": "ดาวตก",
     "designed": true,
     "shape": "target",
-    "range": 300,
-    "rangeLabel": "ค้นหารอบตัวรัศมี 300",
-    "hitLabel": "8 Hit / 1 Mob",
+    "range": 150.0,
+    "rangeLabel": "ค้นหารอบตัวรัศมี 150",
+    "hitLabel": "1 Hit / 1 Mob",
     "effects": "เลือกศัตรูใกล้ที่สุด",
     "cd": 2,
     "damage": 120,
-    "damageLabel": "120% ต่อชุด / เป้า\n8 Hit: Hit ละ 15%"
+    "damageLabel": "120% ต่อรอบ / เป้า · 1 Hit"
   },
   "wand_3_active_0": {
     "id": "wand_3_active_0",
@@ -247,13 +247,13 @@ const ACTIVE_SKILLS={
     "name": "บอลเวทกลิ้ง",
     "designed": true,
     "shape": "bounce",
-    "range": 0,
+    "range": 0.0,
     "rangeLabel": "กลิ้งบนชั้น / เด้งที่ขอบ",
-    "hitLabel": "1 Hit / โควตา 15",
-    "effects": "อยู่สูงสุด 15 วิ; ความเร็วตาม ATKSPD\nมอนโดนครั้งเดียว; บอสโดนซ้ำต้องเด้งก่อน",
+    "hitLabel": "1 Hit / 8 Mob",
+    "effects": "อยู่สูงสุด 15 วิ · โควตา 8 เป้าหมาย · ความเร็วตาม ATKSPD · มอนโดนครั้งเดียว บอสโดนซ้ำต้องเด้งก่อน",
     "cd": 3,
     "damage": 150,
-    "damageLabel": "150% ต่อชุด / เป้า\n1 Hit: Hit ละ 150%"
+    "damageLabel": "150% ต่อรอบ / เป้า · 1 Hit"
   },
   "wand_4_active_0": {
     "id": "wand_4_active_0",
@@ -264,10 +264,10 @@ const ACTIVE_SKILLS={
     "name": "วงเวท",
     "designed": true,
     "shape": "buff",
-    "range": 0,
+    "range": 0.0,
     "rangeLabel": "เปิด–ปิด เสริมตัวเอง",
-    "hitLabel": "ดาวตกเหลือ 4 Hit",
-    "effects": "บอลขั้น 1 CD=0; ยิงคทาโดนเรียกดาวตกเป้าละ 1 ชุด/การใช้\nMP ร่ายเอง ×2; ดาวตกเสริมฟรี ไม่เรียกต่อ",
+    "hitLabel": "ไม่มีดาเมจตรง · สกิลโจมตี 1 Hit/รอบ",
+    "effects": "บอลขั้น 1 CD=0; ยิงคทาโดนเรียกดาวตก 1 Hit เป้าละ 1 ชุด/การใช้ · MP ร่ายเอง ×2; ไม่เรียกต่อ",
     "cd": null,
     "damage": 200,
     "damageLabel": "ไม่มีดาเมจตรง"
@@ -281,13 +281,13 @@ const ACTIVE_SKILLS={
     "name": "เคียว",
     "designed": true,
     "shape": "scythe",
-    "range": 400,
-    "rangeLabel": "ด้านหน้า 400 / กว้างแนวตั้งรวม 150",
+    "range": 200.0,
+    "rangeLabel": "ด้านหน้า 200 / กว้างแนวตั้งรวม 75",
     "hitLabel": "1 Hit / 6 Mob",
-    "effects": "แผ่กว้างขึ้นแนวบน–ล่าง สูงสุดรวม 150",
+    "effects": "แผ่กว้างขึ้นแนวบน–ล่าง สูงสุดรวม 75",
     "cd": 1,
     "damage": 100,
-    "damageLabel": "100% ต่อชุด / เป้า\n1 Hit: Hit ละ 100%"
+    "damageLabel": "100% ต่อรอบ / เป้า · 1 Hit"
   },
   "staff_2_active_0": {
     "id": "staff_2_active_0",
@@ -298,13 +298,13 @@ const ACTIVE_SKILLS={
     "name": "ชาร์จระเบิด",
     "designed": true,
     "shape": "circle",
-    "range": 400,
-    "rangeLabel": "รัศมี 200→400",
-    "hitLabel": "1 Hit / 15 Mob",
-    "effects": "ชาร์จ 0–2 วิ; ระยะ/ดาเมจเพิ่มตามชาร์จ\nเดินไม่ได้ กดเดิน/ปล่อยปุ่มยิง; เต็มยิงอัตโนมัติ",
+    "range": 200.0,
+    "rangeLabel": "รัศมี 100→200",
+    "hitLabel": "1 Hit / 8 Mob",
+    "effects": "ชาร์จ 0–2 วิ · รัศมี 100–200 · เดินไม่ได้ ปล่อยปุ่มยิง เต็มยิงอัตโนมัติ",
     "cd": 3,
     "damage": 120,
-    "damageLabel": "120% ต่อชุด / เป้า\n1 Hit: Hit ละ 120%"
+    "damageLabel": "120% ต่อรอบ / เป้า · 1 Hit"
   },
   "staff_3_active_0": {
     "id": "staff_3_active_0",
@@ -315,13 +315,13 @@ const ACTIVE_SKILLS={
     "name": "ชาร์จตรึง",
     "designed": true,
     "shape": "circle",
-    "range": 600,
-    "rangeLabel": "รัศมี 100→600",
-    "hitLabel": "1 Hit / ทุก Mob",
-    "effects": "ชาร์จ 0–3 วิ; ปล่อยเหมือนชาร์จระเบิด\nรับดาเมจ +20% 10 วิ; มอนทั่วไปสตัน 1.5 วิ",
+    "range": 300.0,
+    "rangeLabel": "รัศมี 50→300",
+    "hitLabel": "1 Hit / 10 Mob",
+    "effects": "ชาร์จ 0–3 วิ · รัศมี 50–300 · สูงสุด 10 Mob · รับดาเมจ +20% 10 วิ; มอนทั่วไปสตัน 1.5 วิ",
     "cd": 8,
     "damage": 150,
-    "damageLabel": "150% ต่อชุด / เป้า\n1 Hit: Hit ละ 150%"
+    "damageLabel": "150% ต่อรอบ / เป้า · 1 Hit"
   },
   "staff_4_active_0": {
     "id": "staff_4_active_0",
@@ -332,9 +332,9 @@ const ACTIVE_SKILLS={
     "name": "ปลดชาร์จ",
     "designed": true,
     "shape": "buff",
-    "range": 0,
+    "range": 0.0,
     "rangeLabel": "เสริมตัวเอง",
-    "hitLabel": "ไม่มีดาเมจตรง",
+    "hitLabel": "ไม่มีดาเมจตรง · สกิลโจมตี 1 Hit/รอบ",
     "effects": "อยู่ 5 วิ; รีเซ็ต CD ขั้น 1–3\nขั้น 1–3 ไม่มี CD และปล่อยเต็มกำลังทันที",
     "cd": 12,
     "damage": 200,
@@ -349,13 +349,13 @@ const ACTIVE_SKILLS={
     "name": "บอลแสงหมุน",
     "designed": true,
     "shape": "spiral",
-    "range": 800,
-    "rangeLabel": "ก้นหอย 0→800",
-    "hitLabel": "1 Hit / ทุกตัวที่บอลผ่าน",
-    "effects": "ขยายถึง 800 ใน 3 วิ แล้วหาย\nแต่ละมอนโดนครั้งเดียวตลอดสกิล",
+    "range": 400.0,
+    "rangeLabel": "ก้นหอย 0→400",
+    "hitLabel": "1 Hit / 10 Mob",
+    "effects": "ขยายถึงรัศมี 400 ใน 3 วิ · สูงสุด 10 เป้าหมาย เป้าละ 1 Hit ตลอดสกิล",
     "cd": 1,
     "damage": 100,
-    "damageLabel": "100% ต่อชุด / เป้า\n1 Hit: Hit ละ 100%"
+    "damageLabel": "100% ต่อรอบ / เป้า · 1 Hit"
   },
   "tome_2_active_0": {
     "id": "tome_2_active_0",
@@ -366,13 +366,13 @@ const ACTIVE_SKILLS={
     "name": "วงเวทแสง",
     "designed": true,
     "shape": "circle",
-    "range": 250,
-    "rangeLabel": "วางที่ตัว / รัศมี 250",
-    "hitLabel": "3 Hit/รอบ / ทุก Mob",
-    "effects": "อยู่ 10 วิ; ATKSPD 100→190: 2→4 รอบ/วิ\nเข้าโดนทันที ออกรีเซ็ตจังหวะโจมตี",
+    "range": 125.0,
+    "rangeLabel": "วางที่ตัว / รัศมี 125",
+    "hitLabel": "1 Hit / 10 Mob",
+    "effects": "อยู่ 10 วิ · 1 Hit ทุก 1 วินาที สูงสุด 10 Mob",
     "cd": 10,
     "damage": 120,
-    "damageLabel": "120% ต่อรอบ / เป้า\n3 Hit: Hit ละ 40%"
+    "damageLabel": "120% ต่อรอบ / เป้า · 1 Hit"
   },
   "tome_3_active_0": {
     "id": "tome_3_active_0",
@@ -383,13 +383,13 @@ const ACTIVE_SKILLS={
     "name": "วงเวทมืด",
     "designed": true,
     "shape": "pull",
-    "range": 250,
-    "rangeLabel": "วางที่ตัว / รัศมี 250",
-    "hitLabel": "1 Hit/รอบ + ระเบิด 3 Hit",
-    "effects": "อยู่ 10 วิ; 2→4 รอบ/วิ; ดูดมอนเข้ากลาง\nดีบัฟ +20% เฉพาะในวง; จบเวลาระเบิด",
+    "range": 125.0,
+    "rangeLabel": "วางที่ตัว / รัศมี 125",
+    "hitLabel": "1 Hit / 10 Mob",
+    "effects": "อยู่ 10 วิ · 1 Hit ทุก 1 วินาที สูงสุด 10 Mob · ดูดมอนเข้ากลาง ดีบัฟ +20% เฉพาะในวง",
     "cd": 10,
     "damage": 150,
-    "damageLabel": "150% ต่อรอบ / เป้า\nรอบปกติ 150%; ระเบิด 3 Hit รวม 150%"
+    "damageLabel": "150% ต่อรอบ / เป้า · 1 Hit"
   },
   "tome_4_active_0": {
     "id": "tome_4_active_0",
@@ -400,13 +400,13 @@ const ACTIVE_SKILLS={
     "name": "เสาแสง",
     "designed": true,
     "shape": "multi",
-    "range": 400,
-    "rangeLabel": "รัศมี 400 / วงเล็ก 85",
-    "hitLabel": "1 Hit / ทุก Mob",
-    "effects": "เป้าละ 1 วงสุ่มแสง/มืด อยู่ 5 วิ\nวงเสริมขนาด/ดาเมจเหลือ 34%",
+    "range": 200.0,
+    "rangeLabel": "รัศมี 200 / วงเล็ก 42.5",
+    "hitLabel": "1 Hit / 10 Mob",
+    "effects": "รัศมี 200 สูงสุด 10 Mob · เป้าละ 1 วงแสง/มืด อยู่ 5 วิ รัศมี 42.5 · วงจากการร่ายเดียวกันโดนเป้าละ 1 Hit ทุก 1 วินาที",
     "cd": 15,
     "damage": 200,
-    "damageLabel": "200% ต่อชุด / เป้า\n1 Hit: Hit ละ 200%\nวงเสริม: แสง 40.8%/รอบ; มืด 51%/รอบ"
+    "damageLabel": "200% ต่อรอบ / เป้า · 1 Hit"
   },
   "bow_1_active_0": {
     "id": "bow_1_active_0",
@@ -417,13 +417,13 @@ const ACTIVE_SKILLS={
     "name": "ธนูระเบิด",
     "designed": true,
     "shape": "blast",
-    "range": 150,
-    "rangeLabel": "ยิง 600 / ระเบิดรัศมี 150",
+    "range": 75.0,
+    "rangeLabel": "ยิง 300 / ระเบิดรัศมี 75",
     "hitLabel": "1 Hit / 3 Mob",
     "effects": "ชนศัตรูตัวแรกแล้วระเบิดทันที\nรวมตัวที่ชนในเพดาน 3 Mob",
     "cd": 1,
     "damage": 100,
-    "damageLabel": "100% ต่อชุด / เป้า\n1 Hit: Hit ละ 100%"
+    "damageLabel": "100% ต่อรอบ / เป้า · 1 Hit"
   },
   "bow_2_active_0": {
     "id": "bow_2_active_0",
@@ -434,13 +434,13 @@ const ACTIVE_SKILLS={
     "name": "ฝนธนู",
     "designed": true,
     "shape": "placed",
-    "range": 400,
-    "rangeLabel": "จุดวางหน้า 150 / รัศมี 400",
-    "hitLabel": "1 Hit / 15 Mob",
-    "effects": "โจมตีหนึ่งครั้ง แล้วพื้นที่หายทันที",
+    "range": 200.0,
+    "rangeLabel": "จุดวางหน้า 75 / รัศมี 200",
+    "hitLabel": "1 Hit / 8 Mob",
+    "effects": "วางด้านหน้า 75 รัศมี 200 · โจมตีหนึ่งครั้ง สูงสุด 8 Mob",
     "cd": 2,
     "damage": 120,
-    "damageLabel": "120% ต่อชุด / เป้า\n1 Hit: Hit ละ 120%"
+    "damageLabel": "120% ต่อรอบ / เป้า · 1 Hit"
   },
   "bow_3_active_0": {
     "id": "bow_3_active_0",
@@ -451,13 +451,13 @@ const ACTIVE_SKILLS={
     "name": "ภูติแสง",
     "designed": true,
     "shape": "summon",
-    "range": 600,
-    "rangeLabel": "ตามตัว / ระยะค้นหา 600",
-    "hitLabel": "1 Hit/ครั้ง / 1 Mob",
+    "range": 300.0,
+    "rangeLabel": "ตามตัว / ระยะค้นหา 300",
+    "hitLabel": "1 Hit / 1 Mob",
     "effects": "อยู่ 30 วิ; เลือกบอสก่อน แล้วใกล้ที่สุด\nATKSPD 100→190: ยิง 1→5 ครั้ง/วิ",
     "cd": 25,
     "damage": 150,
-    "damageLabel": "150% ต่อรอบ / เป้า\n1 Hit: Hit ละ 150%"
+    "damageLabel": "150% ต่อรอบ / เป้า · 1 Hit"
   },
   "bow_4_active_0": {
     "id": "bow_4_active_0",
@@ -468,13 +468,13 @@ const ACTIVE_SKILLS={
     "name": "ป้อมธนู",
     "designed": true,
     "shape": "turret",
-    "range": 600,
-    "rangeLabel": "ป้อมอยู่กับที่ / ยิง 600",
-    "hitLabel": "1 Hit/ครั้ง / 1 Mob",
+    "range": 300.0,
+    "rangeLabel": "ป้อมอยู่กับที่ / ยิง 300",
+    "hitLabel": "1 Hit / 1 Mob",
     "effects": "อยู่ 10 วิ; ยิงเป้าที่ผู้เล่นโจมตี ถ้าไม่มีเป้ายิงด้านหน้า\nทิศกำหนดตอนวาง; ยิง 1→5 ครั้ง/วิ",
     "cd": 8,
     "damage": 200,
-    "damageLabel": "200% ต่อรอบ / เป้า\n1 Hit: Hit ละ 200%"
+    "damageLabel": "200% ต่อรอบ / เป้า · 1 Hit"
   },
   "crossbow_1_active_0": {
     "id": "crossbow_1_active_0",
@@ -485,13 +485,13 @@ const ACTIVE_SKILLS={
     "name": "ศรทะลุ",
     "designed": true,
     "shape": "front",
-    "range": 800,
-    "rangeLabel": "ด้านหน้า 800",
+    "range": 400.0,
+    "rangeLabel": "ด้านหน้า 400",
     "hitLabel": "1 Hit / 8 Mob",
     "effects": "ทะลุ; ATKSPD 100→190 ลด CD 1%→45%\nใช้ค่า ATKSPD ตอนกดสกิล",
     "cd": 2,
     "damage": 100,
-    "damageLabel": "100% ต่อชุด / เป้า\n1 Hit: Hit ละ 100%"
+    "damageLabel": "100% ต่อรอบ / เป้า · 1 Hit"
   },
   "crossbow_2_active_0": {
     "id": "crossbow_2_active_0",
@@ -502,13 +502,13 @@ const ACTIVE_SKILLS={
     "name": "กระโดดยิง",
     "designed": true,
     "shape": "jump-shot",
-    "range": 400,
-    "rangeLabel": "กระสุนเฉียงลง 400 / ระเบิด 200",
+    "range": 200.0,
+    "rangeLabel": "กระสุนเฉียงลง 200 / ระเบิด 100",
     "hitLabel": "1 Hit / 6 Mob",
     "effects": "กระโดดตาม JUMP; กระสุนชนแพลตฟอร์มแล้วระเบิด\nลด CD ตาม ATKSPD 1%→45%",
     "cd": 1,
     "damage": 120,
-    "damageLabel": "120% ต่อชุด / เป้า\n1 Hit: Hit ละ 120%"
+    "damageLabel": "120% ต่อรอบ / เป้า · 1 Hit"
   },
   "crossbow_3_active_0": {
     "id": "crossbow_3_active_0",
@@ -519,13 +519,13 @@ const ACTIVE_SKILLS={
     "name": "สไนป์",
     "designed": true,
     "shape": "front",
-    "range": 800,
-    "rangeLabel": "ด้านหน้า 400→800",
+    "range": 400.0,
+    "rangeLabel": "ด้านหน้า 200→400",
     "hitLabel": "1 Hit / 1 Mob",
     "effects": "ชาร์จ 0–2 วิ เดินได้ เต็มแล้วรอปล่อยปุ่ม\nดาเมจเพิ่มตามชาร์จ; ลด CD 1%→45%",
     "cd": 5,
     "damage": 150,
-    "damageLabel": "150% ต่อชุด / เป้า\n1 Hit: Hit ละ 150%"
+    "damageLabel": "150% ต่อรอบ / เป้า · 1 Hit"
   },
   "crossbow_4_active_0": {
     "id": "crossbow_4_active_0",
@@ -536,13 +536,13 @@ const ACTIVE_SKILLS={
     "name": "มาร์ก",
     "designed": true,
     "shape": "link",
-    "range": 800,
-    "rangeLabel": "รัศมี 800",
-    "hitLabel": "สถานะ / 15 Mob",
-    "effects": "อยู่ 10 วิ; รับดาเมจ +20%\nโจมตีด้วยหน้าไม้ส่งดาเมจเท่ากัน ไม่วน/ไม่เพิ่มโบนัสซ้ำ",
+    "range": 400.0,
+    "rangeLabel": "รัศมี 400",
+    "hitLabel": "1 Hit / 8 Mob",
+    "effects": "อยู่ 10 วิ · สูงสุด 8 Mob · รับดาเมจ +20% โจมตีส่งดาเมจให้เป้าที่ติดสถานะ ไม่วน",
     "cd": 5,
     "damage": 200,
-    "damageLabel": "ไม่มีดาเมจตรง"
+    "damageLabel": "200% ต่อรอบ / เป้า · 1 Hit"
   },
   "gun_1_active_0": {
     "id": "gun_1_active_0",
@@ -553,13 +553,13 @@ const ACTIVE_SKILLS={
     "name": "กระโดดยิง",
     "designed": true,
     "shape": "jump-shot",
-    "range": 300,
-    "rangeLabel": "ระยะกระสุน 300",
-    "hitLabel": "2 Hit / 1 Mob",
+    "range": 150.0,
+    "rangeLabel": "ระยะกระสุน 150",
+    "hitLabel": "1 Hit / 1 Mob",
     "effects": "กระโดดตามค่า JUMP ยิงด้านหน้าเฉียงลง",
     "cd": 0.5,
     "damage": 100,
-    "damageLabel": "100% ต่อชุด / เป้า\n2 Hit: Hit ละ 50%"
+    "damageLabel": "100% ต่อรอบ / เป้า · 1 Hit"
   },
   "gun_2_active_0": {
     "id": "gun_2_active_0",
@@ -570,13 +570,13 @@ const ACTIVE_SKILLS={
     "name": "ยิงรอบตัว",
     "designed": true,
     "shape": "circle",
-    "range": 400,
-    "rangeLabel": "รัศมี 400",
+    "range": 200.0,
+    "rangeLabel": "รัศมี 200",
     "hitLabel": "1 Hit / 10 Mob",
     "effects": "โจมตีรอบตัวหนึ่งชุด",
     "cd": 1,
     "damage": 120,
-    "damageLabel": "120% ต่อชุด / เป้า\n1 Hit: Hit ละ 120%"
+    "damageLabel": "120% ต่อรอบ / เป้า · 1 Hit"
   },
   "gun_3_active_0": {
     "id": "gun_3_active_0",
@@ -587,13 +587,13 @@ const ACTIVE_SKILLS={
     "name": "พุ่งปาระเบิด",
     "designed": true,
     "shape": "smoke",
-    "range": 200,
-    "rangeLabel": "พุ่งค้นหา 400 / ควันรัศมี 200",
-    "hitLabel": "เปิด 1 Hit / 5 Mob",
+    "range": 100.0,
+    "rangeLabel": "พุ่งค้นหา 200 / ควันรัศมี 100",
+    "hitLabel": "1 Hit / 5 Mob",
     "effects": "หยุดหน้าเป้า ไม่มียืนปาที่ตัวเอง\nควัน 10 วิ; AVOID +70 จุดเปอร์เซ็นต์เฉพาะในควัน",
     "cd": 5,
     "damage": 150,
-    "damageLabel": "150% ต่อชุด / เป้า\n1 Hit: Hit ละ 150%"
+    "damageLabel": "150% ต่อรอบ / เป้า · 1 Hit"
   },
   "gun_4_active_0": {
     "id": "gun_4_active_0",
@@ -604,13 +604,13 @@ const ACTIVE_SKILLS={
     "name": "ระดมยิง",
     "designed": true,
     "shape": "front",
-    "range": 300,
-    "rangeLabel": "ด้านหน้า 300",
-    "hitLabel": "ทุก Mob / กระสุนต่อเนื่อง",
-    "effects": "กดค้าง เดินได้ ปล่อยหยุด\nATKSPD 100→190: ทยอยยิง 10→30 นัด/วิ",
+    "range": 150.0,
+    "rangeLabel": "ด้านหน้า 150",
+    "hitLabel": "1 Hit / 10 Mob",
+    "effects": "กดค้าง เดินได้ ปล่อยหยุด · ATKSPD 100→190 ยิง 1→3 รอบ/วิ รอบละ 1 Hit",
     "cd": 5,
     "damage": 200,
-    "damageLabel": "200% ต่อรอบ / เป้า\n10 Hit: Hit ละ 20%"
+    "damageLabel": "200% ต่อรอบ / เป้า · 1 Hit"
   },
   "sword_1_active_0": {
     "id": "sword_1_active_0",
@@ -621,13 +621,13 @@ const ACTIVE_SKILLS={
     "name": "ฟันต่อเนื่อง",
     "designed": true,
     "shape": "front",
-    "range": 200,
-    "rangeLabel": "ด้านหน้า 200",
-    "hitLabel": "3 Hit / 3 Mob",
+    "range": 100.0,
+    "rangeLabel": "ด้านหน้า 100",
+    "hitLabel": "1 Hit / 3 Mob",
     "effects": "โจมตีด้านหน้าเป็นชุด",
     "cd": 0.5,
     "damage": 100,
-    "damageLabel": "100% ต่อชุด / เป้า\n3 Hit: Hit ละ 33.33% (ใช้เศษส่วนจริง)"
+    "damageLabel": "100% ต่อรอบ / เป้า · 1 Hit"
   },
   "sword_2_active_0": {
     "id": "sword_2_active_0",
@@ -638,13 +638,13 @@ const ACTIVE_SKILLS={
     "name": "คลื่นดาบ",
     "designed": true,
     "shape": "arrows",
-    "range": 600,
-    "rangeLabel": "ตามลูกศร 600",
+    "range": 300.0,
+    "rangeLabel": "ตามลูกศร 300",
     "hitLabel": "1 Hit / 8 Mob",
     "effects": "ทะลุจนโดนครบ 8 ตัว หรือสุดระยะแล้วหาย",
     "cd": 3,
     "damage": 120,
-    "damageLabel": "120% ต่อชุด / เป้า\n1 Hit: Hit ละ 120%"
+    "damageLabel": "120% ต่อรอบ / เป้า · 1 Hit"
   },
   "sword_3_active_0": {
     "id": "sword_3_active_0",
@@ -655,13 +655,13 @@ const ACTIVE_SKILLS={
     "name": "หมุนดาบ",
     "designed": true,
     "shape": "orbit",
-    "range": 200,
-    "rangeLabel": "หมุนแนวนอนรัศมี 200",
-    "hitLabel": "2 Hit/รอบ / 6 Mob",
-    "effects": "กดค้าง เดินได้ สูงสุด 5 วิ ปล่อยหยุด\n2→4 รอบ/วิ; เริ่ม CD เมื่อหยุด",
+    "range": 100.0,
+    "rangeLabel": "หมุนแนวนอนรัศมี 100",
+    "hitLabel": "1 Hit / 6 Mob",
+    "effects": "กดค้าง เดินได้ สูงสุด 5 วิ · 1 Hit ทุก 1 วินาที · เริ่ม CD เมื่อหยุด",
     "cd": 10,
     "damage": 150,
-    "damageLabel": "150% ต่อรอบ / เป้า\n2 Hit: Hit ละ 75%"
+    "damageLabel": "150% ต่อรอบ / เป้า · 1 Hit"
   },
   "sword_4_active_0": {
     "id": "sword_4_active_0",
@@ -672,13 +672,13 @@ const ACTIVE_SKILLS={
     "name": "ดาบยักษ์",
     "designed": true,
     "shape": "blade",
-    "range": 180,
-    "rangeLabel": "จุดตกหน้า 400 / กว้างรวม 180",
-    "hitLabel": "6 Hit / 10 Mob",
-    "effects": "ไม่มีเป้าที่ 400 เลือกตัวใกล้จุด 400 ที่สุด\nทะลุหลายชั้น; เลือกเป้าใกล้จุดตกที่สุดในแมพ",
+    "range": 90.0,
+    "rangeLabel": "จุดตกหน้า 200 / กว้างรวม 90",
+    "hitLabel": "1 Hit / 10 Mob",
+    "effects": "เลือกเป้าภายในระยะ 200 หรือจุดด้านหน้า 200 · คอลัมน์กว้าง 90 ทะลุหลายชั้น",
     "cd": 12,
     "damage": 200,
-    "damageLabel": "200% ต่อชุด / เป้า\n6 Hit: Hit ละ 33.33% (ใช้เศษส่วนจริง)"
+    "damageLabel": "200% ต่อรอบ / เป้า · 1 Hit"
   },
   "spear_1_active_0": {
     "id": "spear_1_active_0",
@@ -689,13 +689,13 @@ const ACTIVE_SKILLS={
     "name": "กวาดบนลงล่าง",
     "designed": true,
     "shape": "quarter",
-    "range": 300,
-    "rangeLabel": "ส่วนโค้ง 90° / ระยะ 300",
+    "range": 150.0,
+    "rangeLabel": "ส่วนโค้ง 45° / ระยะ 150",
     "hitLabel": "1 Hit / 6 Mob",
-    "effects": "กวาดจากบนลงมาด้านหน้า\nลากมอนที่โดนไปสุดระยะ",
+    "effects": "กวาดจากบนลงล่าง ระยะ 150 · ดึงมอนทั่วไปที่โดนลงมายืนเลนเดียวกับตัวละคร · บอสต้านการลาก",
     "cd": 1,
     "damage": 100,
-    "damageLabel": "100% ต่อชุด / เป้า\n1 Hit: Hit ละ 100%"
+    "damageLabel": "100% ต่อรอบ / เป้า · 1 Hit"
   },
   "spear_2_active_0": {
     "id": "spear_2_active_0",
@@ -706,13 +706,13 @@ const ACTIVE_SKILLS={
     "name": "พุ่งแทงลาก",
     "designed": true,
     "shape": "push",
-    "range": 400,
-    "rangeLabel": "พุ่งหน้า 400 / มอนหยุด 410",
+    "range": 200.0,
+    "rangeLabel": "พุ่งหน้า 200 / มอนหยุด 205",
     "hitLabel": "1 Hit / 6 Mob",
     "effects": "ตัวละครและมอนเคลื่อนไปด้วยกัน\nบอสต้านการลาก มอนหยุดก่อนกำแพง/ขอบชั้น",
     "cd": 2,
     "damage": 120,
-    "damageLabel": "120% ต่อชุด / เป้า\n1 Hit: Hit ละ 120%"
+    "damageLabel": "120% ต่อรอบ / เป้า · 1 Hit"
   },
   "spear_3_active_0": {
     "id": "spear_3_active_0",
@@ -723,13 +723,13 @@ const ACTIVE_SKILLS={
     "name": "แทงต่อเนื่อง",
     "designed": true,
     "shape": "front",
-    "range": 300,
-    "rangeLabel": "ด้านหน้า 300",
-    "hitLabel": "3 Hit / 6 Mob",
-    "effects": "ATKSPD 190 เพิ่ม 3 เป็น 6 Hit\nATKSPD 130/160/190 เพิ่มเป็น 4/5/6 Hit",
+    "range": 150.0,
+    "rangeLabel": "ด้านหน้า 150",
+    "hitLabel": "1 Hit / 6 Mob",
+    "effects": "แทงด้านหน้า 150 · 1 Hit ต่อรอบ",
     "cd": 1,
     "damage": 150,
-    "damageLabel": "150% ต่อชุด / เป้า\n3 Hit: Hit ละ 50%\nเมื่อ 6 Hit: Hit ละ 25%"
+    "damageLabel": "150% ต่อรอบ / เป้า · 1 Hit"
   },
   "spear_4_active_0": {
     "id": "spear_4_active_0",
@@ -740,13 +740,13 @@ const ACTIVE_SKILLS={
     "name": "ชาร์จปาหอก",
     "designed": true,
     "shape": "charge-dash",
-    "range": 600,
-    "rangeLabel": "ตามลูกศร 300→600 / ระเบิด 300",
-    "hitLabel": "หอก 3 Hit + ระเบิด 1 Hit",
-    "effects": "ทุก Mob; ชาร์จ 0–1.5 วิ เดินได้ รอปล่อยปุ่ม\nพุ่งตามหอกมี I-frame; ระเบิดโดนซ้ำได้",
+    "range": 300.0,
+    "rangeLabel": "ตามลูกศร 150→300 / ระเบิด 150",
+    "hitLabel": "1 Hit / 10 Mob",
+    "effects": "ชาร์จ 0–1.5 วิ เดินได้ · พุ่งระยะ 150–300 มี I-frame · เป้าละ 1 Hit สูงสุด 10 Mob รวมการระเบิด",
     "cd": 7,
     "damage": 200,
-    "damageLabel": "200% ต่อชุด / เป้า\n4 Hit รวม 200%; Hit ละ 50%"
+    "damageLabel": "200% ต่อรอบ / เป้า · 1 Hit"
   },
   "hammer_1_active_0": {
     "id": "hammer_1_active_0",
@@ -757,13 +757,13 @@ const ACTIVE_SKILLS={
     "name": "เหวี่ยงดีด",
     "designed": true,
     "shape": "bounce-step",
-    "range": 200,
-    "rangeLabel": "ทุบหน้า 200 / ตัวจบระยะ 300",
+    "range": 100.0,
+    "rangeLabel": "ทุบหน้า 100 / ตัวจบระยะ 150",
     "hitLabel": "1 Hit / 8 Mob",
     "effects": "กระแทกแล้วดีดลอยหน้าอีก 100\nไม่โดนศัตรูก็ยังดีดตัว",
     "cd": 1.5,
     "damage": 100,
-    "damageLabel": "100% ต่อชุด / เป้า\n1 Hit: Hit ละ 100%"
+    "damageLabel": "100% ต่อรอบ / เป้า · 1 Hit"
   },
   "hammer_2_active_0": {
     "id": "hammer_2_active_0",
@@ -774,13 +774,13 @@ const ACTIVE_SKILLS={
     "name": "ทุบพื้น",
     "designed": true,
     "shape": "slam",
-    "range": 50,
-    "rangeLabel": "กว้างรวม 100 / ข้างละ 50",
+    "range": 25.0,
+    "rangeLabel": "กว้างรวม 50 / ข้างละ 25",
     "hitLabel": "1 Hit / 4 Mob",
     "effects": "ใช้กลางอากาศแล้วลงพื้นทันที",
     "cd": 0.5,
     "damage": 120,
-    "damageLabel": "120% ต่อชุด / เป้า\n1 Hit: Hit ละ 120%"
+    "damageLabel": "120% ต่อรอบ / เป้า · 1 Hit"
   },
   "hammer_3_active_0": {
     "id": "hammer_3_active_0",
@@ -791,13 +791,13 @@ const ACTIVE_SKILLS={
     "name": "ชาร์จค้อน",
     "designed": true,
     "shape": "circle",
-    "range": 900,
-    "rangeLabel": "รอบตัวรัศมี 500·700·900",
-    "hitLabel": "1 Hit / ทุก Mob ในระยะ",
-    "effects": "ชาร์จ 1/2/3 วิ มีหลอดระดับ เดินไม่ได้\nก่อน 1 วิใช้ไม่ได้ ปล่อยเสีย MP แต่ไม่ขึ้น CD",
+    "range": 450.0,
+    "rangeLabel": "รอบตัวรัศมี 250·350·450",
+    "hitLabel": "1 Hit / 10 Mob",
+    "effects": "ชาร์จ 1/2/3 วิ · รัศมี 250/350/450 · สูงสุด 10 Mob · ก่อน 1 วิใช้ไม่ได้",
     "cd": 8,
     "damage": 150,
-    "damageLabel": "150% ต่อชุด / เป้า\n1 Hit: Hit ละ 150%"
+    "damageLabel": "150% ต่อรอบ / เป้า · 1 Hit"
   },
   "hammer_4_active_0": {
     "id": "hammer_4_active_0",
@@ -808,13 +808,12 @@ const ACTIVE_SKILLS={
     "name": "ค้อนแสง",
     "designed": true,
     "shape": "orbit",
-    "range": 200,
-    "rangeLabel": "รอบตัวระยะ 200",
-    "hitLabel": "4 Hit/รอบ / 12 Mob",
-    "effects": "เปิด–ปิด ใช้ MP ต่อเนื่อง ค้อนหมุนแนวนอน\nสัมผัสแล้วทำดาเมจทุก 0.5 วิ ไม่อิง ATKSPD",
+    "range": 100.0,
+    "rangeLabel": "รอบตัวระยะ 100",
+    "hitLabel": "1 Hit / 8 Mob",
+    "effects": "เปิด–ปิด ใช้ MP ต่อเนื่อง · 1 Hit ทุก 1 วินาที · สูงสุด 8 Mob",
     "cd": null,
     "damage": 200,
-    "damageLabel": "200% ต่อรอบ / เป้า\n4 Hit: Hit ละ 50%"
+    "damageLabel": "200% ต่อรอบ / เป้า · 1 Hit"
   }
 };
-

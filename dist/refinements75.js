@@ -6,12 +6,12 @@ function handlePlayerDeath(){
  player.hp=maxHP();if(tutorial)startTutorial();else enterTown();save();toast('เสียชีวิต · EXP -'+loss+' · กลับ'+(tutorial?'ลานฝึก':'หมู่บ้าน'));return true;
 }
 function changeEmblemType(type){
- if(!WEAPON_NAMES[type])return false;let gear=player.loot.gear.find(g=>g.id===player.loot.equipped.emblem&&g.slot==='emblem');
+ if(!WEAPON_NAMES[type])return false;const changed=equippedEmblemType()!==type;let gear=player.loot.gear.find(g=>g.id===player.loot.equipped.emblem&&g.slot==='emblem');
  if(!gear){if(player.loot.gear.length>=10000)return false;gear={id:crypto.randomUUID(),name:'',slot:'emblem',weapon:null,emblemWeapon:type,stage:0,level:1,rarity:'common',atk:0,def:0,hp:0,mp:0,bonuses:[],enchant:0};player.loot.gear.push(gear);player.loot.equipped.emblem=gear.id}
- gear.emblemWeapon=type;gear.name='Emblem '+WEAPON_NAMES[type];supportOnEquipmentChange();player.hp=Math.min(player.hp,maxHP());player.mp=Math.min(player.mp,maxMP());save();updateUI();return true;
+ gear.emblemWeapon=type;gear.name='Emblem '+WEAPON_NAMES[type];if(changed)clearEquippedSkillsForGearChange();supportOnEquipmentChange();player.hp=Math.min(player.hp,maxHP());player.mp=Math.min(player.mp,maxMP());save();updateUI();return true;
 }
 function openEmblemChooser(){
- const body=document.createElement('div');body.className='emblem-choice-grid';for(const [type,name]of Object.entries(WEAPON_NAMES)){const button=document.createElement('button');button.innerHTML=weaponIcon(type);const label=document.createElement('span');label.textContent=name;button.append(label);button.setAttribute('aria-label','ใช้ Emblem '+name);button.classList.toggle('selected',equippedEmblemType()===type);button.onclick=()=>{if(changeEmblemType(type)){closeModal();if(!$('characterOverlay').hidden)renderCharacterWindow();toast('ใช้ Emblem '+name)}};body.append(button)}modal('เลือกชนิด Emblem',body,[]);
+ const body=document.createElement('div');body.className='emblem-choice-grid';for(const [type,name]of Object.entries(WEAPON_NAMES)){const button=document.createElement('button');button.innerHTML=weaponIcon(type);const label=document.createElement('span');label.textContent=name;button.append(label);button.setAttribute('aria-label','ใช้ Emblem '+name);button.classList.toggle('selected',equippedEmblemType()===type);button.onclick=()=>{if(changeEmblemType(type)){closeModal();if(!$('characterOverlay').hidden)renderCharacterWindow();toast('ใช้ Emblem '+name)}};body.append(button)}modal('เลือกชนิด Emblem',body,equippedEmblemType()?[['ถอด Emblem',unequipEmblem]]:[]);
 }
 let liveInventoryStamp='';
 function updateLivePanels(){if(typeof refreshSkillUpgrade==='function')refreshSkillUpgrade();
